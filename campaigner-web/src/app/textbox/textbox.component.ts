@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-textbox',
@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./textbox.component.css']
 })
 export class TextboxComponent {
-
+  @Input() text = "";
 }

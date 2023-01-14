@@ -1,3 +1,6 @@
-<div contenteditable>
-
+<div class="grow">
+    <ckeditor 
+        [data]="text"
+        [config]="{toolbar: [['Bold', 'Italic', 'Underline'], ['NumberedList', 'BulletedList'], ['Styles', 'Format'], ['Link']], resize_enabled: false, removePlugins: 'elementspath'}">
+    </ckeditor>
 </div>

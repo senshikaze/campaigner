@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CKEditorModule } from 'ckeditor4-angular';
 
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -21,6 +22,7 @@ import { TextboxComponent } from './textbox/textbox.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    CKEditorModule
   ],
   providers: [],
   bootstrap: [AppComponent]
