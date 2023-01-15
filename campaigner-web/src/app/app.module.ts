@@ -9,6 +9,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { BattleComponent } from './battle/battle.component';
 import { AlmanacComponent } from './almanac/almanac.component';
 import { TextboxComponent } from './textbox/textbox.component';
+import { EntryComponent } from './entry/entry.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,12 +19,14 @@ import { TextboxComponent } from './textbox/textbox.component';
     CampaignComponent,
     BattleComponent,
     AlmanacComponent,
-    TextboxComponent
+    TextboxComponent,
+    EntryComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CKEditorModule
+    CKEditorModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

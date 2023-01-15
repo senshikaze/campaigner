@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Entry } from '../interfaces/entry';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-campaign',
@@ -9,8 +10,15 @@ import { Entry } from '../interfaces/entry';
 export class CampaignComponent {
   entries$: Entry[] = [];
 
+  constructor(private api: ApiService) { }
+
+  ngOnInit(): void {
+    this.api.getEntries().subscribe({
+      next: entries => this.entries$ = entries
+    })
+  }
+
   onCreateClicked() {
-    console.log("hola");
-    this.entries$.push({text: ""} as Entry);
+    this.entries$.push({id: null, title: "", text: ""} as Entry);
   }
 }
