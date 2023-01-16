@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Entry } from '../interfaces/entry';
-import { ApiService } from '../services/api.service';
+import { Entry } from '../../interfaces/entry';
 
 @Component({
   selector: 'app-entry',
@@ -12,7 +11,7 @@ export class EntryComponent {
 
   editing: boolean = false;
 
-  constructor(private api: ApiService) {
+  constructor() {
     this.entry = {
       title: "",
       text: ""
@@ -27,7 +26,4 @@ export class EntryComponent {
     this.editing = false;
   }
 
-  onTitleChanged() {
-    console.log(this.entry);
-  }
 }

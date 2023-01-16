@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 import { Campaign } from '../interfaces/campaign';
 import { Entry } from '../interfaces/entry';
-import { ApiService } from '../services/api.service';
+import { StoreService } from '../services/store.service';
 
 @Component({
   selector: 'app-campaign',
@@ -13,7 +13,7 @@ import { ApiService } from '../services/api.service';
 export class CampaignComponent implements OnInit {
   campaign: Campaign;
 
-  constructor(private api: ApiService, private route: ActivatedRoute) { 
+  constructor(private store: StoreService, private route: ActivatedRoute) { 
     this.campaign = {
       id: "",
       name: "",
@@ -23,7 +23,13 @@ export class CampaignComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.pipe(
-      map(params => params)
+      map(params => {
+        if (params.has("id") && params.get("id") != "new") {
+          this.store.getCampaign(params.get("id") as string).subscribe({
+            next: c => this.campaign = c
+          });
+        }
+      })
     );
   }
 

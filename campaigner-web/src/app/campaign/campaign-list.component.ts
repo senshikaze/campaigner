@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Route, Router } from '@angular/router';
 import { Campaign } from '../interfaces/campaign';
-import { ApiService } from '../services/api.service';
+import { StoreService } from '../services/store.service';
 
 @Component({
   selector: 'app-campaign-list',
@@ -22,10 +22,10 @@ import { ApiService } from '../services/api.service';
 export class CampaignListComponent implements OnInit {
   campaigns: Campaign[] = [];
 
-  constructor(private api: ApiService, private router: Router, private route: ActivatedRoute) {}
+  constructor(private store: StoreService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.api.getCampaigns().subscribe({
+    this.store.getCampaigns().subscribe({
       next: json => this.campaigns = json
     });
   }

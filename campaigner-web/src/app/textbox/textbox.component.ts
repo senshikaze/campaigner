@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CKEditor4 } from 'ckeditor4-angular';
 
 @Component({
-  selector: 'app-textbox',
+  selector: 'ck-textbox',
   template:`
 <div class="grow">
   <ckeditor 
