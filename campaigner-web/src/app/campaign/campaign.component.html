@@ -1,6 +1,9 @@
 <div class="flex flex-col grow">
-    <div class="mb-2"><button class="float-right p-2 rounded-lg text-white bg-dark-action hover:bg-dark-action-hover" (click)="onCreateClicked()">Create</button></div>
-    <div class="mb-4" *ngFor="let entry of entries$">
+    <div>
+        <input class="grow text-black" [(ngModel)]="campaign.name" />
+        <div class="mb-2"><button class="float-right p-2 rounded-lg text-white bg-dark-action hover:bg-dark-action-hover" (click)="onCreateClicked()">Create</button></div>
+    </div>
+    <div class="mb-4" *ngFor="let entry of campaign.entries">
         <app-entry [entry]="entry"></app-entry>
     </div>
 </div>

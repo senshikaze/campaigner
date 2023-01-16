@@ -11,6 +11,8 @@ import { AlmanacComponent } from './almanac/almanac.component';
 import { TextboxComponent } from './textbox/textbox.component';
 import { EntryComponent } from './entry/entry.component';
 import { FormsModule } from '@angular/forms';
+import { CampaignListComponent } from './campaign-list/campaign-list.component';
+import { NotfoundComponent } from './notfound.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { FormsModule } from '@angular/forms';
     BattleComponent,
     AlmanacComponent,
     TextboxComponent,
-    EntryComponent
+    EntryComponent,
+    CampaignListComponent,
+    NotfoundComponent
   ],
   imports: [
     BrowserModule,

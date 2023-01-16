@@ -1,5 +1,6 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { from, map, Observable, of, reduce } from 'rxjs';
+import { Campaign } from '../interfaces/campaign';
 import { Entry } from '../interfaces/entry';
 
 @Injectable({
@@ -9,29 +10,26 @@ export class ApiService {
 
   constructor() { }
 
-  getEntries(): Observable<Entry[]> {
-    let entries = localStorage.getItem('entries') ?? "[]";
-    return from(of(entries)).pipe(
-      map(entries => JSON.parse(entries) as Entry[])
+  getCampaigns(): Observable<Campaign[]> {
+    let campaigns = localStorage.getItem('campaigns') ?? "[]";
+    return from(of(campaigns)).pipe(
+      map(camps => JSON.parse(camps) as Campaign[])
     );
   }
 
-  saveEntry(entry: Entry): Observable<Entry> {
-    let entries = JSON.parse(localStorage.getItem('entries') ?? "[]") as Entry[];
-    let ids = entries.map(e => e.id ?? 0) ?? [];
-    ids.sort((a, b) => b - a);
-    if (!entry.id) {
-      entry.id = ids[0] + 1;
-      entries.push(entry);
+  saveCampaign(campaign: Campaign): Observable<Campaign> {
+    let campaigns = JSON.parse(localStorage.getItem('campaigns') ?? "[]") as Campaign[];
+    if (!campaign.id) {
+      // Generate campaign id
     } else {
-      entries = entries.filter(e => e.id != entry.id);
-      entries.push()
+      campaigns = campaigns.filter(c => c.id != campaign.id);
+      campaigns.push(campaign)
     }
 
-    localStorage.setItem("entries", JSON.stringify(entries));
+    localStorage.setItem("campaigns", JSON.stringify(campaigns));
 
-    return from(of(entry)).pipe(
-      map(entry => entry)
+    return from(of(campaign)).pipe(
+      map(campaign => campaign)
     )
   }
 }

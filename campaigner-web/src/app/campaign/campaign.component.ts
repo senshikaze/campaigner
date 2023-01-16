@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs';
+import { Campaign } from '../interfaces/campaign';
 import { Entry } from '../interfaces/entry';
 import { ApiService } from '../services/api.service';
 
@@ -7,18 +10,24 @@ import { ApiService } from '../services/api.service';
   templateUrl: './campaign.component.html',
   styleUrls: ['./campaign.component.css']
 })
-export class CampaignComponent {
-  entries$: Entry[] = [];
+export class CampaignComponent implements OnInit {
+  campaign: Campaign;
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private route: ActivatedRoute) { 
+    this.campaign = {
+      id: "",
+      name: "",
+      entries: []
+    };
+  }
 
   ngOnInit(): void {
-    this.api.getEntries().subscribe({
-      next: entries => this.entries$ = entries
-    })
+    this.route.paramMap.pipe(
+      map(params => params)
+    );
   }
 
   onCreateClicked() {
-    this.entries$.push({id: null, title: "", text: ""} as Entry);
+    this.campaign.entries.push({id: null, title: "", text: ""} as Entry);
   }
 }

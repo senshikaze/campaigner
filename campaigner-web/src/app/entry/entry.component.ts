@@ -14,7 +14,6 @@ export class EntryComponent {
 
   constructor(private api: ApiService) {
     this.entry = {
-      id: null,
       title: "",
       text: ""
     };
