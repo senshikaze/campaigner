@@ -1,9 +1,24 @@
-<div class="flex flex-col grow">
+<div class="flex flex-col grow p-2">
     <div class="flex">
-        <input class="grow text-black p-2 m-2" [(ngModel)]="campaign.name" />
-        <div class="mb-2"><button class="float-right p-2 rounded-lg text-white bg-dark-action hover:bg-dark-action-hover" (click)="onCreateClicked()">Add Entry</button></div>
+        <input
+            class="grow text-black p-2 m-2 rounded-md"
+            [ngModel]="campaign.name"
+            (ngModelChange)="onNameChanged($event)" />
+        <div class="mb-2">
+            <button
+                class="p-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
+                (click)="onSaveClicked()"
+                i18ln-title="Save Campaign">
+                <img class="w-[24px]" src="assets/save-white.png" />
+            </button>
+            <button
+                class="p-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
+                (click)="onCreateClicked()" i18ln>
+                    Add Entry
+            </button>
+        </div>
     </div>
-    <div class="mb-4" *ngFor="let entry of campaign.entries">
-        <app-entry [entry]="entry"></app-entry>
+    <div class="mb-4" *ngFor="let entry of campaign.entries; let i = index">
+        <app-entry [(entry)]="campaign.entries[i]"></app-entry>
     </div>
 </div>

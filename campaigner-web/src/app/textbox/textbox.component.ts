@@ -6,7 +6,7 @@ import { CKEditor4 } from 'ckeditor4-angular';
   selector: 'ck-textbox',
   template:`
 <div class="grow">
-  <ckeditor 
+  <ckeditor
       [data]="text"
       (dataChange)="onDataChanged($event)"
       [config]="{toolbar: [['Bold', 'Italic', 'Underline'], ['NumberedList', 'BulletedList'], ['Styles', 'Format'], ['Link']], resize_enabled: false, removePlugins: 'elementspath', extraPlugins: 'autogrow'}">
@@ -20,7 +20,6 @@ export class TextboxComponent {
   constructor() {}
 
   onDataChanged(event: CKEditor4.EventInfo) {
-    console.log(event);
     // @ts-ignore
     this.text = event;
     this.textChange.emit(this.text);

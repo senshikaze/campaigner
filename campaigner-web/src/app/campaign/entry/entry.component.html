@@ -1,8 +1,8 @@
 <div class="flex flex-col bg-dark-content-bg rounded-lg">
     <div class="flex">
-        <input class="grow m-2 p-2 text-black" type="text" [(ngModel)]="entry.title"/>
-        <button *ngIf="!editing" class="float-right p-2 m-2 rounded-lg text-white bg-dark-action hover:bg-dark-action-hover" (click)="onEditClicked()">Edit</button>
-        <button *ngIf="editing" class="float-right p-2 m-2 rounded-lg text-white bg-dark-action hover:bg-dark-action-hover" (click)="onSaveClicked()">Save</button>
+        <input class="grow m-2 p-2 text-black rounded-md" type="text" [(ngModel)]="entry.title"/>
+        <button *ngIf="!editing" class="float-right p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover" (click)="onEditClicked()" i18n>Edit</button>
+        <button *ngIf="editing" class="float-right p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover" (click)="onSaveClicked()" i18n>Save</button>
     </div>
     <div class="min-h-[15rem] m-2" *ngIf="!editing" [innerHTML]="entry.text" (dblclick)="onEditClicked()"></div>
     <div class="min-h-[15rem] m-2" *ngIf="editing">

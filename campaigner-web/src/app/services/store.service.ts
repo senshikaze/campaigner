@@ -11,7 +11,16 @@ export class StoreService {
 
   constructor() { }
 
-  getCampaign(id: string) {
+  deleteCampaign(id: string): Observable<Campaign[]> {
+    let campaigns = JSON.parse(localStorage.getItem('campaigns') ?? "[]") as Campaign[];
+    campaigns = campaigns.filter(c => c.id != id);
+    localStorage.setItem('campaigns', JSON.stringify(campaigns));
+    return of(campaigns).pipe(
+      map(c => c)
+    );
+  }
+
+  getCampaign(id: string): Observable<Campaign> {
     let campaigns = JSON.parse(localStorage.getItem('campaigns') ?? "[]") as Campaign[];
     return of(campaigns).pipe(
       map(campaign => {return campaign.filter(campaign => campaign.id == id)[0]})

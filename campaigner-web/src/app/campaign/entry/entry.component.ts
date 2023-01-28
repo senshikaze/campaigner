@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Entry } from '../../interfaces/entry';
 
 @Component({
@@ -6,8 +6,9 @@ import { Entry } from '../../interfaces/entry';
   templateUrl: './entry.component.html',
   styleUrls: ['./entry.component.css']
 })
-export class EntryComponent {
+export class EntryComponent implements OnChanges {
   @Input() entry: Entry;
+  @Output() entryChange = new EventEmitter<Entry>();
 
   editing: boolean = false;
 
@@ -16,6 +17,10 @@ export class EntryComponent {
       title: "",
       text: ""
     };
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.entryChange.emit(this.entry);
   }
 
   onEditClicked() {
