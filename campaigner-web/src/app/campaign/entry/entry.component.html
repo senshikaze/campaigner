@@ -1,8 +1,29 @@
-<div class="flex flex-col bg-dark-content-bg rounded-lg">
+<div class="flex flex-col border-t-2">
     <div class="flex">
-        <input class="grow m-2 p-2 text-black rounded-md" type="text" [(ngModel)]="entry.title"/>
-        <button *ngIf="!editing" class="float-right p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover" (click)="onEditClicked()" i18n>Edit</button>
-        <button *ngIf="editing" class="float-right p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover" (click)="onSaveClicked()" i18n>Save</button>
+        <input
+            class="grow m-2 p-2 text-black rounded-md placeholder:text-slate"
+            type="text"
+            [(ngModel)]="entry.title"
+            i18ln-title title="Entry Title"
+            placeholder="Entry Title" />
+        <button
+            *ngIf="!editing"
+            class="float-right p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
+            (click)="onEditClicked()"
+            i18n
+            i18n-title
+            title="Edit Entry">
+                Edit
+        </button>
+        <button
+            *ngIf="editing"
+            class="float-right p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
+            (click)="onSaveClicked()"
+            i18n
+            i18n-title
+            title="Save Entry">
+                Save
+        </button>
     </div>
     <div class="min-h-[15rem] m-2" *ngIf="!editing" [innerHTML]="entry.text" (dblclick)="onEditClicked()"></div>
     <div class="min-h-[15rem] m-2" *ngIf="editing">

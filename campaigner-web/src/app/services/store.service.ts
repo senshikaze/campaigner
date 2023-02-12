@@ -11,41 +11,32 @@ export class StoreService {
 
   constructor() { }
 
-  deleteCampaign(id: string): Observable<Campaign[]> {
-    let campaigns = JSON.parse(localStorage.getItem('campaigns') ?? "[]") as Campaign[];
-    campaigns = campaigns.filter(c => c.id != id);
-    localStorage.setItem('campaigns', JSON.stringify(campaigns));
-    return of(campaigns).pipe(
-      map(c => c)
-    );
+  deleteCampaign(id: string): void {
+    localStorage.removeItem(`campaigns-${id}`)
   }
 
   getCampaign(id: string): Observable<Campaign> {
-    let campaigns = JSON.parse(localStorage.getItem('campaigns') ?? "[]") as Campaign[];
-    return of(campaigns).pipe(
-      map(campaign => {return campaign.filter(campaign => campaign.id == id)[0]})
+    let campaign = JSON.parse(localStorage.getItem(`campaigns-${id}`) ?? "") as Campaign;
+    return of(campaign).pipe(
+      map(campaign => {return campaign})
     );
   }
 
   getCampaigns(): Observable<Campaign[]> {
-    let campaigns = localStorage.getItem('campaigns') ?? "[]";
-    return from(of(campaigns)).pipe(
+    let campaigns = {...localStorage}
+    campaigns
+    return of(campaigns).pipe(
       map(camps => JSON.parse(camps) as Campaign[])
     );
   }
 
   saveCampaign(campaign: Campaign): Observable<Campaign> {
-    let campaigns = JSON.parse(localStorage.getItem('campaigns') ?? "[]") as Campaign[];
     if (!campaign.id || campaign.id == "new") {
       // Generate campaign id
       campaign.id = uuid();
-    } else {
-      campaigns = campaigns.filter(c => c.id != campaign.id);
     }
 
-    campaigns.push(campaign)
-
-    localStorage.setItem("campaigns", JSON.stringify(campaigns));
+    localStorage.setItem(`campaigns-${campaign.id}`, JSON.stringify(campaign));
 
     return from(of(campaign)).pipe(
       map(campaign => campaign)

@@ -15,7 +15,7 @@ module.exports = {
         'light-bg-alt': "#fffffd",
         'dark-action': "#404258",
         'dark-action-hover': "#50577A",
-        'dark-action-active': "#50577A",
+        'dark-action-active': "#474d6c",
         'dark-action-light': "#707182",
         'dark-accent': "#404258",
         'dark-accent-red': "#d62828",
@@ -23,7 +23,7 @@ module.exports = {
         'dark-accent-yellow': "#fcbf49",
         'dark-accent-wheat': "#eae2b7",
         'dark-bg': "#404258",
-        'dark-bg-alt': "#6B728E",
+        'dark-bg-alt': "#8d94af",
         'dark-content-bg': "#9095aa"
       }
     }
