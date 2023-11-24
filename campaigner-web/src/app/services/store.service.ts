@@ -1,5 +1,5 @@
 import { Injectable, isDevMode } from '@angular/core';
-import { filter, from, map, Observable, of, reduce } from 'rxjs';
+import { filter, flatMap, from, map, mergeMap, Observable, of, reduce } from 'rxjs';
 import { v4 as uuid} from 'uuid';
 
 import { Campaign } from '../interfaces/campaign';
@@ -11,8 +11,9 @@ export class StoreService {
 
   constructor() { }
 
-  deleteCampaign(id: string): void {
+  deleteCampaign(id: string): Observable<Campaign[]> {
     localStorage.removeItem(`campaigns-${id}`)
+    return this.getCampaigns();
   }
 
   getCampaign(id: string): Observable<Campaign> {
@@ -22,11 +23,15 @@ export class StoreService {
     );
   }
 
+  /**
+   * Get All Campaigns from local storage
+   * @returns Observable of an array of Campaigns 
+   */
   getCampaigns(): Observable<Campaign[]> {
-    let campaigns = {...localStorage}
-    campaigns
+    let campaigns: string[] = [];
+    Object.keys(localStorage).map(k => (k.includes('campaigns') ? campaigns.push(localStorage.getItem(k)!) : null));
     return of(campaigns).pipe(
-      map(camps => JSON.parse(camps) as Campaign[])
+      map(camps => camps.map(c => JSON.parse(c) as Campaign))
     );
   }
 

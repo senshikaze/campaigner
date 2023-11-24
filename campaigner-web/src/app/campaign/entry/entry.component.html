@@ -1,31 +1,33 @@
-<div class="flex flex-col border-t-2">
+<div class="flex flex-col">
     <div class="flex">
         <input
-            class="grow m-2 p-2 text-black rounded-md placeholder:text-slate"
+            class="grow m-2 p-2 text-white rounded-md placeholder:text-slate-700 bg-dark-input-bg"
             type="text"
             [(ngModel)]="entry.title"
-            i18ln-title title="Entry Title"
-            placeholder="Entry Title" />
+            i18n-title title="Entry Title"
+            i18n-placeholder placeholder="Entry Title" />
         <button
             *ngIf="!editing"
-            class="float-right p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
+            class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
             (click)="onEditClicked()"
-            i18n
-            i18n-title
-            title="Edit Entry">
-                Edit
+            i18n i18n-title title="Edit Entry">
+            <img class="w-[28px] h-[28px]" src="assets/edit-white.png" i18n-title title="Edit Entry" alt="Edit Entry"/>
         </button>
         <button
             *ngIf="editing"
-            class="float-right p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
+            class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
             (click)="onSaveClicked()"
-            i18n
-            i18n-title
-            title="Save Entry">
-                Save
+            i18n i18n-title title="Save Entry">
+            <img class="w-[28px] h-[28px]" src="assets/save-white.png" i18n-title title="Save Entry" alt="Save Entry"/>
+        </button>
+        <button
+            class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-accent-red"
+            (click)="onDeleteClicked()"
+            i18n i18n-title title="Delete Entry">
+            <img class="w-[28px] h-[28px]" src="assets/delete-white.png" i18n-title title="Delete Entry" alt="Delete Entry"/>
         </button>
     </div>
-    <div class="min-h-[15rem] m-2" *ngIf="!editing" [innerHTML]="entry.text" (dblclick)="onEditClicked()"></div>
+    <div class="m-2" *ngIf="!editing" [innerHTML]="entry.text" (dblclick)="onEditClicked()"></div>
     <div class="min-h-[15rem] m-2" *ngIf="editing">
         <ck-textbox [(text)]="entry.text"></ck-textbox>
     </div>

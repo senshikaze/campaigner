@@ -10,7 +10,7 @@ import { StoreService } from '../services/store.service';
 @Component({
   selector: 'app-campaign',
   templateUrl: './campaign.component.html',
-  styleUrls: ['./campaign.component.css']
+  styles: []
 })
 export class CampaignComponent implements OnInit, OnDestroy {
   campaign: Campaign;
@@ -49,6 +49,15 @@ export class CampaignComponent implements OnInit, OnDestroy {
     }
   }
 
+  onCreateClicked(): void {
+    this.campaign.entries.push({id: null, title: "", text: ""} as Entry);
+  }
+
+  onDeleteEntry(entry: Entry): void {
+    this.campaign.entries = this.campaign.entries.filter(e => e.title != entry.title);
+    this.store.saveCampaign(this.campaign);
+  }
+
   onNameChanged(value: string): void {
     this.campaign.name = value;
     // save this campaign
@@ -60,10 +69,6 @@ export class CampaignComponent implements OnInit, OnDestroy {
         }
       });
     }
-  }
-
-  onCreateClicked(): void {
-    this.campaign.entries.push({id: null, title: "", text: ""} as Entry);
   }
 
   onSaveClicked(): void {

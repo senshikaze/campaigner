@@ -13,8 +13,8 @@ import { StoreService } from '../services/store.service';
     <button
       class="p-2 rounded-lg text-white bg-dark-action hover:bg-dark-action-hover"
       (click)="onCreateClicked()"
-      i18n>
-        New Campaign
+      i18n i18n-title title="Add Campaign">
+      <img class="w-[28px] h-[28px]" src="assets/add-white.png" i18n-title title="Add Campaign" alt="Add Campaign"/>
     </button>
   </div>
   <div class="flex grow">
@@ -31,8 +31,9 @@ import { StoreService } from '../services/store.service';
             <button
               class="p-2 rounded-lg text-white bg-dark-action hover:bg-dark-accent-red"
               [attr.data-campaign_id]="campaign.id" (click)="onDeleteClicked($event)"
-              title="Delete Campaign">
-                Delete
+              title="Delete Campaign"
+              i18n i18n-title title="Delete Campaign">
+              <img class="w-[28px] h-[28px]" src="assets/delete-white.png" i18n-title title="Delete Campaign" alt="Delete Campaign"/>
             </button>
           </div>
         </div>
@@ -56,8 +57,9 @@ export class CampaignListComponent implements OnInit {
   }
 
   onDeleteClicked($event: MouseEvent) {
-    // @ts-ignore
-    let id = $event.target?.dataset.campaign_id;
-    this.campaigns = this.store.deleteCampaign(id).pipe(share());
+    let target = $event.target as HTMLElement;
+    if (target.dataset['campaign_id']) {
+      this.campaigns = this.store.deleteCampaign(target.dataset['campaign_id']);
+    }
   }
 }

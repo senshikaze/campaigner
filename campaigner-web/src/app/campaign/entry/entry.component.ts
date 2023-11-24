@@ -9,6 +9,7 @@ import { Entry } from '../../interfaces/entry';
 export class EntryComponent implements OnChanges {
   @Input() entry: Entry;
   @Output() entryChange = new EventEmitter<Entry>();
+  @Output() entryDelete = new EventEmitter<Entry>();
 
   editing: boolean = false;
 
@@ -23,11 +24,15 @@ export class EntryComponent implements OnChanges {
     this.entryChange.emit(this.entry);
   }
 
-  onEditClicked() {
+  onDeleteClicked(): void {
+    this.entryDelete.emit(this.entry);
+  }
+
+  onEditClicked(): void {
     this.editing = true;
   }
 
-  onSaveClicked() {
+  onSaveClicked(): void {
     this.editing = false;
   }
 

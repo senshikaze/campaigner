@@ -13,18 +13,19 @@ module.exports = {
         'light-accent-wheat': "#eae2b7",
         'light-bg': "#fcfaf3",
         'light-bg-alt': "#fffffd",
-        'dark-action': "#404258",
-        'dark-action-hover': "#50577A",
+        'dark-action': "#303248",
+        'dark-action-hover': "#354265",
         'dark-action-active': "#474d6c",
         'dark-action-light': "#707182",
         'dark-accent': "#404258",
-        'dark-accent-red': "#d62828",
+        'dark-accent-red': "#c61818",
         'dark-accent-orange': "#f77f00",
         'dark-accent-yellow': "#fcbf49",
         'dark-accent-wheat': "#eae2b7",
         'dark-bg': "#404258",
-        'dark-bg-alt': "#8d94af",
-        'dark-content-bg': "#9095aa"
+        'dark-bg-alt': "#4d546f",
+        'dark-content-bg': "#9095aa",
+        'dark-input-bg': "#80859a"
       }
     }
   },
