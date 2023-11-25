@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, Subscription, timer } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { Location } from '@angular/common';
 
 import { Campaign } from '../interfaces/campaign';
-import { Entry } from '../interfaces/entry';
+import { CampaignEntry } from '../interfaces/campaign-entry';
 import { StoreService } from '../services/store.service';
 
 @Component({
@@ -50,10 +50,10 @@ export class CampaignComponent implements OnInit, OnDestroy {
   }
 
   onCreateClicked(): void {
-    this.campaign.entries.push({id: null, title: "", text: ""} as Entry);
+    this.campaign.entries.push({id: null, title: "", text: ""} as CampaignEntry);
   }
 
-  onDeleteEntry(entry: Entry): void {
+  onDeleteEntry(entry: CampaignEntry): void {
     this.campaign.entries = this.campaign.entries.filter(e => e.title != entry.title);
     this.store.saveCampaign(this.campaign);
   }

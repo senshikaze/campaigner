@@ -1,12 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { StoreService } from './services/store.service';
 
 describe('AppComponent', () => {
+  let apiSpy: jasmine.SpyObj<StoreService>;
+
   beforeEach(async () => {
+    apiSpy = jasmine.createSpyObj('StoreService', ['getFromStore']);
     await TestBed.configureTestingModule({
       declarations: [
         AppComponent
       ],
+      providers: [
+        {provide: StoreService, useValue: apiSpy}
+      ]
     }).compileComponents();
   });
 

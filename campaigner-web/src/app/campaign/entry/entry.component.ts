@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { Entry } from '../../interfaces/entry';
+import { CampaignEntry } from '../../interfaces/campaign-entry';
 
 @Component({
   selector: 'app-entry',
@@ -7,9 +7,9 @@ import { Entry } from '../../interfaces/entry';
   styleUrls: ['./entry.component.css']
 })
 export class EntryComponent implements OnChanges {
-  @Input() entry: Entry;
-  @Output() entryChange = new EventEmitter<Entry>();
-  @Output() entryDelete = new EventEmitter<Entry>();
+  @Input() entry: CampaignEntry;
+  @Output() entryChange = new EventEmitter<CampaignEntry>();
+  @Output() entryDelete = new EventEmitter<CampaignEntry>();
 
   editing: boolean = false;
 

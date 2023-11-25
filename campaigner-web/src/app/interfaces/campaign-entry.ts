@@ -1,4 +1,4 @@
-export interface Entry {
+export interface CampaignEntry {
     title: string;
     text: string;
 }
