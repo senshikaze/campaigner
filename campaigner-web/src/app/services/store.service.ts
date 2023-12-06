@@ -15,14 +15,54 @@ export class StoreService {
   /**
    * Almanac methods
    */
+  deleteAlmanacEntry(id: string): Observable<AlmanacEntry[]> {
+    this.deleteFromStore(`almanac-${id}`);
+    return this.getAlmanacEntries();
+  }
+
   /**
    * Get the specific Almanac Entry by id
    * @param id Almanac Entry id
    * @returns Observable of AlamancEntry
    */
-  getAlamanacEntry(id: string): Observable<AlmanacEntry> {
+  getAlmanacEntry(id: string): Observable<AlmanacEntry> {
     let entry = JSON.parse(this.getFromStore(`almanac-${id}`)) as AlmanacEntry;
     return of(entry);
+  }
+
+  /**
+   * Get all alamanc entries, optionally with string filter
+   * @param filter (optional) find entries with string in name or description
+   * @returns 
+   */
+  getAlmanacEntries(filter: string | null = null): Observable<AlmanacEntry[]> {
+    let entries = this.getAllFromStoreByFilter('almanac-').map(e => JSON.parse(e) as AlmanacEntry);
+    if (filter !== null) {
+      entries = entries.filter(e => e.name.includes(filter) || e.description.includes(filter))
+    }
+    return of(entries);
+  }
+
+  saveAlmanacEntry(entry: AlmanacEntry): Observable<AlmanacEntry> {
+    if (entry.id === "new") {
+      entry.id = uuid();
+    }
+    this.setToStore(`almanac-${entry.id}`, JSON.stringify(entry));
+    return of(entry);
+  }
+
+  /**
+   * Get all alamanc entries from campaign, optionally with string filter
+   * @param filter (optional) find entries with string in name or description
+   */
+  getAlmanacEntriesByCampaign(campaign: string, filter: string | null = null): Observable<AlmanacEntry[]> {
+    let entries = this.getAllFromStoreByFilter('almanac-')
+      .map(e => JSON.parse(e) as AlmanacEntry)
+      .filter(e => e.campaign === campaign);
+    if (filter !== null) {
+      entries = entries.filter(e => e.name.includes(filter) || e.description.includes(filter));
+    }
+    return of(entries);
   }
 
   /**

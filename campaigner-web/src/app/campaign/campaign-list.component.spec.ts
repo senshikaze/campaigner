@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CampaignListComponent } from './campaign-list.component';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('CampaignListComponent', () => {
   let component: CampaignListComponent;
@@ -8,7 +10,10 @@ describe('CampaignListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CampaignListComponent ]
+      declarations: [ CampaignListComponent ],
+      providers: [
+        { provide: ActivatedRoute, useValue: of([{id: 1}])}
+      ]
     })
     .compileComponents();
 

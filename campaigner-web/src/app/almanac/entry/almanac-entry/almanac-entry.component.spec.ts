@@ -1,28 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CampaignComponent } from './campaign.component';
+import { AlmanacEntryComponent } from './almanac-entry.component';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-describe('CampaignComponent', () => {
-  let component: CampaignComponent;
-  let fixture: ComponentFixture<CampaignComponent>;
+describe('AlmanacEntryComponent', () => {
+  let component: AlmanacEntryComponent;
+  let fixture: ComponentFixture<AlmanacEntryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CampaignComponent ],
+      declarations: [ AlmanacEntryComponent ],
       providers: [
         { provide: ActivatedRoute, useValue: { paramMap: of(convertToParamMap({id: 1})) } }
-      ],
-      imports: [
-        FormsModule,
-        ReactiveFormsModule
       ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CampaignComponent);
+    fixture = TestBed.createComponent(AlmanacEntryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MockComponent } from 'ng-mocks';
 import { TextboxComponent } from './textbox.component';
+import { CKEditorModule } from 'ckeditor4-angular';
 
 describe('TextboxComponent', () => {
   let component: TextboxComponent;
@@ -8,7 +9,12 @@ describe('TextboxComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TextboxComponent ]
+      declarations: [
+        TextboxComponent,
+      ],
+      imports: [
+        CKEditorModule
+      ]
     })
     .compileComponents();
 

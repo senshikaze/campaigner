@@ -1,0 +1,15 @@
+name: Campaigner Build
+run-name: Campaigner tests
+on: [push]
+jobs:
+    tests:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Use nodejs 20
+              uses: actions/setup-node@v3
+              with:
+                node-version: '20.x'
+            - run: npm ci
+            - run: npm build --if-present
+            - run: ng test --no-watch --no-progress --browsers=ChromeHeadless

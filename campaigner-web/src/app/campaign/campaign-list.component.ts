@@ -19,23 +19,22 @@ import { StoreService } from '../services/store.service';
   </div>
   <div class="flex grow">
     <ul class="grow">
-      <li class="p-2 odd:bg-dark-action-light hover:bg-dark-action-hover" *ngFor="let campaign of campaigns | async">
+      <li class="p-2 odd:bg-dark-zebra-odd even:bg-dark-zebra-even" *ngFor="let campaign of campaigns | async">
         <div class="flex">
+          <p class="grow block text-lg">{{campaign.name}}</p>
           <a
-            class="grow block text-lg"
-            [routerLink]="['/campaign/', campaign.id]" 
+            class="p-2 m-2 rounded-md bg-dark-action hover:bg-dark-action-hover inline-block"
+            [routerLink]="['/campaign/', campaign.id]"
             [state]="campaign">
-              {{campaign.name}}
+            <img class="w-[28px] h-[28px]" src="assets/open-white.png" i18n-title title="View Campaign" alt="View Campaign"/>
           </a>
-          <div>
-            <button
-              class="p-2 rounded-lg text-white bg-dark-action hover:bg-dark-accent-red"
-              [attr.data-campaign_id]="campaign.id" (click)="onDeleteClicked($event)"
-              title="Delete Campaign"
-              i18n i18n-title title="Delete Campaign">
-              <img class="w-[28px] h-[28px]" src="assets/delete-white.png" i18n-title title="Delete Campaign" alt="Delete Campaign"/>
-            </button>
-          </div>
+          <button
+            class="p-2 m-2 rounded-lg text-white bg-dark-action hover:bg-dark-accent-red"
+            [attr.data-campaign_id]="campaign.id" (click)="onDeleteClicked($event)"
+            title="Delete Campaign"
+            i18n i18n-title title="Delete Campaign">
+            <img class="w-[28px] h-[28px]" src="assets/delete-white.png" i18n-title title="Delete Campaign" alt="Delete Campaign"/>
+          </button>
         </div>
       </li>
     </ul>

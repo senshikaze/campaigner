@@ -25,7 +25,9 @@ module.exports = {
         'dark-bg': "#404258",
         'dark-bg-alt': "#4d546f",
         'dark-content-bg': "#9095aa",
-        'dark-input-bg': "#80859a"
+        'dark-input-bg': "#80859a",
+        'dark-zebra-odd': "#5d647f",
+        'dark-zebra-even': "#3d445f"
       }
     }
   },

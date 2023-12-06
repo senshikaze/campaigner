@@ -7,6 +7,7 @@ import { NotfoundComponent } from './notfound.component';
 const routes: Routes = [
   { path: "campaign", loadChildren: () => import("./campaign/campaign.module").then(m => m.CampaignModule)},
   { path: "battle", loadChildren: () => import("./battle/battle.module").then(m => m.BattleModule)},
+  { path: "almanac", loadChildren: () => import("./almanac/almanac.module").then(m => m.AlmanacModule)},
   { path: "", redirectTo: "/campaign", pathMatch: "full"},
   { path: "**", component: NotfoundComponent}
 ];

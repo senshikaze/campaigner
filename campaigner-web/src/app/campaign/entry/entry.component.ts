@@ -4,7 +4,7 @@ import { CampaignEntry } from '../../interfaces/campaign-entry';
 @Component({
   selector: 'app-entry',
   templateUrl: './entry.component.html',
-  styleUrls: ['./entry.component.css']
+  styles: []
 })
 export class EntryComponent implements OnChanges {
   @Input() entry: CampaignEntry;
