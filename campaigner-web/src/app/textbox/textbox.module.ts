@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { TextboxComponent } from '../textbox/textbox.component';
-import { CKEditorModule } from 'ckeditor4-angular';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular'
 
 
 @NgModule({
@@ -16,7 +16,7 @@ import { CKEditorModule } from 'ckeditor4-angular';
       FormsModule
     ],
     exports: [
-        TextboxComponent
+      TextboxComponent
     ]
   })
   export class TextBoxModule { }
