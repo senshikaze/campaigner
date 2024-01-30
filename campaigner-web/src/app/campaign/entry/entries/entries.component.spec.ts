@@ -1,21 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AlmanacFormComponent } from './almanac-form.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EntriesComponent } from './entries.component';
 import { StoreService } from 'src/app/services/store.service';
+import { CreateEntryButtonComponent } from '../create-button/create-entry-button.component';
 
-describe('AlmanacFormComponent', () => {
-  let component: AlmanacFormComponent;
-  let fixture: ComponentFixture<AlmanacFormComponent>;
+describe('EntriesComponent', () => {
+  let component: EntriesComponent;
+  let fixture: ComponentFixture<EntriesComponent>;
   let storeSpy: jasmine.SpyObj<StoreService>;
 
   beforeEach(async () => {
-    storeSpy = jasmine.createSpyObj('StoreService', ['saveAlmanac']);
+    storeSpy = jasmine.createSpyObj('StoreService', ['getSectionEntries']);
     await TestBed.configureTestingModule({
-      declarations: [ AlmanacFormComponent ],
-      imports: [
-        FormsModule,
-        ReactiveFormsModule
+      declarations: [
+        EntriesComponent,
+        CreateEntryButtonComponent
       ],
       providers: [
         { provide: StoreService, useValue: storeSpy }
@@ -23,7 +22,7 @@ describe('AlmanacFormComponent', () => {
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AlmanacFormComponent);
+    fixture = TestBed.createComponent(EntriesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

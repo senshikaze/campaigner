@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, share, Observable } from 'rxjs';
 import { Campaign } from '../interfaces/campaign';
 import { StoreService } from '../services/store.service';
+import { ModalService } from '../services/modal.service';
 
 @Component({
   selector: 'app-campaign-list',
@@ -24,13 +25,13 @@ import { StoreService } from '../services/store.service';
           <p class="grow block text-lg">{{campaign.name}}</p>
           <a
             class="p-2 m-2 rounded-md bg-dark-action hover:bg-dark-action-hover inline-block"
-            [routerLink]="['/campaign/', campaign.id]"
+            [routerLink]="['/campaign/', campaign._id]"
             [state]="campaign">
             <img class="w-[28px] h-[28px]" src="assets/open-white.png" i18n-title title="View Campaign" alt="View Campaign"/>
           </a>
           <button
             class="p-2 m-2 rounded-lg text-white bg-dark-action hover:bg-dark-accent-red"
-            [attr.data-campaign_id]="campaign.id" (click)="onDeleteClicked($event)"
+            (click)="onDeleteClicked(campaign)"
             title="Delete Campaign"
             i18n i18n-title title="Delete Campaign">
             <img class="w-[28px] h-[28px]" src="assets/delete-white.png" i18n-title title="Delete Campaign" alt="Delete Campaign"/>
@@ -45,7 +46,11 @@ import { StoreService } from '../services/store.service';
 export class CampaignListComponent implements OnInit {
   campaigns: Observable<Campaign[]> = of([]);
 
-  constructor(private store: StoreService, private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private store: StoreService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private modal: ModalService) {}
 
   ngOnInit(): void {
     this.campaigns = this.store.getCampaigns().pipe(share());
@@ -55,10 +60,18 @@ export class CampaignListComponent implements OnInit {
     this.router.navigate(["new"], { relativeTo: this.route });
   }
 
-  onDeleteClicked($event: MouseEvent) {
-    let target = $event.target as HTMLElement;
-    if (target.dataset['campaign_id']) {
-      this.campaigns = this.store.deleteCampaign(target.dataset['campaign_id']);
+  onDeleteClicked(campaign: Campaign) {
+    if (campaign._id !== undefined) {
+      this.modal.open({
+        header: "Are you sure?",
+        message: "Are you sure you want to delete this campaign?",
+        confirm: true,
+        closable: true,
+        yes: () => {
+          this.store.deleteCampaign(campaign);
+          this.campaigns = this.store.getCampaigns();
+        }
+      })
     }
   }
 }

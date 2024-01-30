@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   template: `
   <div class="bg-dark-bg text-gray-50 min-w-full min-h-screen flex">
     <div class="flex flex-col grow lg:w-8/12 min-h-screen">
-      <header class="flex flex-row mb-4 p-4 font-medium border-dark-accent border-b-2">
+      <header class="flex flex-row mb-4 p-4 font-medium">
         <h1 class="font-bold text-3xl"><a routerLink="">Campaigner</a></h1>
         <span class="grow"></span>
       </header>
@@ -15,6 +15,7 @@ import { Component } from '@angular/core';
           <router-outlet></router-outlet>
         </div>
       </main>
+      <app-modal></app-modal>
     </div>
   </div>
   `

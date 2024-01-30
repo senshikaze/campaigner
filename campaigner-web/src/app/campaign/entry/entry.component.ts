@@ -7,18 +7,13 @@ import { CampaignEntry } from '../../interfaces/campaign-entry';
   styles: []
 })
 export class EntryComponent implements OnChanges {
-  @Input() entry: CampaignEntry;
+  @Input() entry!: CampaignEntry;
   @Output() entryChange = new EventEmitter<CampaignEntry>();
   @Output() entryDelete = new EventEmitter<CampaignEntry>();
 
   editing: boolean = false;
 
-  constructor() {
-    this.entry = {
-      title: "",
-      text: ""
-    };
-  }
+  constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.entryChange.emit(this.entry);

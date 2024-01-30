@@ -1,31 +1,23 @@
-<div class="flex flex-col grow p-2">
-    <div class="flex mb-2 border-b-2 border-slate-700">
+<div class="flex flex-col grow p-2 h-full">
+    <div class="flex border-b-2 border-slate-700" *ngIf="campaign$ | async as campaign">
         <div class="mb-2 flex flex-auto">
             <input
-                class="grow text-white p-2 m-2 rounded-md placeholder:text-slate-700 bg-dark-input-bg"
-                [ngModel]="campaign.name"
-                (ngModelChange)="onNameChanged($event)"
+                class="grow text-white p-2 m-2 rounded-md placeholder:text-slate-400 bg-dark-input-bg"
+                [(ngModel)]="campaign.name"
                 i18n-title title="Campaign Title" 
                 i18n-placeholder placeholder="Campaign Title"/>
         </div>
         <div class="mb-2 flex">
             <button
                 class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
-                (click)="onSaveClicked()"
+                (click)="onSaveClicked(campaign)"
                 i18n i18n-title title="Save Campaign">
                 <img class="w-[28px] h-[28px]" src="assets/save-white.png" i18n-title title="Save Campaign" alt="Save Campaign"/>
             </button>
-            <button
-                class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
-                (click)="onCreateClicked()"
-                i18n i18n-title title="Add Entry">
-                <img class="w-[28px] h-[28px]" src="assets/add-white.png" i18n-title title="Add Entry" alt="Add Entry"/>
-            </button>
         </div>
     </div>
-    <div class="overflow-y-scroll">
-        <div class="mb-4" *ngFor="let entry of campaign.entries; let i = index">
-            <app-entry [(entry)]="campaign.entries[i]" (entryDelete)="onDeleteEntry(entry)"></app-entry>
-        </div>
+    <div class="overflow-y-scroll grid grid-cols-12 grow" *ngIf="campaign$ | async as campaign">
+        <app-section-list class="col-span-2" *ngIf="sections$ | async as sections" [campaign]="campaign" [sections]="sections" (section)="selectedSection"></app-section-list>
+        <app-entries class="mb-4 col-auto" *ngIf="selectedSection" [section]="selectedSection"></app-entries>
     </div>
 </div>

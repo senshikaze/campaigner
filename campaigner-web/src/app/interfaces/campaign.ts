@@ -1,7 +1,5 @@
-import { CampaignEntry } from "./campaign-entry";
-
 export interface Campaign {
-    id: string;
+    _id?: string;
     name: string;
-    entries: CampaignEntry[];
+    user?: string;
 }

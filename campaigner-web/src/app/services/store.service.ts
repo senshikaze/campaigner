@@ -4,18 +4,68 @@ import { v4 as uuid} from 'uuid';
 
 import { Campaign } from '../interfaces/campaign';
 import { AlmanacEntry } from '../interfaces/almanac-entry';
+import { CampaignSection } from '../interfaces/campaign-section';
+import { CampaignEntry } from '../interfaces/campaign-entry';
+import { HttpClient, HttpParamsOptions } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StoreService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
+
+  /** 
+   * HTTP Methods
+   */
+  delete<T>(url: string): Observable<T> {
+    // TODO error handling, login for auth0
+    let options = {
+      headers: {
+        "x-apikey": environment.api_token,
+        "Content-Type": "application/json",
+      }
+    };
+    return this.http.delete<T>(`${environment.data_store_url}/${url}`, options);
+  }
+
+  get<T>(url: string): Observable<T> {
+    // TODO error handling, login for auth0
+    let options = {
+      headers: {
+        "x-apikey": environment.api_token,
+        "Content-Type": "application/json",
+      }
+    };
+    return this.http.get<T>(`${environment.data_store_url}/${url}`, options);
+  }
+
+  post<T>(url: string, data: any): Observable<T> {
+    let options = {
+      headers: {
+        "x-apikey": environment.api_token,
+        "Content-Type": "application/json",
+      }
+    };
+    return this.http.post<T>(`${environment.data_store_url}/${url}`, data, options);
+  }
+
+  patch<T>(url: string, data: any): Observable<T> {
+    let options = {
+      headers: {
+        "x-apikey": environment.api_token,
+        "Content-Type": "application/json",
+      }
+    };
+    return this.http.patch<T>(url, data, options);
+  }
 
   /**
    * Almanac methods
    */
   deleteAlmanacEntry(id: string): Observable<AlmanacEntry[]> {
+    HttpClient
     this.deleteFromStore(`almanac-${id}`);
     return this.getAlmanacEntries();
   }
@@ -26,8 +76,7 @@ export class StoreService {
    * @returns Observable of AlamancEntry
    */
   getAlmanacEntry(id: string): Observable<AlmanacEntry> {
-    let entry = JSON.parse(this.getFromStore(`almanac-${id}`)) as AlmanacEntry;
-    return of(entry);
+    return of(JSON.parse(this.getFromStore(`almanac-${id}`) ?? "null") as AlmanacEntry);
   }
 
   /**
@@ -44,10 +93,10 @@ export class StoreService {
   }
 
   saveAlmanacEntry(entry: AlmanacEntry): Observable<AlmanacEntry> {
-    if (entry.id === "new") {
-      entry.id = uuid();
+    if (entry._id === "new") {
+      entry._id = uuid();
     }
-    this.setToStore(`almanac-${entry.id}`, JSON.stringify(entry));
+    this.setToStore(`almanac-${entry._id}`, JSON.stringify(entry));
     return of(entry);
   }
 
@@ -73,30 +122,28 @@ export class StoreService {
    * @param id 
    * @returns 
    */
-  deleteCampaign(id: string): Observable<Campaign[]> {
-    this.deleteFromStore(`campaigns-${id}`);
-    return this.getCampaigns();
+  deleteCampaign(campaign: Campaign): void {
+    if (campaign._id) {
+      this.http.delete<Campaign[]>(`campaigns/${campaign._id}`)
+    }
+
   }
 
   /**
-   * Get Campaing from local storage
+   * Get Campaing from store
    * @param id Campaign Id
    * @returns Observalbe of Campaign
    */
   getCampaign(id: string): Observable<Campaign> {
-    let campaign = JSON.parse(this.getFromStore(`campaigns-${id}`)) as Campaign;
-    return of(campaign);
+    return this.get<Campaign>(`campaigns/${id}`);
   }
 
   /**
-   * Get All Campaigns from local storage
+   * Get All Campaigns from store
    * @returns Observable of an array of Campaigns 
    */
   getCampaigns(): Observable<Campaign[]> {
-    let campaigns: string[] = this.getAllFromStoreByFilter('campaigns');
-    return of(campaigns).pipe(
-      map(camps => camps.map(c => JSON.parse(c) as Campaign))
-    );
+    return this.get<Campaign[]>('campaigns/');
   }
 
   /**
@@ -104,14 +151,70 @@ export class StoreService {
    * @returns Observable of the campaign saved
    */
   saveCampaign(campaign: Campaign): Observable<Campaign> {
-    if (!campaign.id || campaign.id == "new") {
-      // Generate campaign id
-      campaign.id = uuid();
+    if (campaign._id) {
+      return this.patch<Campaign>(`campaigns/${campaign._id}`, campaign);
+    }
+    return this.post<Campaign>(`campaigns/`, campaign);
+  }
+
+  /**
+   * Section endpoints
+   */
+  /**
+   * Delete Section and associated entries
+   * @param section 
+   */
+  deleteSection(section: CampaignSection): void {
+    if (section._id == "") {
+      return;
+    }
+    // delete all entries in this section
+    Object.keys(localStorage)
+      .filter(k => k.includes(`entries-${section._id}-`))
+      .forEach(e => this.deleteFromStore(`entries-${section._id}-${e}`));
+    this.deleteFromStore(`sections-${section._id}`);
+  }
+
+  /**
+   * Get all entries for a section
+   */
+  getSectionEntries(section: CampaignSection): Observable<CampaignEntry[]> {
+    if (section._id == null || section._id == "new") {
+      return of([]);
     }
 
-    this.setToStore(`campaigns-${campaign.id}`, JSON.stringify(campaign));
+    return of(this.getAllFromStoreByFilter(`entries-${section._id}-`).map(
+      e => JSON.parse(e) as CampaignEntry
+    ));
+  }
 
-    return of(campaign);
+  /**
+   * Get all sections for campaign
+   * @param campaign 
+   * @returns 
+   */
+  getSections(campaign: Campaign): Observable<CampaignSection[]> {
+    if (!campaign._id || campaign._id == "new") {
+      return of([]);
+    }
+    let sections = this.getAllFromStoreByFilter(`sections-${campaign._id}-`).map(
+      s => JSON.parse(s) as CampaignSection
+    );
+    return of(sections);
+  }
+
+  /**
+   * Save section to store
+   * @param section 
+   */
+  saveSection(section: CampaignSection): Observable<CampaignSection> {
+    if (section._id == "" || section._id == "new") {
+      section._id = uuid();
+    }
+
+    this.setToStore(`sections-${section.campaign}-${section._id}`, JSON.stringify(section));
+
+    return of(section);
   }
 
   /**
@@ -129,8 +232,8 @@ export class StoreService {
    * Get from local store by key
    * @param key 
    */
-  getFromStore(key: string): string {
-    return localStorage.getItem(key) ?? "";
+  getFromStore(key: string): string | null {
+    return localStorage.getItem(key);
   }
 
   /**

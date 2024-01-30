@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription, timer } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, Subject, Subscription, map, of, takeUntil, timer } from 'rxjs';
 import { Location } from '@angular/common';
 
 import { Campaign } from '../interfaces/campaign';
 import { CampaignEntry } from '../interfaces/campaign-entry';
 import { StoreService } from '../services/store.service';
+import { CampaignSection } from '../interfaces/campaign-section';
 
 @Component({
   selector: 'app-campaign',
@@ -13,65 +14,46 @@ import { StoreService } from '../services/store.service';
   styles: []
 })
 export class CampaignComponent implements OnInit, OnDestroy {
-  campaign: Campaign;
-  saveTimer: Subscription | null = null;
+  campaign$!: Observable<Campaign>;
 
-  constructor(private store: StoreService, private route: ActivatedRoute, private location: Location) { 
-    this.campaign = {
-      id: "",
-      name: "",
-      entries: []
-    };
-  }
+  sections$: Observable<CampaignSection[]> = of([]);
+  selectedSection!: CampaignSection;
+
+  entries$: Observable<CampaignEntry[]> = of([]);
+
+
+  destroy$ = new Subject<boolean>();
+
+  constructor(
+    private store: StoreService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(p => {
       if (p.has("id") && p.get("id") != "new") {
-        this.store.getCampaign(p.get("id") as string).subscribe({
-          next: c => this.campaign = c
+        this.campaign$ = this.store.getCampaign(p.get("id") as string);
+      } else if (p.get("id") == "new") {
+        this.campaign$ = of({
+          name: '',
         });
       }
     });
 
-    // create a timer to save the campaign every 10 seconds
-    // only save if the campaign has a name
-    if (this.campaign.name) {
-      this.saveTimer = timer(10000, 10000)
-        .subscribe({next: 
-          _ => this.store.saveCampaign(this.campaign)
-        });
-    }
+    this.campaign$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(camp => this.sections$ = this.store.getSections(camp));
   }
 
   ngOnDestroy(): void {
-    if (this.saveTimer) {
-      this.saveTimer.unsubscribe();
-    }
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
-  onCreateClicked(): void {
-    this.campaign.entries.push({id: null, title: "", text: ""} as CampaignEntry);
-  }
-
-  onDeleteEntry(entry: CampaignEntry): void {
-    this.campaign.entries = this.campaign.entries.filter(e => e.title != entry.title);
-    this.store.saveCampaign(this.campaign);
-  }
-
-  onNameChanged(value: string): void {
-    this.campaign.name = value;
-    // save this campaign
-    if (!this.campaign.id) {
-      this.store.saveCampaign(this.campaign).subscribe({
-        next: c => {
-          this.campaign.id = c.id;
-          this.route.parent?.url.subscribe(p => this.location.replaceState(`${p[p.length -1].path}/${c.id}`));
-        }
-      });
-    }
-  }
-
-  onSaveClicked(): void {
-    this.store.saveCampaign(this.campaign);
+  onSaveClicked(campaign: Campaign): void {
+    this.store.saveCampaign(campaign).subscribe(
+      c => this.router.navigate(['/campaign', c._id])
+    );
   }
 }

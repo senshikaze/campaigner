@@ -11,20 +11,20 @@ import { StoreService } from 'src/app/services/store.service';
     <div class="flex flex-col m-2">
       <input
         type="text"
-        class="grow text-stone-900 m-2 p-2 rounded-md placeholder:text-slate-700 bg-dark-input-bg"
+        class="grow text-stone-900 m-2 p-2 rounded-md placeholder:text-slate-400 bg-dark-input-bg"
         formControlName="name"
         placeholder="Entry Name"
         i18n i18n-title title="Almanac Entry Name"
         [ngClass]="{'border-2 border-dark-accent-red': this.almanacForm.dirty && this.almanacForm.get('name')?.invalid}">
       <select
-        class="grow text-stone-900 m-2 p-2 rounded-md placeholder:text-slate-700 bg-dark-input-bg"
+        class="grow text-stone-900 m-2 p-2 rounded-md placeholder:text-slate-400 bg-dark-input-bg"
         formControlName="type"
         i18n i18n-title title="Almanac Entry Type"
         [ngClass]="{'border-2 border-dark-accent-red': this.almanacForm.dirty && this.almanacForm.get('type')?.invalid}">
         <option *ngFor="let aType of almanacTypes">{{aType}}</option>
       </select>
       <textarea
-        class="grow text-stone-900 m-2 p-2 rounded-md placeholder:text-slate-700 bg-dark-input-bg"
+        class="grow text-stone-900 m-2 p-2 rounded-md placeholder:text-slate-400 bg-dark-input-bg"
         placeholder="Entry Description"
         formControlName="description"
         i18n i18n-title title="Almanac Entry Description"

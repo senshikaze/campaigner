@@ -3,6 +3,8 @@ import { AppComponent } from './app.component';
 import { StoreService } from './services/store.service';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockComponents } from 'ng-mocks';
+import { ModalComponent } from './misc/modal/modal.component';
 
 describe('AppComponent', () => {
   let apiSpy: jasmine.SpyObj<StoreService>;
@@ -12,7 +14,8 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         AppComponent,
-        SidebarComponent
+        SidebarComponent,
+        ModalComponent
       ],
       providers: [
         {provide: StoreService, useValue: apiSpy}

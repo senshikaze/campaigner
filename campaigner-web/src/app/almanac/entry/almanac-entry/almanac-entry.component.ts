@@ -31,7 +31,7 @@ export class AlmanacEntryComponent implements OnInit {
     this.entry$ = this.route.paramMap.pipe(
       mergeMap(p => 
         (p.get('id') === 'new') 
-          ? of({id:"new", name: "", description:"", type: AlmanacType.LOCATION} as AlmanacEntry)
+          ? of({name: "", description:"", type: AlmanacType.LOCATION} as AlmanacEntry)
           : this.store.getAlmanacEntry(p.get('id')!)
       )
     )
@@ -39,7 +39,7 @@ export class AlmanacEntryComponent implements OnInit {
 
   onSave(entry: AlmanacEntry): void {
     this.entry$ = this.store.saveAlmanacEntry(entry).pipe(
-      map(e => {if (entry.id != e.id) this.router.navigate(['/almanac', e.id]); return e})
+      map(e => {if (entry._id != e._id) this.router.navigate(['/almanac', e._id]); return e})
     )
   }
 }
