@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -10,6 +10,7 @@ import { NotfoundComponent } from './notfound.component';
 import { TextBoxModule } from './textbox/textbox.module';
 import { SharedModule } from './shared.module';
 import { ModalComponent } from './misc/modal/modal.component';
+import { provideHttpCache, withHttpCacheInterceptor } from '@ngneat/cashew';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,11 @@ import { ModalComponent } from './misc/modal/modal.component';
     SharedModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    provideHttpClient(withInterceptors(
+      [withHttpCacheInterceptor()]
+    )), provideHttpCache()
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

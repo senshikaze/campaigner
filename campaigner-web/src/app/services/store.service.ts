@@ -8,6 +8,7 @@ import { CampaignSection } from '../interfaces/campaign-section';
 import { CampaignEntry } from '../interfaces/campaign-entry';
 import { HttpClient, HttpParamsOptions } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { withCache } from '@ngneat/cashew';
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +37,8 @@ export class StoreService {
       headers: {
         "x-apikey": environment.api_token,
         "Content-Type": "application/json",
-      }
+      },
+      context: withCache()
     };
     return this.http.get<T>(`${environment.data_store_url}/${url}`, options);
   }
