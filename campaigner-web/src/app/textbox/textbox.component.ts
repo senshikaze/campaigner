@@ -1,5 +1,6 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
@@ -9,7 +10,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
   <ckeditor
       [editor]="editor"
       [data]="text"
-      (dataChange)="onDataChanged($event)"
+      (change)="onDataChanged($event)"
       [config]="{
         toolbar: ['Bold','Italic', 'Underline', 'NumberedList', 'BulletedList', 'Styles', 'Format', 'Link'],
         removePlugins: ['elementspath'],
@@ -24,9 +25,7 @@ export class TextboxComponent {
   editor = ClassicEditor;
   constructor() {}
 
-  onDataChanged(event: Event) {
-    // @ts-ignore
-    this.text = event.text;
-    this.textChange.emit(this.text);
+  onDataChanged({ editor }: ChangeEvent) {
+    this.textChange.emit(editor.data.get());
   }
 }
