@@ -5,20 +5,27 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponents } from 'ng-mocks';
 import { ModalComponent } from './misc/modal/modal.component';
+import { LoginComponent } from './misc/login/login.component';
+import { AuthService } from '@auth0/auth0-angular';
 
 describe('AppComponent', () => {
   let apiSpy: jasmine.SpyObj<StoreService>;
+  let authSpy: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
     apiSpy = jasmine.createSpyObj('StoreService', ['getFromStore']);
+    authSpy = jasmine.createSpyObj('AuthService', [], ['isAuthenticated$']);
+    
     await TestBed.configureTestingModule({
       declarations: [
         AppComponent,
         SidebarComponent,
-        ModalComponent
+        ModalComponent,
+        LoginComponent
       ],
       providers: [
-        {provide: StoreService, useValue: apiSpy}
+        {provide: StoreService, useValue: apiSpy },
+        {provide: AuthService, useValue: authSpy }
       ],
       imports: [
         RouterTestingModule

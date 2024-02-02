@@ -24,7 +24,6 @@ export class StoreService {
     // TODO error handling, login for auth0
     let options = {
       headers: {
-        "x-apikey": environment.api_token,
         "Content-Type": "application/json",
       }
     };
@@ -35,10 +34,8 @@ export class StoreService {
     // TODO error handling, login for auth0
     let options = {
       headers: {
-        "x-apikey": environment.api_token,
         "Content-Type": "application/json",
       },
-      context: withCache()
     };
     return this.http.get<T>(`${environment.data_store_url}/${url}`, options);
   }
@@ -46,7 +43,6 @@ export class StoreService {
   post<T>(url: string, data: any): Observable<T> {
     let options = {
       headers: {
-        "x-apikey": environment.api_token,
         "Content-Type": "application/json",
       }
     };
@@ -56,7 +52,6 @@ export class StoreService {
   patch<T>(url: string, data: any): Observable<T> {
     let options = {
       headers: {
-        "x-apikey": environment.api_token,
         "Content-Type": "application/json",
       }
     };

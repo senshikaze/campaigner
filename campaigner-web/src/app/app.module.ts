@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -11,6 +11,9 @@ import { TextBoxModule } from './textbox/textbox.module';
 import { SharedModule } from './shared.module';
 import { ModalComponent } from './misc/modal/modal.component';
 import { provideHttpCache, withHttpCacheInterceptor } from '@ngneat/cashew';
+import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
+import { environment } from 'src/environments/environment';
+import { LoginComponent } from './misc/login/login.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +21,7 @@ import { provideHttpCache, withHttpCacheInterceptor } from '@ngneat/cashew';
     SidebarComponent,
     NotfoundComponent,
     ModalComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -25,12 +29,31 @@ import { provideHttpCache, withHttpCacheInterceptor } from '@ngneat/cashew';
     TextBoxModule,
     FormsModule,
     SharedModule,
-    HttpClientModule
+    HttpClientModule,
+    AuthModule.forRoot({
+      domain: environment.auth_domain,
+      clientId: environment.auth_clientId,
+      authorizationParams: {
+        audience: environment.auth_audience,
+        redirect_uri: window.location.origin,
+      },
+      httpInterceptor: {
+        allowedList: [
+          {
+            uri: `${environment.data_store_url}*`
+          }
+        ]
+      },
+      useRefreshTokens: true,
+      cacheLocation: "localstorage",
+    })
   ],
   providers: [
     provideHttpClient(withInterceptors(
       [withHttpCacheInterceptor()]
-    )), provideHttpCache()
+    )),
+    provideHttpCache(),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })
