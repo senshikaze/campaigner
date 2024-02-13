@@ -12,12 +12,14 @@ import { SectionListComponent } from './section/section-list/section-list.compon
 import { CreateEntryButtonComponent } from './entry/create-button/create-entry-button.component';
 import { CreateSectionButtonComponent } from './section/create-section-button/create-section-button.component';
 import { EntriesComponent } from './entry/entries/entries.component';
+import { CampaignSectionsComponent } from './campaign-sections/campaign-sections.component';
 
 
 @NgModule({
     declarations: [
       CampaignComponent,
       CampaignListComponent,
+      CampaignSectionsComponent,
       EntryComponent,
       SectionComponent,
       SectionListComponent,

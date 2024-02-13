@@ -6,7 +6,7 @@ import { StoreService } from '../services/store.service';
 import { ModalService } from '../services/modal.service';
 
 @Component({
-  selector: 'app-campaign-list',
+  selector: 'campaign-list',
   template:`
 <div class="flex flex-col p-2">
   <div class="flex mb-4 grow">

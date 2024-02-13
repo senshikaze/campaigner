@@ -1,25 +1,22 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CampaignEntry } from '../../interfaces/campaign-entry';
+import { StoreService } from 'src/app/services/store.service';
 
 @Component({
-  selector: 'app-entry',
+  selector: 'campaign-entry',
   templateUrl: './entry.component.html',
   styles: []
 })
-export class EntryComponent implements OnChanges {
+export class EntryComponent {
   @Input() entry!: CampaignEntry;
-  @Output() entryChange = new EventEmitter<CampaignEntry>();
   @Output() entryDelete = new EventEmitter<CampaignEntry>();
 
   editing: boolean = false;
 
-  constructor() {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.entryChange.emit(this.entry);
-  }
+  constructor(private store: StoreService) {}
 
   onDeleteClicked(): void {
+    this.store.deleteCampaignEntry(this.entry);
     this.entryDelete.emit(this.entry);
   }
 
@@ -29,6 +26,6 @@ export class EntryComponent implements OnChanges {
 
   onSaveClicked(): void {
     this.editing = false;
+    this.store.saveCampaignEntry(this.entry)
   }
-
 }

@@ -8,11 +8,12 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
   template:`
 <div class="grow">
   <ckeditor
+      class="text-black"
       [editor]="editor"
       [data]="text"
       (change)="onDataChanged($event)"
       [config]="{
-        toolbar: ['Bold','Italic', 'Underline', 'NumberedList', 'BulletedList', 'Styles', 'Format', 'Link'],
+        toolbar: ['Bold','Italic', '|', 'heading', '|', 'NumberedList', 'BulletedList', 'blockQuote', 'Link'],
         removePlugins: ['elementspath'],
       }">
   </ckeditor>

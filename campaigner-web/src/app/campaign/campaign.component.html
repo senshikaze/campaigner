@@ -16,8 +16,5 @@
             </button>
         </div>
     </div>
-    <div class="overflow-y-scroll grid grid-cols-12 grow" *ngIf="campaign$ | async as campaign">
-        <app-section-list class="col-span-2" *ngIf="sections$ | async as sections" [campaign]="campaign" [sections]="sections" (section)="selectedSection"></app-section-list>
-        <app-entries class="mb-4 col-auto" *ngIf="selectedSection" [section]="selectedSection"></app-entries>
-    </div>
+    <campaign-sections class="overflow-y-scroll grid grow" *ngIf="campaign$ | async as campaign" [campaign]="campaign"></campaign-sections>
 </div>

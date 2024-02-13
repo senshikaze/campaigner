@@ -9,26 +9,22 @@ import { StoreService } from '../services/store.service';
 import { CampaignSection } from '../interfaces/campaign-section';
 
 @Component({
-  selector: 'app-campaign',
+  selector: 'campaign',
   templateUrl: './campaign.component.html',
   styles: []
 })
 export class CampaignComponent implements OnInit, OnDestroy {
   campaign$!: Observable<Campaign>;
 
-  sections$: Observable<CampaignSection[]> = of([]);
   selectedSection!: CampaignSection;
-
-  entries$: Observable<CampaignEntry[]> = of([]);
-
 
   destroy$ = new Subject<boolean>();
 
   constructor(
     private store: StoreService,
     private router: Router,
-    private route: ActivatedRoute,
-    private location: Location) {}
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(p => {
@@ -40,10 +36,6 @@ export class CampaignComponent implements OnInit, OnDestroy {
         });
       }
     });
-
-    this.campaign$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(camp => this.sections$ = this.store.getSections(camp));
   }
 
   ngOnDestroy(): void {

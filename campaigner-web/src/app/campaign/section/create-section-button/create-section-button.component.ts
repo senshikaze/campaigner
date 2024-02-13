@@ -4,7 +4,7 @@ import { CampaignSection } from 'src/app/interfaces/campaign-section';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
-  selector: 'app-create-section-button',
+  selector: 'campaign-section-create-button',
   template: `
     <button
       class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"

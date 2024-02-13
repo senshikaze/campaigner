@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { from, map, Observable, of } from 'rxjs';
+import { forkJoin, Observable, of, switchMap } from 'rxjs';
 import { v4 as uuid} from 'uuid';
 
 import { Campaign } from '../interfaces/campaign';
@@ -155,34 +155,54 @@ export class StoreService {
   }
 
   /**
+   * Campaign Entry endpoints
+   */
+  deleteCampaignEntry(entry: CampaignEntry): Observable<never> {
+    if (!entry._id) {
+      return of(); 
+    }
+    return this.delete<never>(`entries/${entry._id}`);
+  }
+
+  getCampaignEntry(id: string): Observable<CampaignEntry> {
+    return this.get<CampaignEntry>(`entries/${id}`);
+  }
+
+  saveCampaignEntry(entry: CampaignEntry): Observable<CampaignEntry> {
+    if (entry._id) {
+      return this.patch<CampaignEntry>(`entries/${entry._id}`, entry);
+    }
+    return this.post<CampaignEntry>(`entries`, entry);
+  }
+
+  /**
    * Section endpoints
    */
   /**
    * Delete Section and associated entries
    * @param section 
    */
-  deleteSection(section: CampaignSection): void {
-    if (section._id == "") {
-      return;
+  deleteSection(section: CampaignSection): Observable<never> {
+    if (!section._id) {
+      return of();
     }
-    // delete all entries in this section
-    Object.keys(localStorage)
-      .filter(k => k.includes(`entries-${section._id}-`))
-      .forEach(e => this.deleteFromStore(`entries-${section._id}-${e}`));
-    this.deleteFromStore(`sections-${section._id}`);
+    return forkJoin([
+      this.delete<never>(`sections/${section._id}`),
+      this.delete<never>(`entries?section=${section._id}`)
+    ]).pipe(
+      switchMap(n => n)
+    );
   }
 
   /**
    * Get all entries for a section
    */
   getSectionEntries(section: CampaignSection): Observable<CampaignEntry[]> {
-    if (section._id == null || section._id == "new") {
+    if (!section._id) {
       return of([]);
     }
 
-    return of(this.getAllFromStoreByFilter(`entries-${section._id}-`).map(
-      e => JSON.parse(e) as CampaignEntry
-    ));
+    return this.get<CampaignEntry[]>(`entries?section=${section._id}`);
   }
 
   /**
@@ -191,13 +211,11 @@ export class StoreService {
    * @returns 
    */
   getSections(campaign: Campaign): Observable<CampaignSection[]> {
-    if (!campaign._id || campaign._id == "new") {
+    if (!campaign._id) {
       return of([]);
     }
-    let sections = this.getAllFromStoreByFilter(`sections-${campaign._id}-`).map(
-      s => JSON.parse(s) as CampaignSection
-    );
-    return of(sections);
+
+    return this.get<CampaignSection[]>(`sections?campaign=${campaign._id}`);
   }
 
   /**
@@ -205,13 +223,11 @@ export class StoreService {
    * @param section 
    */
   saveSection(section: CampaignSection): Observable<CampaignSection> {
-    if (section._id == "" || section._id == "new") {
-      section._id = uuid();
+    if (!section.campaign) {
+      return of(section);
     }
-
-    this.setToStore(`sections-${section.campaign}-${section._id}`, JSON.stringify(section));
-
-    return of(section);
+  
+    return this.post<CampaignSection>(`sections`, section);
   }
 
   /**
