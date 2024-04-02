@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { TextboxComponent } from '../textbox/textbox.component';
+import { TextboxComponent } from './textbox.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular'
 
 
