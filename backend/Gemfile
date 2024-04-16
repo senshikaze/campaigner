@@ -45,3 +45,7 @@ group :development do
   # gem "spring"
 end
 
+
+gem "jwt", "~> 2.8"
+gem "rack-cors", "~> 2.0"
+gem "mocha", "~>2.2"
