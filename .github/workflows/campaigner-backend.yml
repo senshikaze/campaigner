@@ -8,6 +8,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Use ruby
         uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
+        with:
+          ruby-version: '3.0.2'
       - name: Install Packages
         working-directory: ./backend
         run: bundle install 
