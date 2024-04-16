@@ -25,7 +25,7 @@ describe('EntryComponent', () => {
     .compileComponents();
 
     let entry: CampaignEntry = {
-      section: "1",
+      section: 1,
       title: "Test Title",
       text: "Test Text"
     };

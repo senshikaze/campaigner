@@ -22,9 +22,9 @@ export class CreateSectionButtonComponent {
   constructor(private store: StoreService) {}
 
   onCreateClicked(): void {
-    if (this.campaign._id !== undefined) {
+    if (this.campaign.id !== undefined) {
       this.newSectionEvent.emit({
-        campaign: this.campaign._id,
+        campaign: this.campaign.id,
         name: ""
       });
     }

@@ -24,7 +24,7 @@ describe('SectionComponent', () => {
     .compileComponents();
 
     let section: CampaignSection = {
-      campaign: "1",
+      campaign: 1,
       name: "Test Name"
     };
 

@@ -1,5 +1,5 @@
 export interface Encounter {
-    _id?: string;
+    id?: number;
     belligerents: string[];
     name: string;
     description: string;

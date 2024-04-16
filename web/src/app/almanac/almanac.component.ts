@@ -29,7 +29,7 @@ import { ActivatedRoute, Router } from '@angular/router';
               <p class="px-4 block align-middle">{{entry.type}}</p>
               <a
                 class="p-2 m-2 rounded-md bg-dark-action hover:bg-dark-action-hover inline-block"
-                [routerLink]="['/almanac/', entry._id]">
+                [routerLink]="['/almanac/', entry.id]">
                 <img class="w-[28px] h-[28px]" src="assets/open-white.png" i18n-title title="View Entry" alt="View Entry"/>
               </a>
               <button
@@ -65,8 +65,8 @@ export class AlmanacComponent implements OnInit {
   }
 
   onDeleteClicked(entry: AlmanacEntry): void {
-    if (entry._id !== undefined) {
-      this.almanacEntries$ = this.store.deleteAlmanacEntry(entry._id);
+    if (entry.id !== undefined) {
+      this.almanacEntries$ = this.store.deleteAlmanacEntry(entry.id);
     }
   }
 }

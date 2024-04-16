@@ -90,10 +90,10 @@ export class StoreService {
   }
 
   saveAlmanacEntry(entry: AlmanacEntry): Observable<AlmanacEntry> {
-    if (entry._id === "new") {
-      entry._id = uuid();
+    if (entry.id === "new") {
+      entry.id = uuid();
     }
-    this.setToStore(`almanac-${entry._id}`, JSON.stringify(entry));
+    this.setToStore(`almanac-${entry.id}`, JSON.stringify(entry));
     return of(entry);
   }
 
@@ -101,7 +101,7 @@ export class StoreService {
    * Get all alamanc entries from campaign, optionally with string filter
    * @param filter (optional) find entries with string in name or description
    */
-  getAlmanacEntriesByCampaign(campaign: string, filter: string | null = null): Observable<AlmanacEntry[]> {
+  getAlmanacEntriesByCampaign(campaign: number, filter: string | null = null): Observable<AlmanacEntry[]> {
     let entries = this.getAllFromStoreByFilter('almanac-')
       .map(e => JSON.parse(e) as AlmanacEntry)
       .filter(e => e.campaign === campaign);
@@ -120,8 +120,8 @@ export class StoreService {
    * @returns 
    */
   deleteCampaign(campaign: Campaign): void {
-    if (campaign._id) {
-      this.http.delete<Campaign[]>(`campaigns/${campaign._id}`)
+    if (campaign.id) {
+      this.http.delete<Campaign[]>(`campaigns/${campaign.id}`)
     }
 
   }
@@ -148,8 +148,8 @@ export class StoreService {
    * @returns Observable of the campaign saved
    */
   saveCampaign(campaign: Campaign): Observable<Campaign> {
-    if (campaign._id) {
-      return this.patch<Campaign>(`campaigns/${campaign._id}`, campaign);
+    if (campaign.id) {
+      return this.patch<Campaign>(`campaigns/${campaign.id}`, campaign);
     }
     return this.post<Campaign>(`campaigns/`, campaign);
   }
@@ -158,10 +158,10 @@ export class StoreService {
    * Campaign Entry endpoints
    */
   deleteCampaignEntry(entry: CampaignEntry): Observable<never> {
-    if (!entry._id) {
+    if (!entry.id) {
       return of(); 
     }
-    return this.delete<never>(`entries/${entry._id}`);
+    return this.delete<never>(`entries/${entry.id}`);
   }
 
   getCampaignEntry(id: string): Observable<CampaignEntry> {
@@ -169,8 +169,8 @@ export class StoreService {
   }
 
   saveCampaignEntry(entry: CampaignEntry): Observable<CampaignEntry> {
-    if (entry._id) {
-      return this.patch<CampaignEntry>(`entries/${entry._id}`, entry);
+    if (entry.id) {
+      return this.patch<CampaignEntry>(`entries/${entry.id}`, entry);
     }
     return this.post<CampaignEntry>(`entries`, entry);
   }
@@ -183,12 +183,12 @@ export class StoreService {
    * @param section 
    */
   deleteSection(section: CampaignSection): Observable<never> {
-    if (!section._id) {
+    if (!section.id) {
       return of();
     }
     return forkJoin([
-      this.delete<never>(`sections/${section._id}`),
-      this.delete<never>(`entries?section=${section._id}`)
+      this.delete<never>(`sections/${section.id}`),
+      this.delete<never>(`entries?section=${section.id}`)
     ]).pipe(
       switchMap(n => n)
     );
@@ -198,11 +198,11 @@ export class StoreService {
    * Get all entries for a section
    */
   getSectionEntries(section: CampaignSection): Observable<CampaignEntry[]> {
-    if (!section._id) {
+    if (!section.id) {
       return of([]);
     }
 
-    return this.get<CampaignEntry[]>(`entries?section=${section._id}`);
+    return this.get<CampaignEntry[]>(`entries?section=${section.id}`);
   }
 
   /**
@@ -211,11 +211,11 @@ export class StoreService {
    * @returns 
    */
   getSections(campaign: Campaign): Observable<CampaignSection[]> {
-    if (!campaign._id) {
+    if (!campaign.id) {
       return of([]);
     }
 
-    return this.get<CampaignSection[]>(`sections?campaign=${campaign._id}`);
+    return this.get<CampaignSection[]>(`sections?campaign=${campaign.id}`);
   }
 
   /**

@@ -45,7 +45,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
 
   onSaveClicked(campaign: Campaign): void {
     this.store.saveCampaign(campaign).subscribe(
-      c => this.router.navigate(['/campaign', c._id])
+      c => this.router.navigate(['/campaign', c.id])
     );
   }
 }

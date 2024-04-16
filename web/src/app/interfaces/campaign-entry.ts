@@ -1,6 +1,6 @@
 export interface CampaignEntry {
-    _id?: string;
+    id?: number;
     title: string;
     text: string;
-    section: string;
+    section: number;
 }

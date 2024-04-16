@@ -39,11 +39,11 @@ export class SectionListComponent implements OnInit, OnDestroy {
   addNewSection() {
     this.sections$.pipe(
       takeUntil(this.destroy$)
-    ).subscribe(s => this.sections$ = of([...s, ...[{name:'', campaign: this.campaign._id} as CampaignSection]]))
+    ).subscribe(s => this.sections$ = of([...s, ...[{name:'', campaign: this.campaign.id} as CampaignSection]]))
   }
 
   sectionSelected(section: CampaignSection): void {
-    if (section._id) {
+    if (section.id) {
       this.section.emit(section);
     }
   }

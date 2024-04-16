@@ -1,5 +1,5 @@
 export interface CampaignSection {
-    _id?: string;
-    campaign: string;
+    id?: number;
+    campaign: number;
     name: string;
 }

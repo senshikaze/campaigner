@@ -27,7 +27,7 @@ import { StoreService } from 'src/app/services/store.service';
       <img class="w-[28px] h-[28px]" src="assets/save-white.png" i18n-title title="Save" alt="Save"/>
     </button>
     <button
-      *ngIf="section._id"
+      *ngIf="section.id"
       class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-accent-red"
       (click)="onDeleteClicked()"
       i18n i18n-title title="Delete Section">
@@ -74,7 +74,7 @@ export class SectionComponent implements OnInit, OnDestroy {
   }
 
   onDeleteClicked() {
-    if (this.section._id) {
+    if (this.section.id) {
       this.modal.open({
         header: "Are you sure?",
         message: "Are you sure you want to delete this section?\nThis will delete all entries as well.",

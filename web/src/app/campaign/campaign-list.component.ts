@@ -25,7 +25,7 @@ import { ModalService } from '../services/modal.service';
           <p class="grow block text-lg">{{campaign.name}}</p>
           <a
             class="p-2 m-2 rounded-md bg-dark-action hover:bg-dark-action-hover inline-block"
-            [routerLink]="['/campaign/', campaign._id]"
+            [routerLink]="['/campaign/', campaign.id]"
             [state]="campaign">
             <img class="w-[28px] h-[28px]" src="assets/open-white.png" i18n-title title="View Campaign" alt="View Campaign"/>
           </a>
@@ -61,7 +61,7 @@ export class CampaignListComponent implements OnInit {
   }
 
   onDeleteClicked(campaign: Campaign) {
-    if (campaign._id !== undefined) {
+    if (campaign.id !== undefined) {
       this.modal.open({
         header: "Are you sure?",
         message: "Are you sure you want to delete this campaign?",

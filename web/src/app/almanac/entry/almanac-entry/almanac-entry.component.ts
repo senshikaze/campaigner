@@ -39,7 +39,7 @@ export class AlmanacEntryComponent implements OnInit {
 
   onSave(entry: AlmanacEntry): void {
     this.entry$ = this.store.saveAlmanacEntry(entry).pipe(
-      map(e => {if (entry._id != e._id) this.router.navigate(['/almanac', e._id]); return e})
+      map(e => {if (entry.id != e.id) this.router.navigate(['/almanac', e.id]); return e})
     )
   }
 }

@@ -20,6 +20,6 @@ export class CreateEntryButtonComponent {
   @Output() entryCreated = new EventEmitter<CampaignEntry>();
 
   onCreateClicked(): void {
-    this.entryCreated.emit({title: "", text: "", section: this.section._id} as CampaignEntry);
+    this.entryCreated.emit({title: "", text: "", section: this.section.id} as CampaignEntry);
   }
 }
