@@ -24,7 +24,7 @@ export class CreateSectionButtonComponent {
   onCreateClicked(): void {
     if (this.campaign.id !== undefined) {
       this.newSectionEvent.emit({
-        campaign: this.campaign.id,
+        campaign_id: this.campaign.id,
         name: ""
       });
     }

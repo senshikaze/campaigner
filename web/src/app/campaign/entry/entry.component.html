@@ -7,14 +7,6 @@
             i18n-title title="Entry Title"
             i18n-placeholder placeholder="Entry Title" />
         <button
-            *ngIf="!editing"
-            class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
-            (click)="onEditClicked()"
-            i18n i18n-title title="Edit Entry">
-            <img class="w-[28px] h-[28px]" src="assets/edit-white.png" i18n-title title="Edit Entry" alt="Edit Entry"/>
-        </button>
-        <button
-            *ngIf="editing"
             class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
             (click)="onSaveClicked()"
             i18n i18n-title title="Save Entry">
@@ -27,8 +19,7 @@
             <img class="w-[28px] h-[28px]" src="assets/delete-white.png" i18n-title title="Delete Entry" alt="Delete Entry"/>
         </button>
     </div>
-    <div class="m-2" *ngIf="!editing" [innerHTML]="entry.text" (dblclick)="onEditClicked()"></div>
-    <div class="min-h-[15rem] m-2" *ngIf="editing">
-        <ck-textbox [(text)]="entry.text"></ck-textbox>
+    <div class="min-h-[15rem] m-2">
+        <textbox [(text)]="entry.text"></textbox>
     </div>
 </div>

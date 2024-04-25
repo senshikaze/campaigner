@@ -13,8 +13,8 @@ module.exports = {
         'light-accent-wheat': "#eae2b7",
         'light-bg': "#fcfaf3",
         'light-bg-alt': "#fffffd",
-        'dark-action': "#096fa3",
-        'dark-action-hover': "#0B5286",
+        'dark-action': "#084e83",
+        'dark-action-hover': "#02487d",
         'dark-action-active': "#11578b",
         'dark-action-light': "#707182",
         'dark-accent': "#38a169",
@@ -23,13 +23,16 @@ module.exports = {
         'dark-accent-yellow': "#fcbf49",
         'dark-accent-wheat': "#eae2b7",
         'dark-bg': "#1f2937",
-        'dark-bg-alt': "#111827",
+        'dark-bg-alt': "#101726",
         'dark-content-bg': "#111827",
         'dark-input-bg': "#40455a",
+        'dark-input-bg-selected': "#70788e",
         'dark-zebra-odd': "#1F2937",
-        'dark-zebra-even': "#3d445f"
-      }
-    }
+        'dark-zebra-even': "#3d445f",
+      },
+    },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography')
+  ],
 }

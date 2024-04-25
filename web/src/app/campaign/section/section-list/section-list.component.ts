@@ -7,9 +7,15 @@ import { StoreService } from 'src/app/services/store.service';
 @Component({
   selector: 'campaign-section-list',
   template: `
-  <div class="flex flex-col border-r-2 border-slate-700 h-full">
+  <div class="flex flex-col h-full">
     <div class="grow">
-      <campaign-section *ngFor="let section of sections$| async" [section]="section" (selected)="sectionSelected($event)"></campaign-section>
+      <campaign-section
+        class="border-b-dark-input-bg border-b-2 last:border-b-0"
+        *ngFor="let section of sections$| async"
+        [section]="section"
+        (selected)="sectionSelected($event)"
+        [ngClass]="{'bg-dark-input-bg-selected': selected?.id == section.id}"
+        if></campaign-section>
     </div>
     <div class="grow-0 flex flex-row">
       <campaign-section-create-button [campaign]="campaign" (newSectionEvent)="addNewSection()"></campaign-section-create-button>
@@ -22,6 +28,8 @@ export class SectionListComponent implements OnInit, OnDestroy {
   @Input() campaign!: Campaign;
   @Output() section = new EventEmitter<CampaignSection>();
   sections$!: Observable<CampaignSection[]>;
+
+  selected: CampaignSection | undefined;
 
   destroy$ = new Subject<boolean>();
 
@@ -39,12 +47,13 @@ export class SectionListComponent implements OnInit, OnDestroy {
   addNewSection() {
     this.sections$.pipe(
       takeUntil(this.destroy$)
-    ).subscribe(s => this.sections$ = of([...s, ...[{name:'', campaign: this.campaign.id} as CampaignSection]]))
+    ).subscribe(s => this.sections$ = of([...s, ...[{name:'', campaign_id: this.campaign.id} as CampaignSection]]))
   }
 
   sectionSelected(section: CampaignSection): void {
     if (section.id) {
       this.section.emit(section);
+      this.selected = section;
     }
   }
 }

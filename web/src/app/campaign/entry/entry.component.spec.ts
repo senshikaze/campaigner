@@ -4,6 +4,8 @@ import { EntryComponent } from './entry.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StoreService } from 'src/app/services/store.service';
 import { CampaignEntry } from 'src/app/interfaces/campaign-entry';
+import { TextBoxModule } from 'src/app/textbox/textbox.module';
+import { MarkdownModule, MarkdownService } from 'ngx-markdown';
 
 describe('EntryComponent', () => {
   let component: EntryComponent;
@@ -16,16 +18,19 @@ describe('EntryComponent', () => {
       declarations: [ EntryComponent ],
       imports: [
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        TextBoxModule,
+        MarkdownModule.forRoot()
       ],
       providers: [
-        { provide: StoreService, useValue: storeSpy}
+        { provide: StoreService, useValue: storeSpy},
+        MarkdownService
       ]
     })
     .compileComponents();
 
     let entry: CampaignEntry = {
-      section: 1,
+      section_id: 1,
       title: "Test Title",
       text: "Test Text"
     };

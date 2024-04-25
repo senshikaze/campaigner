@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { CampaignSection } from 'src/app/interfaces/campaign-section';
 import { ModalService } from 'src/app/services/modal.service';
 import { StoreService } from 'src/app/services/store.service';
@@ -14,7 +14,7 @@ import { StoreService } from 'src/app/services/store.service';
       placeholder="New Section"
     >
     <ng-template #display>
-      <div class="grow text-white p-2 m-2 border-b-dark-input-bg border-b-2 cursor-pointer"
+      <div class="grow text-white p-2 m-2 cursor-pointer"
         (dblclick)="editing = !editing">
         {{section.name}}
       </div>
@@ -37,15 +37,13 @@ import { StoreService } from 'src/app/services/store.service';
   `,
   styles: []
 })
-export class SectionComponent implements OnInit, OnDestroy {
+export class SectionComponent implements OnInit {
   @Input() section!: CampaignSection;
   @Output() sectionChange = new EventEmitter<CampaignSection>();
   @Output() selected = new EventEmitter<CampaignSection>();
 
   editing = false;
   dirty = false;
-
-  destroy$ = new Subject<boolean>();
 
   constructor(
     private store: StoreService,
@@ -56,11 +54,6 @@ export class SectionComponent implements OnInit, OnDestroy {
     if (this.section && this.section.name == "") {
       this.editing = true;
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.unsubscribe();
   }
 
   save(): void {
@@ -80,7 +73,7 @@ export class SectionComponent implements OnInit, OnDestroy {
         message: "Are you sure you want to delete this section?\nThis will delete all entries as well.",
         confirm: true,
         yes: () => this.store.deleteSection(this.section).pipe(
-          takeUntil(this.destroy$)
+          take(1)
         ).subscribe()
       });
     }

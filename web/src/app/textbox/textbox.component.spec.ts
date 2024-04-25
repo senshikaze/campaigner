@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockComponent } from 'ng-mocks';
 import { TextboxComponent } from './textbox.component';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { MarkdownModule } from 'ngx-markdown';
 
 describe('TextboxComponent', () => {
   let component: TextboxComponent;
@@ -13,7 +12,7 @@ describe('TextboxComponent', () => {
         TextboxComponent,
       ],
       imports: [
-        CKEditorModule
+        MarkdownModule.forRoot()
       ]
     })
     .compileComponents();

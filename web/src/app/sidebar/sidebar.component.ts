@@ -41,7 +41,7 @@ import { Component } from '@angular/core';
       <img class="cursor-pointer w-[28px] h-[28px]" src="assets/left-white.png" [class.rotate-180]="!expanded" [alt]="expanded ? 'Close' : 'Expand'" [title]="expanded ? 'Close' : 'Expand'" (click)="onExpand()" />
     </div>
   </nav>
-  <footer class="text-xs whitespace-nowrap" title="&copy; 2023 Kaze Industries">&copy; 2023 Kaze Industries</footer>
+  <footer class="text-xs whitespace-nowrap" title="&copy; 2024 Kaze Industries">&copy; 2024 Kaze Industries</footer>
 </div>`
 })
 export class SidebarComponent {

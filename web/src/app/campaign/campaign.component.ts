@@ -10,7 +10,11 @@ import { CampaignSection } from '../interfaces/campaign-section';
 
 @Component({
   selector: 'campaign',
-  templateUrl: './campaign.component.html',
+  template: `
+  <div class="flex flex-col grow p-2 h-full">
+    <campaign-sections class="overflow-y-scroll grid grow" *ngIf="campaign$ | async as campaign" [campaign]="campaign"></campaign-sections>
+  </div>
+  `,
   styles: []
 })
 export class CampaignComponent implements OnInit, OnDestroy {
@@ -22,7 +26,6 @@ export class CampaignComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: StoreService,
-    private router: Router,
     private route: ActivatedRoute
   ) {}
 
@@ -41,11 +44,5 @@ export class CampaignComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
-  }
-
-  onSaveClicked(campaign: Campaign): void {
-    this.store.saveCampaign(campaign).subscribe(
-      c => this.router.navigate(['/campaign', c.id])
-    );
   }
 }

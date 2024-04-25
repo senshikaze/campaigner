@@ -6,9 +6,8 @@ import { Campaign } from '../interfaces/campaign';
 import { AlmanacEntry } from '../interfaces/almanac-entry';
 import { CampaignSection } from '../interfaces/campaign-section';
 import { CampaignEntry } from '../interfaces/campaign-entry';
-import { HttpClient, HttpParamsOptions } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { withCache } from '@ngneat/cashew';
 
 @Injectable({
   providedIn: 'root',
@@ -55,7 +54,7 @@ export class StoreService {
         "Content-Type": "application/json",
       }
     };
-    return this.http.patch<T>(url, data, options);
+    return this.http.patch<T>(`${environment.data_store_url}/${url}`, data, options);
   }
 
   /**
@@ -188,7 +187,7 @@ export class StoreService {
     }
     return forkJoin([
       this.delete<never>(`sections/${section.id}`),
-      this.delete<never>(`entries?section=${section.id}`)
+      this.delete<never>(`sections/${section.id}/entries`)
     ]).pipe(
       switchMap(n => n)
     );
@@ -202,7 +201,7 @@ export class StoreService {
       return of([]);
     }
 
-    return this.get<CampaignEntry[]>(`entries?section=${section.id}`);
+    return this.get<CampaignEntry[]>(`sections/${section.id}/entries`);
   }
 
   /**
@@ -215,7 +214,7 @@ export class StoreService {
       return of([]);
     }
 
-    return this.get<CampaignSection[]>(`sections?campaign=${campaign.id}`);
+    return this.get<CampaignSection[]>(`campaigns/${campaign.id}/sections`);
   }
 
   /**
@@ -223,7 +222,7 @@ export class StoreService {
    * @param section 
    */
   saveSection(section: CampaignSection): Observable<CampaignSection> {
-    if (!section.campaign) {
+    if (!section.campaign_id) {
       return of(section);
     }
   

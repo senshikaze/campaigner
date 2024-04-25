@@ -12,7 +12,11 @@ import { StoreService } from 'src/app/services/store.service';
       <span class="grow"></span>
       <campaign-entry-create-button [section]="section" (entryCreated)="entryCreated($event)"></campaign-entry-create-button>
     </div>
-    <campaign-entry *ngFor="let entry of entries$ | async" [entry]="entry" (entryDelete)="entryDeleted()"></campaign-entry>
+    <campaign-entry
+      *ngFor="let entry of entries$ | async" 
+      [entry]="entry" 
+      (entryDelete)="entryDeleted()"
+      class="border-b-2 last:border-b-0 border-slate-700"></campaign-entry>
   <div>
   `,
   styles: []

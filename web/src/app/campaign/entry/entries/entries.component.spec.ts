@@ -3,6 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EntriesComponent } from './entries.component';
 import { StoreService } from 'src/app/services/store.service';
 import { CreateEntryButtonComponent } from '../create-button/create-entry-button.component';
+import { MockComponent } from 'ng-mocks';
+import { TextboxComponent } from 'src/app/textbox/textbox.component';
+import { TextBoxModule } from 'src/app/textbox/textbox.module';
 
 describe('EntriesComponent', () => {
   let component: EntriesComponent;
@@ -14,11 +17,11 @@ describe('EntriesComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         EntriesComponent,
-        CreateEntryButtonComponent
+        CreateEntryButtonComponent,
       ],
       providers: [
-        { provide: StoreService, useValue: storeSpy }
-      ]
+        { provide: StoreService, useValue: storeSpy },
+      ],
     })
     .compileComponents();
 

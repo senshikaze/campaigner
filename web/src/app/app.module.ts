@@ -10,10 +10,10 @@ import { NotfoundComponent } from './notfound.component';
 import { TextBoxModule } from './textbox/textbox.module';
 import { SharedModule } from './shared.module';
 import { ModalComponent } from './misc/modal/modal.component';
-import { provideHttpCache, withHttpCacheInterceptor } from '@ngneat/cashew';
 import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { environment } from 'src/environments/environment';
 import { LoginComponent } from './misc/login/login.component';
+import { MARKED_OPTIONS, MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -46,13 +46,18 @@ import { LoginComponent } from './misc/login/login.component';
       },
       useRefreshTokens: true,
       cacheLocation: "localstorage",
-    })
+    }),
+    MarkdownModule.forRoot({
+      markedOptions: {
+        provide: MARKED_OPTIONS,
+        useValue: {
+          gfm: true,
+          breaks: true
+        }
+      }
+    }),
   ],
   providers: [
-    provideHttpClient(withInterceptors(
-      [withHttpCacheInterceptor()]
-    )),
-    provideHttpCache(),
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],

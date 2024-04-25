@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { TextboxComponent } from './textbox.component';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular'
+import { MARKED_OPTIONS, MarkdownModule } from 'ngx-markdown';
 
 
 @NgModule({
@@ -12,11 +12,13 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular'
     ],
     imports: [
       CommonModule,
-      CKEditorModule,
-      FormsModule
+      FormsModule,
+      MarkdownModule.forChild()
     ],
     exports: [
       TextboxComponent
+    ],
+    providers: [
     ]
   })
   export class TextBoxModule { }
