@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :battle_entities
+  resources :battles
   resources :entries, controller: :campaign_entries
   resources :sections do
     member do

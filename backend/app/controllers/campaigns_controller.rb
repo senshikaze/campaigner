@@ -4,8 +4,9 @@ class CampaignsController < ApplicationController
 
   # GET /campaigns
   def index
-    @campaigns = Campaign.where({user: user})
-      .map { |camp| { id: camp.id, name: camp.name, description: camp.description}}
+    @campaigns = Campaign.select(
+      :id, :name, :description
+    ).where(user: user)
 
     render json: @campaigns
   end

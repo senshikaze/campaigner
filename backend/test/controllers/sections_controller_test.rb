@@ -12,6 +12,9 @@ class SectionsControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     get sections_url, as: :json
     assert_response :success
+    sec = @response.parsed_body
+    assert_equal @section.id, sec[0]["id"]
+    assert_not_includes sec[0], :user_id
   end
 
   test "should create section" do

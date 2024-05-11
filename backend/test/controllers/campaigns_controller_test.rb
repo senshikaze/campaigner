@@ -12,6 +12,8 @@ class CampaignsControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     get campaigns_url, as: :json
     assert_response :success
+    camp = @response.parsed_body
+    assert_equal @campaign.id, camp[0]["id"]
   end
 
   test "should create campaign" do

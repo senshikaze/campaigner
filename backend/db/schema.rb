@@ -10,7 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_17_010101) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_01_001611) do
+  create_table "battle_entities", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "battle_id"
+    t.string "name"
+    t.integer "total_health"
+    t.integer "current_health"
+    t.string "description"
+    t.string "notes"
+    t.integer "initiative"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "battles", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "campaign_entries", force: :cascade do |t|
     t.integer "section_id"
     t.string "title"
@@ -39,6 +59,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_17_010101) do
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
+    t.string "password"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

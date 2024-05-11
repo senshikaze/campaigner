@@ -4,8 +4,8 @@ class SectionsController < ApplicationController
 
   # GET /sections
   def index
-    @sections = Section.where(user: user)
-      .map { |section| {id: section.id, name: section.name, campaign_id: section.campaign.id}}
+    @sections = Section.select(:id, :name, :campaign_id)
+      .where(user: user)
 
     render json: @sections
   end

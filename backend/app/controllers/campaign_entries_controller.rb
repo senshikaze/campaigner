@@ -4,8 +4,9 @@ class CampaignEntriesController < ApplicationController
 
   # GET /campaign_entries
   def index
-    @campaign_entries = CampaignEntry.where(user: user)
-      .map {|entry| {id: entry.id, title: entry.title, text: entry.text, section_id: entry.section.id}}
+    @campaign_entries = CampaignEntry.select(
+      :id, :title, :text, :section_id
+      ).where(user: user)
 
     render json: @campaign_entries
   end
