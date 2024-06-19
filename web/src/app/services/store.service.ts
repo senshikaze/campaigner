@@ -8,6 +8,8 @@ import { CampaignSection } from '../interfaces/campaign-section';
 import { CampaignEntry } from '../interfaces/campaign-entry';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Battle } from '../interfaces/battle';
+import { BattleEntity } from '../interfaces/battle-entity';
 
 @Injectable({
   providedIn: 'root',
@@ -111,6 +113,34 @@ export class StoreService {
   }
 
   /**
+   * Battle methods
+   */
+  deleteBattle(battle: Battle): void {
+    if (battle.id) {
+      this.http.delete<null>(`battles/${battle.id}`);
+    }
+  }
+
+  getBattle(id: number): Observable<Battle> {
+    return this.http.get<Battle>(`battles/${id}`);
+  }
+
+  getBattles(): Observable<Battle[]> {
+    return this.http.get<Battle[]>(`battles/`);
+  }
+
+  saveBattle(battle: Battle): Observable<Battle> {
+    if (battle.id) {
+      return this.patch<Battle>(`battles/${battle.id}`, battle);
+    }
+    return this.post<Battle>(`battles/`, battle);
+  }
+
+  getBattleEntity(battle: Battle): Observable<BattleEntity[]> {
+    return this.get<BattleEntity[]>(`battles/${battle.id}/entities`);
+  }
+
+  /**
    * Campaign methods
    */
   /**
@@ -130,7 +160,7 @@ export class StoreService {
    * @param id Campaign Id
    * @returns Observalbe of Campaign
    */
-  getCampaign(id: string): Observable<Campaign> {
+  getCampaign(id: number): Observable<Campaign> {
     return this.get<Campaign>(`campaigns/${id}`);
   }
 

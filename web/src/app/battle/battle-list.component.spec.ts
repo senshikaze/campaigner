@@ -1,33 +1,31 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CampaignListComponent } from './campaign-list.component';
-import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { BattleListComponent } from './battle-list.component';
 import { StoreService } from '../services/store.service';
+import { of } from 'rxjs';
 import { MockComponents } from 'ng-mocks';
 import { AddButtonComponent } from '../misc/add-button/add-button.component';
 
-describe('CampaignListComponent', () => {
-  let component: CampaignListComponent;
-  let fixture: ComponentFixture<CampaignListComponent>;
+describe('BattleListComponent', () => {
+  let component: BattleListComponent;
+  let fixture: ComponentFixture<BattleListComponent>;
   let storeSpy: jasmine.SpyObj<StoreService>;
 
   beforeEach(async () => {
-    storeSpy = jasmine.createSpyObj('StoreService', ['getCampaigns']);
-    storeSpy.getCampaigns.and.returnValue(of([]));
+    storeSpy = jasmine.createSpyObj('StoreService', ['getBattles']);
+    storeSpy.getBattles.and.returnValue(of([]));
     await TestBed.configureTestingModule({
       declarations: [
-        CampaignListComponent,
+        BattleListComponent,
         MockComponents(AddButtonComponent)
       ],
       providers: [
-        { provide: ActivatedRoute, useValue: of([{id: 1}])},
-        { provide: StoreService, useValue: storeSpy }
+        {provide: StoreService, useValue: storeSpy}
       ]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(CampaignListComponent);
+    
+    fixture = TestBed.createComponent(BattleListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

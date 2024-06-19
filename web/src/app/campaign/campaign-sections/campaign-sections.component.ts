@@ -18,12 +18,7 @@ import { StoreService } from 'src/app/services/store.service';
                   i18n-placeholder placeholder="Campaign Title"/>
           </div>
           <div class="mb-2 flex">
-              <button
-                  class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
-                  (click)="onSaveClicked(campaign)"
-                  i18n i18n-title title="Save Campaign">
-                  <img class="w-[28px] h-[28px]" src="assets/save-white.png" i18n-title title="Save Campaign" alt="Save Campaign"/>
-              </button>
+            <save-button (click)="onSaveClicked(campaign)" title="Save Campaign"></save-button>
           </div>
       </div>
       <campaign-section-list class="grow" [campaign]="campaign" (section)="sectionSelected($event)"></campaign-section-list>

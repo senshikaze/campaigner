@@ -32,7 +32,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.paramMap.subscribe(p => {
       if (p.has("id") && p.get("id") != "new") {
-        this.campaign$ = this.store.getCampaign(p.get("id") as string);
+        this.campaign$ = this.store.getCampaign(Number.parseInt(p.get("id") ?? ''));
       } else if (p.get("id") == "new") {
         this.campaign$ = of({
           name: '',

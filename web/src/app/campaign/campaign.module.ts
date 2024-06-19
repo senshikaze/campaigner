@@ -13,6 +13,10 @@ import { CreateEntryButtonComponent } from './entry/create-button/create-entry-b
 import { CreateSectionButtonComponent } from './section/create-section-button/create-section-button.component';
 import { EntriesComponent } from './entry/entries/entries.component';
 import { CampaignSectionsComponent } from './campaign-sections/campaign-sections.component';
+import { AddButtonComponent } from '../misc/add-button/add-button.component';
+import { DeleteButtonComponent } from '../misc/delete-button/delete-button.component';
+import { ViewButtonComponent } from '../misc/view-button/view-button.component';
+import { SaveButtonComponent } from '../misc/save-button/save-button.component';
 
 
 @NgModule({
@@ -31,7 +35,11 @@ import { CampaignSectionsComponent } from './campaign-sections/campaign-sections
       CommonModule,
       CampaignRoutingModule,
       FormsModule,
-      TextBoxModule
+      TextBoxModule,
+      AddButtonComponent,
+      DeleteButtonComponent,
+      SaveButtonComponent,
+      ViewButtonComponent
     ],
     providers: [],
     bootstrap: [CampaignListComponent]
