@@ -14,6 +14,7 @@ class BattlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     batt = @response.parsed_body
     assert_equal @battle.id, batt[0]["id"]
+    assert_equal @battle.id, batt[0]["current_entity_id"]
     assert_not_includes batt[0], :user_id
   end
 

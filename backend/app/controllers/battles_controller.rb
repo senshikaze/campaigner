@@ -4,14 +4,14 @@ class BattlesController < ApplicationController
 
   # GET /battles
   def index
-    @battles = Battle.select(:id, :name).where(user: user)
+    @battles = Battle.select(:id, :name, :current_entity_id).where(user: user)
 
     render json: @battles
   end
 
   # GET /battles/1
   def show
-    render json: {id: @battle.id, name: @battle.name}
+    render json: {id: @battle.id, name: @battle.name, current_entity_id: @battle.current_entity_id}
   end
 
   # GET /battles/1/entities
@@ -24,7 +24,7 @@ class BattlesController < ApplicationController
     @battle = Battle.new(battle_params.merge(user: user))
 
     if @battle.save
-      render json: {id: @battle.id, name: @battle.name}, status: :created, location: @battle
+      render json: {id: @battle.id, name: @battle.name, current_entity_id: @battle.current_entity_id}, status: :created, location: @battle
     else
       render json: @battle.errors, status: :unprocessable_entity
     end
@@ -33,7 +33,7 @@ class BattlesController < ApplicationController
   # PATCH/PUT /battles/1
   def update
     if @battle.update(battle_params)
-      render json: {id: @battle.id, name: @battle.name}
+      render json: {id: @battle.id, name: @battle.name, current_entity_id: @battle.current_entity_id}
     else
       render json: @battle.errors, status: :unprocessable_entity
     end
