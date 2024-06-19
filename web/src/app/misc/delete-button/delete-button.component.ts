@@ -17,6 +17,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class DeleteButtonComponent {
   @Input() value: any; 
-  @Input() title = "Delete Button";
+  @Input() title = "Delete";
   @Output() click = new EventEmitter<any>();
 }
