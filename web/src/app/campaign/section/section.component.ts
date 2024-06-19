@@ -19,20 +19,8 @@ import { StoreService } from 'src/app/services/store.service';
         {{section.name}}
       </div>
     </ng-template>
-    <button
-      *ngIf="dirty"
-      class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
-      (click)="save()"
-      i18n i18n-title title="Save Section">
-      <img class="w-[28px] h-[28px]" src="assets/save-white.png" i18n-title title="Save" alt="Save"/>
-    </button>
-    <button
-      *ngIf="section.id"
-      class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-accent-red"
-      (click)="onDeleteClicked()"
-      i18n i18n-title title="Delete Section">
-      <img class="w-[28px] h-[28px]" src="assets/delete-white.png" i18n-title title="Delete" alt="Delete"/>
-    </button>
+    <save-button (click)="onSaveClicked()" title="Save"></save-button>
+    <delete-button (click)="onDeleteClicked()" title="Delete Section"></delete-button>
   </div>
   `,
   styles: []
@@ -56,7 +44,7 @@ export class SectionComponent implements OnInit {
     }
   }
 
-  save(): void {
+  onSaveClicked(): void {
     this.store.saveSection(this.section).pipe(
       take(1)
     ).subscribe(s => {this.section = s; this.selected.emit(this.section);});

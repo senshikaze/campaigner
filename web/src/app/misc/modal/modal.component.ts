@@ -14,7 +14,9 @@ import { Modal, ModalService } from 'src/app/services/modal.service';
             class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
             (click)="modalClose()"
             i18n i18n-title title="Close">
-            <img class="w-[28px] h-[28px]" src="assets/close-white.png" i18n-title title="Close" alt="Close"/>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+              <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
           </button>
         </div>
         <div class="body grow p-2 flex-shrink-0">
