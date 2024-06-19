@@ -20,7 +20,7 @@ import { Component } from '@angular/core';
         </li>
         <li class="text-white bg-dark-action hover:bg-dark-action-hover">
           <a
-            routerLink="battle"
+            routerLink="battles"
             routerLinkActive="bg-dark-action-active"
             class="p-2 flex"
             i18n i18n-title title="Battles">

@@ -8,7 +8,7 @@ import { BattleListComponent } from './battle-list.component';
 
 const routes: Routes = [
     {path: "", component: BattleListComponent},
-    {path: ":id", component: BattleListComponent}
+    {path: ":id", component: BattleComponent}
 ];
 
 @NgModule({

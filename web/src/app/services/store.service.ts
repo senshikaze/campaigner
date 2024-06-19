@@ -117,16 +117,16 @@ export class StoreService {
    */
   deleteBattle(battle: Battle): void {
     if (battle.id) {
-      this.http.delete<null>(`battles/${battle.id}`);
+      this.delete<null>(`battles/${battle.id}`);
     }
   }
 
   getBattle(id: number): Observable<Battle> {
-    return this.http.get<Battle>(`battles/${id}`);
+    return this.get<Battle>(`battles/${id}`);
   }
 
   getBattles(): Observable<Battle[]> {
-    return this.http.get<Battle[]>(`battles/`);
+    return this.get<Battle[]>(`battles/`);
   }
 
   saveBattle(battle: Battle): Observable<Battle> {
