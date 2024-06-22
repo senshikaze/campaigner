@@ -9,6 +9,7 @@ import { Campaign } from 'src/app/interfaces/campaign';
 import { FormsModule } from '@angular/forms';
 import { MockComponents } from 'ng-mocks';
 import { SaveButtonComponent } from 'src/app/misc/save-button/save-button.component';
+import { AddButtonComponent } from 'src/app/misc/add-button/add-button.component';
 
 describe('CampaignSectionsComponent', () => {
   let component: CampaignSectionsComponent;
@@ -27,10 +28,13 @@ describe('CampaignSectionsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         CampaignSectionsComponent,
-        SectionListComponent,
-        CreateEntryButtonComponent,
-        CreateSectionButtonComponent,
-        MockComponents(SaveButtonComponent)
+        MockComponents(
+          SaveButtonComponent,
+          AddButtonComponent,
+          CreateEntryButtonComponent,
+          CreateSectionButtonComponent,
+          SectionListComponent
+        )
       ],
       providers: [
         { provide: StoreService, useValue: storeSpy }

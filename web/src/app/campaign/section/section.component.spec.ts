@@ -4,6 +4,9 @@ import { SectionComponent } from './section.component';
 import { StoreService } from 'src/app/services/store.service';
 import { CampaignSection } from 'src/app/interfaces/campaign-section';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MockComponents } from 'ng-mocks';
+import { SaveButtonComponent } from 'src/app/misc/save-button/save-button.component';
+import { DeleteButtonComponent } from 'src/app/misc/delete-button/delete-button.component';
 
 describe('SectionComponent', () => {
   let component: SectionComponent;
@@ -16,7 +19,10 @@ describe('SectionComponent', () => {
       imports: [
         FormsModule, ReactiveFormsModule
       ],
-      declarations: [ SectionComponent ],
+      declarations: [
+        SectionComponent,
+        MockComponents(SaveButtonComponent, DeleteButtonComponent)
+      ],
       providers: [
         { provide: StoreService, useValue: storeSpy}
       ]

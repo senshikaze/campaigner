@@ -6,6 +6,9 @@ import { StoreService } from 'src/app/services/store.service';
 import { CampaignEntry } from 'src/app/interfaces/campaign-entry';
 import { TextBoxModule } from 'src/app/textbox/textbox.module';
 import { MarkdownModule, MarkdownService } from 'ngx-markdown';
+import { MockComponents } from 'ng-mocks';
+import { SaveButtonComponent } from 'src/app/misc/save-button/save-button.component';
+import { DeleteButtonComponent } from 'src/app/misc/delete-button/delete-button.component';
 
 describe('EntryComponent', () => {
   let component: EntryComponent;
@@ -15,7 +18,10 @@ describe('EntryComponent', () => {
   beforeEach(async () => {
     storeSpy = jasmine.createSpyObj('StoreSerive', ['getEntry']);
     await TestBed.configureTestingModule({
-      declarations: [ EntryComponent ],
+      declarations: [
+        EntryComponent,
+        MockComponents(SaveButtonComponent, DeleteButtonComponent)
+      ],
       imports: [
         FormsModule,
         ReactiveFormsModule,

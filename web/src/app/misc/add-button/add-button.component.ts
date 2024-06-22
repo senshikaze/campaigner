@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   imports: [],
   template: `
     <button
-      class="p-2 rounded-lg text-white bg-dark-action hover:bg-dark-action-hover"
+      class="p-2 m-2 rounded-lg text-white bg-dark-action hover:bg-dark-action-hover"
       (click)="click.emit()"
       i18n i18n-title [title]="title">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
