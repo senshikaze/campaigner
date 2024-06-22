@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   resources :battle_entities
-  resources :battles
+  resources :battles do
+    member do
+      get 'entities', as: :entities
+      delete 'entities', to: 'battles#destroyEntities'
+    end
+  end
   resources :entries, controller: :campaign_entries
   resources :sections do
     member do

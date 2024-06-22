@@ -136,8 +136,15 @@ export class StoreService {
     return this.post<Battle>(`battles/`, battle);
   }
 
-  getBattleEntity(battle: Battle): Observable<BattleEntity[]> {
+  getBattleEntities(battle: Battle): Observable<BattleEntity[]> {
     return this.get<BattleEntity[]>(`battles/${battle.id}/entities`);
+  }
+
+  saveBattleEntity(entity: BattleEntity): Observable<BattleEntity> {
+    if (entity.battle_id && entity.id) {
+      return this.patch<BattleEntity>(`battles/${entity}/entity/${entity.id}`, entity);
+    }
+    return of(entity);
   }
 
   /**

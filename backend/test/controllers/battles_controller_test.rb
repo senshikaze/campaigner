@@ -7,6 +7,7 @@ class BattlesControllerTest < ActionDispatch::IntegrationTest
     BattlesController.any_instance.stubs(:authorize).returns
     BattlesController.any_instance.stubs(:user).returns(user)
     @battle = battles(:one)
+    @entity = battle_entities(:one)
   end
 
   test "should get index" do
@@ -42,5 +43,13 @@ class BattlesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :no_content
+  end
+
+  test "should get battle entities" do
+    get entities_battle_url(@battle), as: :json
+    assert_response :success
+    ent = @response.parsed_body
+    assert_equal 2, ent.length()
+    assert_equal @entity.id, ent[0]['id']
   end
 end

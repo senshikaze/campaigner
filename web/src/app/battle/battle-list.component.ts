@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Battle } from '../interfaces/battle';
 import { Observable, share } from 'rxjs';
 import { StoreService } from '../services/store.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ModalService } from '../services/modal.service';
 
 @Component({
   selector: 'app-battle-list',
@@ -29,16 +31,33 @@ import { StoreService } from '../services/store.service';
 export class BattleListComponent implements OnInit {
   battles$!: Observable<Battle[]>;
 
-  constructor(private store: StoreService) {}
+  constructor(
+    private store: StoreService,
+    private modal: ModalService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
+
   ngOnInit(): void {
     this.battles$ = this.store.getBattles().pipe(share())
   }
 
   onCreateClicked(): void {
-
+    this.router.navigate(["new"], {relativeTo: this.route})
   }
 
   onDeleteClicked(battle: Battle): void {
-
+    if (battle.id) {
+      this.modal.open({
+        header: "Are you sure?",
+        message: "Are you sure you want to delete this battle?",
+        confirm: true,
+        closable: true,
+        yes: () => {
+          this.store.deleteBattle(battle);
+          this.battles$ = this.store.getBattles();
+        }
+      });
+    }
   }
 }

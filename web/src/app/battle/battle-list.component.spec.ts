@@ -5,6 +5,7 @@ import { StoreService } from '../services/store.service';
 import { of } from 'rxjs';
 import { MockComponents } from 'ng-mocks';
 import { AddButtonComponent } from '../misc/add-button/add-button.component';
+import { ActivatedRoute } from '@angular/router';
 
 describe('BattleListComponent', () => {
   let component: BattleListComponent;
@@ -20,7 +21,10 @@ describe('BattleListComponent', () => {
         MockComponents(AddButtonComponent)
       ],
       providers: [
-        {provide: StoreService, useValue: storeSpy}
+        {provide: ActivatedRoute, useValue: of([{id: 1}])},
+        {provide: StoreService, useValue: storeSpy},
+      ],
+      imports: [
       ]
     })
     .compileComponents();

@@ -1,6 +1,6 @@
 class BattlesController < ApplicationController
   before_action :authorize
-  before_action :set_battle, only: %i[ show update destroy ]
+  before_action :set_battle, only: %i[ show update destroy entities ]
 
   # GET /battles
   def index
@@ -15,7 +15,7 @@ class BattlesController < ApplicationController
   end
 
   # GET /battles/1/entities
-  def showEntities
+  def entities
     render json: @battle.entities
   end
 

@@ -9,12 +9,17 @@ import { DeleteButtonComponent } from '../misc/delete-button/delete-button.compo
 import { ViewButtonComponent } from '../misc/view-button/view-button.component';
 import { AddButtonComponent } from '../misc/add-button/add-button.component';
 import { SaveButtonComponent } from '../misc/save-button/save-button.component';
+import { BattleEntitiesComponent } from './battle-entities/battle-entities.component';
+import { BattleEntityItemComponent } from './battle-entities/battle-entity-item/battle-entity-item.component';
+import { HealthPickerComponent } from '../misc/health-picker/health-picker.component';
 
 
 @NgModule({
     declarations: [
       BattleComponent,
       BattleListComponent,
+      BattleEntitiesComponent,
+      BattleEntityItemComponent,
     ],
     imports: [
       CommonModule,
@@ -24,6 +29,7 @@ import { SaveButtonComponent } from '../misc/save-button/save-button.component';
       ViewButtonComponent,
       AddButtonComponent,
       SaveButtonComponent,
+      HealthPickerComponent
     ],
     providers: [],
     bootstrap: [BattleComponent]
