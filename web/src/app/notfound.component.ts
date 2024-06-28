@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-notfound',
+  selector: 'notfound',
   template:`
 <div class="grow">
   <h2 class="font-bold text-4xl m-auto"> 404 - Not Found</h2>

@@ -14,6 +14,7 @@ import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { environment } from 'src/environments/environment';
 import { LoginComponent } from './misc/login/login.component';
 import { MARKED_OPTIONS, MarkdownModule } from 'ngx-markdown';
+import { CloseButtonComponent } from './misc/close-button/close-button.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,7 @@ import { MARKED_OPTIONS, MarkdownModule } from 'ngx-markdown';
     SidebarComponent,
     NotfoundComponent,
     ModalComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,6 +31,7 @@ import { MARKED_OPTIONS, MarkdownModule } from 'ngx-markdown';
     FormsModule,
     SharedModule,
     HttpClientModule,
+    CloseButtonComponent,
     AuthModule.forRoot({
       domain: environment.auth_domain,
       clientId: environment.auth_clientId,

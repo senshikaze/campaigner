@@ -12,6 +12,9 @@ import { SaveButtonComponent } from '../misc/save-button/save-button.component';
 import { BattleEntitiesComponent } from './battle-entities/battle-entities.component';
 import { BattleEntityItemComponent } from './battle-entities/battle-entity-item/battle-entity-item.component';
 import { HealthPickerComponent } from '../misc/health-picker/health-picker.component';
+import { BattleEntityDescriptionComponent } from './battle-entities/battle-entity-description/battle-entity-description.component';
+import { CloseButtonComponent } from '../misc/close-button/close-button.component';
+import { DragItemComponent } from '../misc/drag-item/drag-item.component';
 
 
 @NgModule({
@@ -20,6 +23,7 @@ import { HealthPickerComponent } from '../misc/health-picker/health-picker.compo
       BattleListComponent,
       BattleEntitiesComponent,
       BattleEntityItemComponent,
+      BattleEntityDescriptionComponent,
     ],
     imports: [
       CommonModule,
@@ -29,7 +33,9 @@ import { HealthPickerComponent } from '../misc/health-picker/health-picker.compo
       ViewButtonComponent,
       AddButtonComponent,
       SaveButtonComponent,
-      HealthPickerComponent
+      HealthPickerComponent,
+      CloseButtonComponent,
+      DragItemComponent,
     ],
     providers: [],
     bootstrap: [BattleComponent]

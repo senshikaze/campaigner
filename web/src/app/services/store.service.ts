@@ -136,6 +136,12 @@ export class StoreService {
     return this.post<Battle>(`battles/`, battle);
   }
 
+  deleteBattleEntity(battleEntity: BattleEntity): void {
+    if (battleEntity.id) {
+      this.delete<null>(`battles/${battleEntity.battle_id}/entities/${battleEntity}`);
+    }
+  }
+
   getBattleEntities(battle: Battle): Observable<BattleEntity[]> {
     return this.get<BattleEntity[]>(`battles/${battle.id}/entities`);
   }

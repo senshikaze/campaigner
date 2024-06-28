@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Battle } from '../interfaces/battle';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StoreService } from '../services/store.service';
-import { BehaviorSubject, Observable, from, of, scan, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, take, tap } from 'rxjs';
 import { BattleEntity } from '../interfaces/battle-entity';
 import { ModalService } from '../services/modal.service';
 
 @Component({
-  selector: 'app-battle',
+  selector: 'battle',
   template:`
   <div class="flex flex-col grow p-2 h-full" *ngIf="battle$ | async as battle">
     <div class="overflow-y-scroll grid grid-flow-col gird-cols-12 grow">
-        <div class="grow col-span-2 flex flex-col border-r-2 border-slate-700">
+        <div class="grow col-span-2 flex flex-col">
             <div class="flex border-b-2 border-slate-700">
                 <div class="mb-2 flex flex-auto">
                     <input
@@ -20,10 +20,10 @@ import { ModalService } from '../services/modal.service';
                         i18n-title title="Battle Title"
                         i18n-placeholder placeholder="Battle Title">
                     <save-button (click)="onSaveClicked(battle)" title="Save Battle"></save-button>
-                    <add-button *ngIf="battle.id" (click)="onAddClicked(battle)" title="Add Combatant"></add-button>
+                    <add-button *ngIf="battle.id" (clicked)="onAddClicked(battle)" title="Add Combatant"></add-button>
                 </div>
             </div>
-            <battle-entities [entities]="(entities$ | async) ?? []"></battle-entities>
+            <battle-entities class="grow" [entities]="(entities$ | async) ?? []" (deleted)="onEntityDeleted($event)"></battle-entities>
         </div>
     </div>
 </div>
@@ -61,8 +61,20 @@ export class BattleComponent implements OnInit {
 
   onAddClicked(battle: Battle): void {
     if (battle.id) {
-      
+      let entities = this.entities$.getValue();
+      let lastInit = (entities[entities.length - 1]) ? (entities[entities.length - 1].initiative ?? 21) - 1 : 20;
+      entities = [...entities, ...[{battle_id: battle.id, current_health: 0, total_health: 0, initiative: lastInit}]];
+      this.entities$.next(entities);
     }
+  }
+
+  onEntityDeleted(entity: BattleEntity): void {
+    if (entity.id) {
+      this.store.deleteBattleEntity(entity);
+    }
+    let entities = this.entities$.getValue();
+    entities = entities.filter(e => e != entity);
+    this.entities$.next(entities);
   }
 
   onSaveClicked(battle: Battle): void {

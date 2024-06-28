@@ -5,7 +5,7 @@ import { StoreService } from '../services/store.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-almanac',
+  selector: 'almanac',
   template: `
     <div class="flex flex-col">
       <div class="flex flex-row">

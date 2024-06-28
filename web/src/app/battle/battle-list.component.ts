@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalService } from '../services/modal.service';
 
 @Component({
-  selector: 'app-battle-list',
+  selector: 'battle-list',
   template: `
   <div class="flex flex-col p-2">
     <div class="flex mb-4 grow">
@@ -19,7 +19,7 @@ import { ModalService } from '../services/modal.service';
           <div class="flex">
             <p class="grow block text-lg">{{battle.name}}</p>
             <view-button [routerLink]="['/battles', battle.id]" [state]="battle" title="View Battle"></view-button>
-            <delete-button [value]="battle" (click)="onDeleteClicked($event)" title="Delete Battle"></delete-button>
+            <delete-button [value]="battle" (clicked)="onDeleteClicked($event)" title="Delete Battle"></delete-button>
           </div>
         </li>
       </ul>

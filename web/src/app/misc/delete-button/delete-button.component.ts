@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   template:`
   <button
     class="p-2 m-2 rounded-lg text-white bg-dark-action hover:bg-dark-accent-red"
-    (click)="click.emit(value)"
+    (click)="clicked.emit(value)"
     [title]="title"
     i18n i18n-title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -20,5 +20,5 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class DeleteButtonComponent {
   @Input() value: any; 
   @Input() title = "Delete";
-  @Output() click = new EventEmitter<any>();
+  @Output() clicked = new EventEmitter<any>();
 }

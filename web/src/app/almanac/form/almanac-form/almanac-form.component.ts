@@ -5,7 +5,7 @@ import { AlmanacEntry } from 'src/app/interfaces/almanac-entry';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
-  selector: 'app-almanac-form',
+  selector: 'almanac-form',
   template: `
   <form [formGroup]="almanacForm" (ngSubmit)="onSave()">
     <div class="flex flex-col m-2">
