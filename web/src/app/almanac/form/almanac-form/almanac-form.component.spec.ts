@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AlmanacFormComponent } from './almanac-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StoreService } from 'src/app/services/store.service';
+import { MockComponents } from 'ng-mocks';
+import { InputComponent } from 'src/app/misc/input/input.component';
 
 describe('AlmanacFormComponent', () => {
   let component: AlmanacFormComponent;
@@ -12,7 +14,10 @@ describe('AlmanacFormComponent', () => {
   beforeEach(async () => {
     storeSpy = jasmine.createSpyObj('StoreService', ['saveAlmanac']);
     await TestBed.configureTestingModule({
-      declarations: [ AlmanacFormComponent ],
+      declarations: [
+        AlmanacFormComponent,
+        MockComponents(InputComponent)
+      ],
       imports: [
         FormsModule,
         ReactiveFormsModule

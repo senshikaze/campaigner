@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   imports: [],
   template:`
   <button
-    class="p-2 m-2 rounded-lg text-white bg-dark-action hover:bg-dark-accent-red"
+    class="p-2 m-2 rounded-lg text-white bg-light-action hover:bg-light-accent-red dark:bg-dark-action dark:hover:bg-dark-accent-red"
     (click)="clicked.emit(value)"
     [title]="title"
     i18n i18n-title>

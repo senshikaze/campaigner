@@ -17,6 +17,7 @@ import { AddButtonComponent } from '../misc/add-button/add-button.component';
 import { DeleteButtonComponent } from '../misc/delete-button/delete-button.component';
 import { ViewButtonComponent } from '../misc/view-button/view-button.component';
 import { SaveButtonComponent } from '../misc/save-button/save-button.component';
+import { InputComponent } from '../misc/input/input.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { SaveButtonComponent } from '../misc/save-button/save-button.component';
       AddButtonComponent,
       DeleteButtonComponent,
       SaveButtonComponent,
-      ViewButtonComponent
+      ViewButtonComponent,
+      InputComponent,
     ],
     providers: [],
     bootstrap: [CampaignListComponent]

@@ -9,8 +9,9 @@ import { MarkdownModule, MarkdownService } from 'ngx-markdown';
 import { MockComponents } from 'ng-mocks';
 import { SaveButtonComponent } from 'src/app/misc/save-button/save-button.component';
 import { DeleteButtonComponent } from 'src/app/misc/delete-button/delete-button.component';
+import { InputComponent } from 'src/app/misc/input/input.component';
 
-describe('EntryComponent', () => {
+describe('CampaignEntryComponent', () => {
   let component: EntryComponent;
   let fixture: ComponentFixture<EntryComponent>;
   let storeSpy: jasmine.SpyObj<StoreService>;
@@ -20,7 +21,7 @@ describe('EntryComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         EntryComponent,
-        MockComponents(SaveButtonComponent, DeleteButtonComponent)
+        MockComponents(SaveButtonComponent, DeleteButtonComponent, InputComponent)
       ],
       imports: [
         FormsModule,

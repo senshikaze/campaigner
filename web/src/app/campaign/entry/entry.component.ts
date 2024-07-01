@@ -9,12 +9,11 @@ import { ModalService } from 'src/app/services/modal.service';
   template:`
   <div class="flex flex-col">
     <div class="flex">
-        <input
-            class="grow m-2 p-2 text-white rounded-md placeholder:text-slate-400 bg-dark-input-bg"
-            type="text"
-            [(ngModel)]="entry.title"
-            i18n-title title="Entry Title"
-            i18n-placeholder placeholder="Entry Title" />
+      <cInput
+        class="grow"
+        [(value)]="entry.title"
+        title="Entry Title"
+        placeholder="Entry Title"></cInput>
         <save-button (click)="onSaveClicked()" title="Save Entry"></save-button>
         <delete-button (click)="onDeleteClicked()" title="Delete Entry"></delete-button>
     </div>

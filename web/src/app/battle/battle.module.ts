@@ -15,6 +15,8 @@ import { HealthPickerComponent } from '../misc/health-picker/health-picker.compo
 import { BattleEntityDescriptionComponent } from './battle-entities/battle-entity-description/battle-entity-description.component';
 import { CloseButtonComponent } from '../misc/close-button/close-button.component';
 import { DragItemComponent } from '../misc/drag-item/drag-item.component';
+import { InputComponent } from '../misc/input/input.component';
+import { TextBoxModule } from '../textbox/textbox.module';
 
 
 @NgModule({
@@ -36,6 +38,8 @@ import { DragItemComponent } from '../misc/drag-item/drag-item.component';
       HealthPickerComponent,
       CloseButtonComponent,
       DragItemComponent,
+      InputComponent,
+      TextBoxModule,
     ],
     providers: [],
     bootstrap: [BattleComponent]

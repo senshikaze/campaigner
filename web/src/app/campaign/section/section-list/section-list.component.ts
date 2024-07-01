@@ -10,11 +10,11 @@ import { StoreService } from 'src/app/services/store.service';
   <div class="flex flex-col h-full">
     <div class="grow">
       <campaign-section
-        class="border-b-dark-input-bg border-b-2 last:border-b-0"
+        class="border-b-slate-900 dark:border-b-slate-700 border-b-2 last:border-b-0"
         *ngFor="let section of sections$| async"
         [section]="section"
         (selected)="sectionSelected($event)"
-        [ngClass]="{'bg-dark-input-bg-selected': selected?.id == section.id}"
+        [ngClass]="{'bg-light-bg-selected dark:bg-dark-input-bg-selected': selected?.id == section.id}"
         if></campaign-section>
     </div>
     <div class="grow-0 flex flex-row">

@@ -7,15 +7,15 @@ import { StoreService } from 'src/app/services/store.service';
 @Component({
   selector: 'campaign-sections',
   template: `
-  <div class="overflow-y-scroll grid grid-flow-col grid-cols-12 grow">
-    <div class="grow col-span-2 flex flex-col border-r-2 border-slate-700">
-      <div class="flex border-b-2 border-slate-700">
+  <div class="overflow-y-scroll flex flex-row">
+    <div class="grow-0 flex flex-col border-r-2 border-slate-400 dark:border-slate-700">
+      <div class="flex border-b-2 border-slate-400 dark:border-slate-700">
           <div class="mb-2 flex flex-auto">
-              <input
-                  class="grow text-white p-2 m-2 rounded-md placeholder:text-slate-400 bg-dark-input-bg"
-                  [(ngModel)]="campaign.name"
-                  i18n-title title="Campaign Title" 
-                  i18n-placeholder placeholder="Campaign Title"/>
+            <cInput
+              class="grow"
+              [(value)]="campaign.name"
+              title="Campaign Title"
+              placeholder="Campaign Title"></cInput>
           </div>
           <div class="mb-2 flex">
             <save-button (click)="onSaveClicked(campaign)" title="Save Campaign"></save-button>
@@ -23,7 +23,7 @@ import { StoreService } from 'src/app/services/store.service';
       </div>
       <campaign-section-list class="grow" [campaign]="campaign" (section)="sectionSelected($event)"></campaign-section-list>
     </div>
-    <campaign-entries class="col-span-10 col-start-3 flex flex-row" *ngIf="selectedSection" [section]="selectedSection"></campaign-entries>
+    <campaign-entries class="grow flex flex-row" *ngIf="selectedSection" [section]="selectedSection"></campaign-entries>
   </div>
   `,
   styles: []

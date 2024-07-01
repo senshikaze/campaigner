@@ -8,13 +8,9 @@ import { StoreService } from 'src/app/services/store.service';
   selector: 'campaign-section',
   template: `
   <div class="flex flex-row" (click)="clicked()">
-    <input *ngIf="editing; else display" class="grow text-white p-2 m-2 rounded-md placeholder:text-slate-400 bg-dark-input-bg"
-      [(ngModel)]="section.name"
-      (input)="dirty = true"
-      placeholder="New Section"
-    >
+    <cInput *ngIf="editing; else display" [(value)]="section.name" placeholder="Section Title"></cInput>
     <ng-template #display>
-      <div class="grow text-white p-2 m-2 cursor-pointer"
+      <div class="grow dark:text-white p-2 m-2 cursor-pointer"
         (dblclick)="editing = !editing">
         {{section.name}}
       </div>

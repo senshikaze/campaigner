@@ -6,7 +6,7 @@ import { StoreService } from 'src/app/services/store.service';
 @Component({
   selector: 'battle-entity-item',
   template: `
-    <div class="flex border-b-2 border-b-slate-700">
+    <div class="flex border-b-2 last:border-b-0 border-b-slate-400 dark:border-b-slate-700">
       <div class="flex flex-col grow-0">
         <close-button (click)="deleted.emit(entity)" title="Delete Entity"></close-button>
         <drag-item></drag-item>
@@ -18,32 +18,28 @@ import { StoreService } from 'src/app/services/store.service';
           <h1>{{entity.name}}</h1>
         </div>
         <ng-template #editable>
-          <input
-            class="grow text-white p-2 m-2 rounded-md placeholder:text-slate-400 bg-dark-input-bg"
-            [(ngModel)]="entity.name"
-            i18n-title title="Entity Name"
-            i18n-placeholder placeholder="Entity Name">
+          <cInput
+            class="grow"
+            [(value)]="entity.name"
+            title="Entity Name"
+            placeholder="Entity Name"></cInput>
           <div class="flex">
-            <input
-              class="text-white p-2 m-2 rounded-md w-16 placeholder:text-slate-400 bg-dark-input-bg inline"
-              [(ngModel)]="entity.current_health"
-              i18n-title title="Current Health"
-              i18n-placeholder placeholder="Current Health"
-              type="number">
-            <p class="text-white p-2 m-2">/</p>
-            <input
-              class="text-white p-2 m-2 rounded-md w-16 placeholder:text-slate-400 bg-dark-input-bg inline"
-              [(ngModel)]="entity.total_health"
-              i18n-title title="Total Health"
-              i18n-placeholder placeholder="Total Health"
-              type="number">
+            <cInput
+              styleClass="inline w-16"
+              [(value)]="entity.current_health"
+              title="Current Health"
+              inputType="number"></cInput>
+            <p class="dark:text-white p-2 m-2">/</p>
+            <cInput
+              styleClass="inline w-16"
+              [(value)]="entity.total_health"
+              title="Total Health"
+              inputType="number"></cInput>
           </div>
-          <input
-            class="grow text-white p-2 m-2 rounded-md placeholder:text-slate-400 bg-dark-input-bg"
-            [(ngModel)]="entity.initiative"
-            i18n-title title="Initiative"
-            i18n-placeholder placeholder="Initiative"
-            type="number">
+          <cInput
+            [(value)]="entity.initiative"
+            title="Initiative"
+            type="number"></cInput>
         </ng-template>
       </div>
       <div class="basis-1/4 grow-0">

@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { MockComponents } from 'ng-mocks';
 import { SaveButtonComponent } from 'src/app/misc/save-button/save-button.component';
 import { AddButtonComponent } from 'src/app/misc/add-button/add-button.component';
+import { InputComponent } from 'src/app/misc/input/input.component';
 
 describe('CampaignSectionsComponent', () => {
   let component: CampaignSectionsComponent;
@@ -33,7 +34,8 @@ describe('CampaignSectionsComponent', () => {
           AddButtonComponent,
           CreateEntryButtonComponent,
           CreateSectionButtonComponent,
-          SectionListComponent
+          SectionListComponent,
+          InputComponent,
         )
       ],
       providers: [

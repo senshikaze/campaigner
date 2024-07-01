@@ -5,11 +5,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   selector: 'textbox',
   template:`
 <div 
-  class="grow relative bg-dark-input-bg border-2 h-96 p-2 border-slate-700"
+  class="grow relative bg-light-input-bg dark:bg-dark-input-bg h-96 p-2"
   (dblclick)="changeEdit()"
 >
   <button
-    class="p-2 rounded-lg text-white bg-dark-action hover:bg-dark-action-hover absolute top-2 right-2"
+    class="p-2 rounded-lg text-white dark:bg-dark-action dark:hover:bg-dark-action-hover absolute top-2 right-2"
     (click)="changeEdit()"
     i18n i18n-title [title]="(!editing) ? 'View' : 'Edit'" [innerHTML]="(editing)? 'View' : 'Edit'"></button>
   <textarea

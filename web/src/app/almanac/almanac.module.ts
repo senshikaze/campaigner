@@ -9,6 +9,7 @@ import { AlmanacFormComponent } from './form/almanac-form/almanac-form.component
 import { AddButtonComponent } from '../misc/add-button/add-button.component';
 import { DeleteButtonComponent } from '../misc/delete-button/delete-button.component';
 import { ViewButtonComponent } from '../misc/view-button/view-button.component';
+import { InputComponent } from '../misc/input/input.component';
 
 
 
@@ -27,6 +28,7 @@ import { ViewButtonComponent } from '../misc/view-button/view-button.component';
     AddButtonComponent,
     DeleteButtonComponent,
     ViewButtonComponent,
+    InputComponent,
     
   ]
 })

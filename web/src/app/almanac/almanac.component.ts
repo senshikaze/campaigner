@@ -9,15 +9,15 @@ import { ActivatedRoute, Router } from '@angular/router';
   template: `
     <div class="flex flex-col">
       <div class="flex flex-row">
-        <input 
-          class="grow m-2 p-2 text-white rounded-md placeholder:text-slate-400 bg-dark-input-bg"
-          placeholder="Search..."
-          [(ngModel)]="search">
+        <cInput
+        class="grow"
+        [(value)]="search"
+        placeholder="Search..."></cInput>
         <add-button (click)="onCreateClicked()" title="Add Entry"></add-button>
       </div>
       <div class="flex flex-row">
         <ul class="grow">
-          <li class="p-2 odd:bg-dark-zebra-odd even:bg-dark-zebra-even" *ngFor="let entry of almanacEntries$ | async">
+          <li class="p-2 odd:bg-light-zebra-odd even:bg-light-zebra-even dark:odd:bg-dark-zebra-odd dark:even:bg-dark-zebra-even" *ngFor="let entry of almanacEntries$ | async">
             <div class="flex flex-row">
               <p class="px-4 block align-middle text-lg">{{entry.name}}</p>
               <p class="px-4 block align-middle grow">{{entry.description | ellipsis:50}}</p>

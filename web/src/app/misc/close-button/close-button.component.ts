@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   ],
   template: `
     <button     
-      class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
+      class="p-2 m-2 rounded-md text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover"
       (click)="clicked.emit($event)"
       i18n i18n-title [title]="title">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">

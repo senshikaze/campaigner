@@ -15,7 +15,7 @@ import { ModalService } from '../services/modal.service';
   </div>
   <div class="flex grow">
     <ul class="grow">
-      <li class="p-2 odd:bg-dark-zebra-odd even:bg-dark-zebra-even" *ngFor="let campaign of campaigns | async">
+      <li class="p-2 odd:bg-light-zebra-odd dark:odd:bg-dark-zebra-odd even:bg-light-zebra-even dark:even:bg-dark-zebra-even" *ngFor="let campaign of campaigns | async">
         <div class="flex">
           <p class="grow block text-lg">{{campaign.name}}</p>
           <view-button [routerLink]="['/campaign/', campaign.id]" [state]="campaign"></view-button>

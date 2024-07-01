@@ -16,7 +16,7 @@ import { StoreService } from 'src/app/services/store.service';
       *ngFor="let entry of entries$ | async" 
       [entry]="entry" 
       (entryDelete)="entryDeleted()"
-      class="border-b-2 last:border-b-0 border-slate-700"></campaign-entry>
+      class="border-b-2 last:border-b-0 border-slate-400 dark:border-slate-700"></campaign-entry>
   <div>
   `,
   styles: []

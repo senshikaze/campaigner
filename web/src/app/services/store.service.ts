@@ -268,6 +268,10 @@ export class StoreService {
     if (!section.campaign_id) {
       return of(section);
     }
+
+    if (section.id) {
+      return this.patch<CampaignSection>(`sections/${section.id}`, section);
+    }
   
     return this.post<CampaignSection>(`sections`, section);
   }

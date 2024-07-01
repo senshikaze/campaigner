@@ -6,10 +6,10 @@ import { Component } from '@angular/core';
 <div class="flex flex-col h-full w-11" [ngClass]="{'sm:w-fit': expanded}">
   <nav class="w-48 grow flex flex-col">
     <ul class="grow">
-        <li class="text-white bg-dark-action hover:bg-dark-action-hover">
+        <li class="text-slate-200 dark:text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover">
           <a
             routerLink="campaign"
-            routerLinkActive="bg-dark-action-active"
+            routerLinkActive="dark:bg-dark-action-active"
             class="flex p-2"
             i18n i18n-title title="Campaigns">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -18,20 +18,20 @@ import { Component } from '@angular/core';
             <span class="hidden" [ngClass]="{'sm:inline':expanded}">Campaign</span>
           </a>
         </li>
-        <li class="text-white bg-dark-action hover:bg-dark-action-hover">
+        <li class="text-slate-200 dark:text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover">
           <a
             routerLink="battles"
-            routerLinkActive="bg-dark-action-active"
+            routerLinkActive="bg-light-action-active dark:bg-dark-action-active"
             class="p-2 flex"
             i18n i18n-title title="Battles">
             <img class="w-[28px] h-[28px] mr-2" src="assets/sword-white.png" />
             <span class="hidden" [ngClass]="{'sm:inline':expanded}">Battles</span>
           </a>
         </li>
-        <li class="text-white bg-dark-action hover:bg-dark-action-hover">
+        <li class="text-slate-200 dark:text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover">
           <a
             routerLink="almanac"
-            routerLinkActive="bg-dark-action-active"
+            routerLinkActive="bg-light-action-active dark:bg-dark-action-active"
             class="flex p-2"
             i18n i18n-title title="Almanac">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
