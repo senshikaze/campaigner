@@ -14,7 +14,7 @@ const createWindow = () => {
 	});
 	if (!DEBUG){
 		win.loadURL(url.format({
-			pathname: path.join(__dirname, "../web/dist/campaigner-web/index.html"),
+			pathname: path.join(__dirname, "../app/dist/campaigner-app/index.html"),
 			protocol: "file:",
 			slashes: true
 		}));
