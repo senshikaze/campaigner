@@ -21,7 +21,9 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
       [placeholder]="placeholder"
       [disabled]="disabled"
       [ngClass]="{'border-2 border-light-accent-red dark:border-dark-accent-red': invalid}"
-      [class]="styleClass">
+      [class]="styleClass"
+      (blur)="(value) ? blur.emit(true): undefined">
+    <span *ngIf="showClear"></span>
   `,
   styles: [
 
@@ -34,9 +36,11 @@ export class InputComponent implements ControlValueAccessor {
   @Input() display = true;
   @Input() disabled = false;
   @Input() invalid = false;
+  @Input() showClear = false;
   @Input() styleClass = "";
   @Output() valueChange = new EventEmitter<any>();
   @Output() dirty = new EventEmitter<boolean>(false);
+  @Output() blur = new EventEmitter<boolean>(false);
 
   onChange = (value: any) => {};
   onTouch = () => {};
@@ -50,6 +54,7 @@ export class InputComponent implements ControlValueAccessor {
       this.onTouch();
       this.onChange(value);
       this.valueChange.emit(value);
+      this.dirty.emit(true);
     }
   }
 

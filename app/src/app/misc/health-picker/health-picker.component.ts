@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
       </svg>
     </button>
     <input
-      [(ngModel)]="currentHealth"
+      [(ngModel)]="damage"
       class="grow dark:text-white p-2 placeholder:text-slate-600 dark:placeholder:text-slate-400 bg-light-input-bg dark:bg-dark-input-bg w-20 text-center"
       title="Current Health">
     <button (click)="decreaseHealth(1)" title="Decrease Health by 1" class="p-2 rounded-b-md bg-light-health-down-bg dark:bg-dark-health-down-bg dark:text-slate-300">
@@ -32,6 +32,7 @@ export class HealthPickerComponent implements OnInit {
   @Input() currentHealth = 0;
   @Input() allowNegative = false;
   @Output() currentHealthChange = new EventEmitter<number>();
+  @Output() changed = new EventEmitter<boolean>();
 
   /**
    * Emits if this entity loses all health
@@ -46,6 +47,8 @@ export class HealthPickerComponent implements OnInit {
    */
   @Output() bloodied = new EventEmitter<boolean>();
 
+
+  damage = 0;
   ngOnInit(): void {
     if (this.currentHealth == undefined) {
       this.currentHealth = 0;
@@ -61,6 +64,7 @@ export class HealthPickerComponent implements OnInit {
     if (prevHealth > 0 && this.currentHealth == 0) {
       this.died.emit(true);
     }
+    this.changed.emit(true);
   }
 
   increaseHealth(value: number): void {
@@ -71,5 +75,7 @@ export class HealthPickerComponent implements OnInit {
       this.died.emit(false);
       this.recovered.emit(true);
     }
+
+    this.changed.emit(true);
   }
 }

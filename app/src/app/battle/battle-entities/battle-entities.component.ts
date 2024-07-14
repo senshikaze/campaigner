@@ -10,20 +10,16 @@ import { StoreService } from 'src/app/services/store.service';
   <div class="h-full w-full grow flex flex-col">
     <div class="grow flex flex-row">
       <div
-        class="grow-0 flex-initial basis-1/5 flex flex-col border-r-slate-400 dark:border-r-slate-700 border-r-2">
+        class="grow-0 flex-initial basis-1/5 flex flex-col">
         <div class="flex grow flex-col">
           <battle-entity-item
             *ngFor="let entity of entities$ | async"
             [entity]="entity" [attr.data-index]="entity.initiative ?? 0"
-            (entitySelected)="selectedEntity = $event"
             (deleted)="onDeleted($event)"></battle-entity-item>
         </div>
         <div class="flex flex-col">
           <add-button *ngIf="battle.id" (clicked)="onAddClicked(battle)" title="Add Combatant"></add-button>
         </div>
-      </div>
-      <div class="grow flex flex-col basis-4/5">
-        <battle-entity-description class="grow flex flex-col" [entity]="selectedEntity"></battle-entity-description>
       </div>
     <div>
   </div>
@@ -35,8 +31,6 @@ export class BattleEntitiesComponent implements OnDestroy {
   @Input() saveEvent!: Observable<Battle>;
 
   entities$ = new BehaviorSubject<BattleEntity[]>([]);
-  
-  selectedEntity!: BattleEntity;
 
   destroy$ = new Subject<boolean>();
 

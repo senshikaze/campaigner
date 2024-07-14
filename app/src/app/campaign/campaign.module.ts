@@ -6,7 +6,6 @@ import { CampaignComponent } from './campaign.component';
 import { CampaignListComponent } from './campaign-list.component';
 import { EntryComponent } from './entry/entry.component';
 import { CampaignRoutingModule } from './campaign-routing.module';
-import { TextBoxModule } from '../textbox/textbox.module';
 import { SectionComponent } from './section/section.component';
 import { SectionListComponent } from './section/section-list/section-list.component';
 import { CreateEntryButtonComponent } from './entry/create-button/create-entry-button.component';
@@ -18,6 +17,7 @@ import { DeleteButtonComponent } from '../misc/delete-button/delete-button.compo
 import { ViewButtonComponent } from '../misc/view-button/view-button.component';
 import { SaveButtonComponent } from '../misc/save-button/save-button.component';
 import { InputComponent } from '../misc/input/input.component';
+import { TextboxComponent } from '../misc/textbox/textbox.component';
 
 
 @NgModule({
@@ -36,7 +36,7 @@ import { InputComponent } from '../misc/input/input.component';
       CommonModule,
       CampaignRoutingModule,
       FormsModule,
-      TextBoxModule,
+      TextboxComponent,
       AddButtonComponent,
       DeleteButtonComponent,
       SaveButtonComponent,

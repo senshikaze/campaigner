@@ -16,7 +16,8 @@ import { BattleEntityDescriptionComponent } from './battle-entities/battle-entit
 import { CloseButtonComponent } from '../misc/close-button/close-button.component';
 import { DragItemComponent } from '../misc/drag-item/drag-item.component';
 import { InputComponent } from '../misc/input/input.component';
-import { TextBoxModule } from '../textbox/textbox.module';
+import { TextboxComponent } from '../misc/textbox/textbox.component';
+import { DiceRollerComponent } from '../misc/dice-roller/dice-roller.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { TextBoxModule } from '../textbox/textbox.module';
       CloseButtonComponent,
       DragItemComponent,
       InputComponent,
-      TextBoxModule,
+      TextboxComponent,
+      DiceRollerComponent
     ],
     providers: [],
     bootstrap: [BattleComponent]

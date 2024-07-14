@@ -4,31 +4,38 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { StoreService } from '../services/store.service';
 import { Observable, Subject, of, take } from 'rxjs';
 import { ModalService } from '../services/modal.service';
+import { BattleEntitySelectedService } from './services/battle-entity-selected.service';
 
 @Component({
   selector: 'battle',
   template:`
-  <div class="flex flex-col grow p-2 h-full" *ngIf="battle$ | async as battle">
-    <div class="overflow-y-scroll grid grid-flow-col gird-cols-12 grow">
-        <div class="grow col-span-2 flex flex-col">
-            <div class="flex border-b-2 border-slate-400 dark:border-slate-700">
-                <div class="mb-2 flex flex-auto">
-                  <cInput
-                    class="grow"
-                    [(value)]="battle.name"
-                    title="Battle Title"
-                    placeholder="Battle Title"></cInput>
-                    <save-button
-                      (click)="onSaveClicked(battle)"
-                      title="Save Battle"></save-button>
-                </div>
-            </div>
-            <battle-entities
-              class="grow"
-              [battle]="battle"
-              [saveEvent]="saveEvent.asObservable()"></battle-entities>
+  <div class="flex grow p-2 h-full" *ngIf="battle$ | async as battle">
+    <div class="flex border-r-2 border-slate-400 dark:border-slate-700">
+      <div class="flex flex-col min-w-96">
+        <div class="mb-4 flex border-b-2 border-slate-400 dark:border-slate-700">
+          <cInput
+            class="grow mr-2"
+            styleClass="w-full"
+            [(value)]="battle.name"
+            title="Battle Title"
+            placeholder="Battle Title"></cInput>
+          <save-button
+            class="justify-end"
+            (click)="onSaveClicked(battle)"
+            title="Save Battle"></save-button>
         </div>
+        <div class="flex grow">
+          <battle-entities
+            class="border-b-2 last:border-b-0 border-b-slate-400 dark:border-b-slate-700"
+            [battle]="battle"
+            [saveEvent]="saveEvent.asObservable()"></battle-entities>
+        </div>
+      </div>
     </div>
+    <div class="grow flex">
+      <battle-entity-description class="grow flex flex-col"></battle-entity-description>
+    </div>
+    <dice-roller class="absolute bottom-1 right-1"></dice-roller>
 </div>
   `,
   styles: []

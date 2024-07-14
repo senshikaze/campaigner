@@ -25,7 +25,7 @@ export class StoreService {
   ) { }
 
   /** 
-   * HTTP Methods
+   * CRUD Methods
    */
   delete<T>(url: string): Observable<T> {
     // TODO error handling, login for auth0
@@ -149,9 +149,9 @@ export class StoreService {
 
   saveBattleEntity(entity: BattleEntity): Observable<BattleEntity> {
     if (entity.battle_id && entity.id) {
-      return this.patch<BattleEntity>(`battles/${entity}/entity/${entity.id}`, entity);
+      return this.patch<BattleEntity>(`battles/${entity.battle_id}/entity/${entity.id}`, entity);
     }
-    return of(entity);
+    return this.post<BattleEntity>(`battles/${entity.battle_id}/entity`, entity);
   }
 
   /**

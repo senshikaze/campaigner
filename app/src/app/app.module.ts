@@ -7,7 +7,6 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { NotfoundComponent } from './notfound.component';
-import { TextBoxModule } from './textbox/textbox.module';
 import { SharedModule } from './shared.module';
 import { ModalComponent } from './misc/modal/modal.component';
 import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
@@ -27,7 +26,6 @@ import { CloseButtonComponent } from './misc/close-button/close-button.component
   imports: [
     BrowserModule,
     AppRoutingModule,
-    TextBoxModule,
     FormsModule,
     SharedModule,
     HttpClientModule,

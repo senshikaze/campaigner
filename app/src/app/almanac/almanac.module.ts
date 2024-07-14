@@ -10,6 +10,7 @@ import { AddButtonComponent } from '../misc/add-button/add-button.component';
 import { DeleteButtonComponent } from '../misc/delete-button/delete-button.component';
 import { ViewButtonComponent } from '../misc/view-button/view-button.component';
 import { InputComponent } from '../misc/input/input.component';
+import { TextboxComponent } from '../misc/textbox/textbox.component';
 
 
 
@@ -29,7 +30,7 @@ import { InputComponent } from '../misc/input/input.component';
     DeleteButtonComponent,
     ViewButtonComponent,
     InputComponent,
-    
+    TextboxComponent,
   ]
 })
 export class AlmanacModule { }
