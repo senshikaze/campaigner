@@ -16,7 +16,7 @@ import { StoreService } from 'src/app/services/store.service';
   styles: []
 })
 export class AlmanacEntryComponent implements OnInit {
-  entry$!: Observable<AlmanacEntry>;
+  entry$!: Observable<AlmanacEntry | undefined>;
   campaigns$!: Observable<Campaign[]>;
 
   almanacTypes = Object.values(AlmanacType);
@@ -32,7 +32,7 @@ export class AlmanacEntryComponent implements OnInit {
       mergeMap(p => 
         (p.get('id') === 'new') 
           ? of({name: "", description:"", type: AlmanacType.LOCATION} as AlmanacEntry)
-          : this.store.getAlmanacEntry(p.get('id')!)
+          : this.store.getAlmanacEntry(Number.parseInt(p.get('id') ?? "-1"))
       )
     )
   }

@@ -57,16 +57,19 @@ export class AlmanacComponent implements OnInit {
     private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.almanacEntries$ = this.store.getAlmanacEntries();
   }
 
   onCreateClicked(): void {
     this.router.navigate(["new"], {relativeTo: this.route});
   }
 
+  onSearch(query: string): void {
+    this.almanacEntries$ = this.store.getAlmanacEntries(query);
+  }
+
   onDeleteClicked(entry: AlmanacEntry): void {
     if (entry.id !== undefined) {
-      this.almanacEntries$ = this.store.deleteAlmanacEntry(entry.id);
+      this.store.deleteAlmanacEntry(entry);
     }
   }
 }

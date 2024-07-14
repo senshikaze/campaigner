@@ -20,6 +20,7 @@
     "@angular/router": "^17.1.1",
     "@auth0/auth0-angular": "^2.2.3",
     "@tailwindcss/typography": "^0.5.12",
+    "dexie": "^4.0.7",
     "marked": "^12.0.1",
     "ngx-markdown": "^17.2.0",
     "rxjs": "~7.5.0",

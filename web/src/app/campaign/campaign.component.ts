@@ -18,7 +18,7 @@ import { CampaignSection } from '../interfaces/campaign-section';
   styles: []
 })
 export class CampaignComponent implements OnInit, OnDestroy {
-  campaign$!: Observable<Campaign>;
+  campaign$!: Observable<Campaign | undefined>;
 
   selectedSection!: CampaignSection;
 
@@ -32,7 +32,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.paramMap.subscribe(p => {
       if (p.has("id") && p.get("id") != "new") {
-        this.campaign$ = this.store.getCampaign(p.get("id") as string);
+        this.campaign$ = this.store.getCampaign(Number.parseInt(p.get("id") ?? "-1"));
       } else if (p.get("id") == "new") {
         this.campaign$ = of({
           name: '',

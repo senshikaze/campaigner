@@ -2,8 +2,8 @@ import { AlmanacType } from "../enums/almanac-type";
 import { AlmanacStats } from "./almanac-stats";
 
 export interface AlmanacEntry {
-    id?: string;
-    campaign?: number;
+    id?: number;
+    campaign_id?: number;
     name: string;
     description: string;
     type: AlmanacType;
