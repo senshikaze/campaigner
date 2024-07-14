@@ -1,0 +1,15 @@
+{
+	"name": "campaigner",
+	"version": "0.0.1",
+	"description": "Campaigner",
+	"main": "main.js",
+	"author": "Christian Smith",
+	"license": "Apache",
+	"scripts": {
+		"start": "electron .",
+		"dev": "electron . -- --debug" 
+	},
+	"devDependencies": {
+		"electron": "^31.2.0"
+	}
+}
