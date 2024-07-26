@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DiceRoll, Roll } from '../interfaces/dice-roll';
 import { inDice } from '../enums/dice';
-import { BehaviorSubject, map, Observable, reduce, take } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, reduce, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +40,14 @@ export class DiceRollerService {
     let dr = this.dice.value;
     this.dice.next(dr.filter(d => d != dice));
     return this.dice$;
+  }
+
+  rollFromString(dice: string): Observable<DiceRoll | undefined> {
+    let diceRoll: DiceRoll | undefined;
+    if (diceRoll = this.parseDice(dice)) {
+      return this.roll(diceRoll);
+    }
+    return of();
   }
 
   /**
@@ -108,6 +116,11 @@ export class DiceRollerService {
       `https://www.random.org/integers/?num=${count}&min=${min}&max=${max}&col=1&format=plain&base=10&rnd=new`,
       {responseType: 'text'}
     ).pipe(
+      catchError(err => {
+        console.error(err.error);
+        Math.random();
+        return of((Math.floor(Math.random() * max) + 1).toString());
+      }),
       map(r => {
         let rolls : number [] = []
         for (let line of r.trim().split("\n")) {

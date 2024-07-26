@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { BehaviorSubject, map, Observable, Subject, takeUntil } from 'rxjs';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { Battle } from 'src/app/interfaces/battle';
 import { BattleEntity } from 'src/app/interfaces/battle-entity';
 import { StoreService } from 'src/app/services/store.service';
@@ -11,11 +12,13 @@ import { StoreService } from 'src/app/services/store.service';
     <div class="grow flex flex-row">
       <div
         class="grow-0 flex-initial basis-1/5 flex flex-col max-h-full">
-        <div class="flex grow flex-col overflow-auto">
+        <div class="flex grow flex-col overflow-auto" cdkDropList (cdkDropListDropped)="drop($event)">
+          @for (entity of entities$ | async; track entity) {
           <battle-entity-item
-            *ngFor="let entity of entities$ | async"
             [entity]="entity" [attr.data-index]="entity.initiative ?? 0"
-            (deleted)="onDeleted($event)"></battle-entity-item>
+            (deleted)="onDeleted($event)"
+            cdkDrag></battle-entity-item>
+          }
         </div>
         <div class="flex flex-col">
           <add-button *ngIf="battle.id" (clicked)="onAddClicked(battle)" title="Add Combatant"></add-button>
@@ -24,7 +27,9 @@ import { StoreService } from 'src/app/services/store.service';
     <div>
   </div>
   `,
-  styles: []
+  styles: [
+    `.cdk-drag-preview {background: theme('colors.slate.800')}`
+  ]
 })
 export class BattleEntitiesComponent implements OnInit, OnDestroy {
   @Input() battle!: Battle;
@@ -69,5 +74,21 @@ export class BattleEntitiesComponent implements OnInit, OnDestroy {
 
   sortEntities(): void {
 
+  }
+
+  drop(event: CdkDragDrop<BattleEntity[]>) {
+    let entities = this.entities$.getValue();
+    // find the next best initiative to set the current to +1/-1
+    if (event.currentIndex !== event.previousIndex) {
+      if (entities.length > 1 && event.currentIndex == 0) {
+        entities[event.previousIndex].initiative = (entities[0].initiative ?? 0) + 1;
+      } else if (entities.length > 1 && event.currentIndex + 1 == entities.length) {
+        entities[event.previousIndex].initiative = (entities[entities.length - 1].initiative ?? 0) - 1;
+      } else if (entities.length > 1) {
+        entities[event.previousIndex].initiative = (entities[event.currentIndex + 1].initiative ?? 0) + 1;
+      }
+    }
+    entities.sort((a, b) => ((b.initiative ?? 0) > (a.initiative ?? 0)) ? 1 : -1)
+    this.entities$.next(entities);
   }
 }

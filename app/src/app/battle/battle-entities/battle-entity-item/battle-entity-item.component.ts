@@ -10,7 +10,7 @@ import { BattleEntitySelectedService } from '../../services/battle-entity-select
     <div class="flex">
       <div class="flex flex-col grow-0">
         <close-button (click)="deleted.emit(entity)" title="Delete Entity"></close-button>
-        <drag-item></drag-item>
+        <drag-item cdkDragHandle></drag-item>
       </div>  
       <div class="basis-3/4 grow" (click)="entitySelected.entitySelected(entity)" >
         <div>
@@ -38,7 +38,7 @@ import { BattleEntitySelectedService } from '../../services/battle-entity-select
           <cInput
             [(value)]="entity.initiative"
             title="Initiative"
-            type="number"
+            inputType="number"
             (blur)="saveBattleEntity(entity)"></cInput>
         </div>
       </div>

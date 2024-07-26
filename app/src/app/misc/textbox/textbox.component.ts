@@ -26,7 +26,7 @@ import { DiceRollerService } from 'src/app/services/dice-roller.service';
     i18n i18n-title [title]="(!editing) ? 'View' : 'Edit'" [innerHTML]="(editing)? 'View' : 'Edit'"></button>
   <textarea
     #editBox
-    class="h-full w-full p-2 bg-inherit"
+    class="h-full w-full p-2 bg-inherit border-2 border-slate-400 dark:border-slate-700"
     *ngIf="editing; else viewBox"
     (input)="inputChanged($event)"
     [class]="styleClass"

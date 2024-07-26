@@ -31,7 +31,7 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 })
 export class InputComponent implements ControlValueAccessor {
   @Input() value!: any;
-  @Input() inputType = "text";
+  @Input() inputType: 'text' | 'number' | 'email' = "text";
   @Input() placeholder = "";
   @Input() display = true;
   @Input() disabled = false;
@@ -50,6 +50,9 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   onInput(value: any): void {
+    if (this.inputType == 'number') {
+      value = Number.parseInt(value);
+    }
     if (!this.disabled) {
       this.onTouch();
       this.onChange(value);

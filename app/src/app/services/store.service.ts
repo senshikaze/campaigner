@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { filter, forkJoin, from, map, Observable, of, switchMap } from 'rxjs';
-import { v4 as uuid} from 'uuid';
+import { forkJoin, from, map, Observable, of } from 'rxjs';
 import { liveQuery } from 'dexie';
 import { DBService } from './db.service';
 
@@ -149,7 +148,11 @@ export class StoreService {
   }
 
   getBattleEntities(battle: Battle): Observable<BattleEntity[]> {
-    return from(liveQuery(() => this.db.battleEntityTable.where({battle_id: battle.id}).toArray()));
+    return from(liveQuery(() => 
+      this.db.battleEntityTable.where({battle_id: battle.id}).toArray()
+    )).pipe(
+      map(entities => entities.sort((a, b) => ((b.initiative ?? 0) > (a.initiative ?? 0)) ? 1:-1))
+    );
   }
 
   saveBattleEntity(entity: BattleEntity): Observable<BattleEntity> {

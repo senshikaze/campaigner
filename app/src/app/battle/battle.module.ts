@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CdkDrag, CdkDragHandle, CdkDropList } from '@angular/cdk/drag-drop';
 
 import { BattleComponent } from './battle.component';
 import { BattleRoutingModule } from './battle-routing.module';
@@ -41,7 +42,10 @@ import { DiceRollerComponent } from '../misc/dice-roller/dice-roller.component';
       DragItemComponent,
       InputComponent,
       TextboxComponent,
-      DiceRollerComponent
+      DiceRollerComponent,
+      CdkDrag,
+      CdkDropList,
+      CdkDragHandle,
     ],
     providers: [],
     bootstrap: [BattleComponent]
