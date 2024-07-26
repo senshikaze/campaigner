@@ -7,9 +7,9 @@
 	"license": "Apache",
 	"scripts": {
 		"start": "electron .",
-		"dev": "electron . -- --debug" 
+		"dev": "electron . -- --debug"
 	},
 	"devDependencies": {
-		"electron": "^31.2.0"
+		"electron": "^31.2.1"
 	}
 }

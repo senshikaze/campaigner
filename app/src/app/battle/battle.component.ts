@@ -9,7 +9,7 @@ import { BattleEntitySelectedService } from './services/battle-entity-selected.s
 @Component({
   selector: 'battle',
   template:`
-  <div class="flex grow p-2 h-full" *ngIf="battle$ | async as battle">
+  <div class="flex grow p-2 h-full max-h-full" *ngIf="battle$ | async as battle">
     <div class="flex border-r-2 border-slate-400 dark:border-slate-700">
       <div class="flex flex-col min-w-96">
         <div class="mb-4 flex border-b-2 border-slate-400 dark:border-slate-700">
@@ -41,7 +41,7 @@ import { BattleEntitySelectedService } from './services/battle-entity-selected.s
   styles: []
 })
 export class BattleComponent implements OnInit {
-  battle$!: Observable<Battle>;
+  battle$!: Observable<Battle | undefined>;
 
   saveEvent = new Subject<Battle>();
 

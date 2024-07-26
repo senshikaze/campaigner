@@ -2,3 +2,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar:hover {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(200, 200, 200, 0.4);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(180, 180, 180, 0.8);
+}
+::-webkit-scrollbar-thumb:hover{
+    background: rgba(180, 180, 180, 1.0);
+}

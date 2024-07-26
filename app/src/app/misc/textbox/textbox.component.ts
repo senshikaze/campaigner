@@ -27,6 +27,7 @@ import { MarkdownModule } from 'ngx-markdown';
     class="h-full w-full p-2 bg-inherit"
     *ngIf="editing; else viewBox"
     (input)="inputChanged($event)"
+    [class]="styleClass"
   >{{text}}</textarea>
   <ng-template #viewBox>
     <markdown class="min-h-max min-w-max p-2 prose prose-neutral prose-invert" [data]="text" ngPreserveWhitespace></markdown>

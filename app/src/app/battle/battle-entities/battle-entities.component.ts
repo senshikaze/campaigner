@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { BehaviorSubject, map, Observable, Subject, takeUntil } from 'rxjs';
 import { Battle } from 'src/app/interfaces/battle';
 import { BattleEntity } from 'src/app/interfaces/battle-entity';
 import { StoreService } from 'src/app/services/store.service';
@@ -10,8 +10,8 @@ import { StoreService } from 'src/app/services/store.service';
   <div class="h-full w-full grow flex flex-col">
     <div class="grow flex flex-row">
       <div
-        class="grow-0 flex-initial basis-1/5 flex flex-col">
-        <div class="flex grow flex-col">
+        class="grow-0 flex-initial basis-1/5 flex flex-col max-h-full">
+        <div class="flex grow flex-col overflow-auto">
           <battle-entity-item
             *ngFor="let entity of entities$ | async"
             [entity]="entity" [attr.data-index]="entity.initiative ?? 0"
@@ -26,7 +26,7 @@ import { StoreService } from 'src/app/services/store.service';
   `,
   styles: []
 })
-export class BattleEntitiesComponent implements OnDestroy {
+export class BattleEntitiesComponent implements OnInit, OnDestroy {
   @Input() battle!: Battle;
   @Input() saveEvent!: Observable<Battle>;
 
@@ -37,6 +37,12 @@ export class BattleEntitiesComponent implements OnDestroy {
   constructor(
     private store: StoreService
   ) {}
+
+  ngOnInit(): void {
+    this.store.getBattleEntities(this.battle).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(entities => this.entities$.next(entities));
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);

@@ -4,12 +4,12 @@ import { EntryComponent } from './entry.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StoreService } from 'src/app/services/store.service';
 import { CampaignEntry } from 'src/app/interfaces/campaign-entry';
-import { TextBoxModule } from 'src/app/textbox/textbox.module';
 import { MarkdownModule, MarkdownService } from 'ngx-markdown';
 import { MockComponents } from 'ng-mocks';
 import { SaveButtonComponent } from 'src/app/misc/save-button/save-button.component';
 import { DeleteButtonComponent } from 'src/app/misc/delete-button/delete-button.component';
 import { InputComponent } from 'src/app/misc/input/input.component';
+import { TextboxComponent } from 'src/app/misc/textbox/textbox.component';
 
 describe('CampaignEntryComponent', () => {
   let component: EntryComponent;
@@ -21,12 +21,11 @@ describe('CampaignEntryComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         EntryComponent,
-        MockComponents(SaveButtonComponent, DeleteButtonComponent, InputComponent)
+        MockComponents(SaveButtonComponent, DeleteButtonComponent, InputComponent, TextboxComponent)
       ],
       imports: [
         FormsModule,
         ReactiveFormsModule,
-        TextBoxModule,
         MarkdownModule.forRoot()
       ],
       providers: [

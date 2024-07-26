@@ -1,7 +1,7 @@
 const { app, BrowserWindow } = require("electron");
+const fs = require("fs");
 const path = require("path");
 const url = require("url");
-
 
 const createWindow = () => {
 	const DEBUG = process.argv.includes("--debug");
@@ -28,6 +28,10 @@ const createWindow = () => {
 
 	win.webContents.openDevTools();
 };
+
+process.on('uncaughtException', function(err) {
+	fs.writeFileSync('crash.log', `${err}\n${err.stack}`);
+});
 
 app.whenReady().then(() => {
 	createWindow();

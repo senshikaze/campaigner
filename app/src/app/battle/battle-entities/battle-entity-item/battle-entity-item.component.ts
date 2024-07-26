@@ -13,12 +13,7 @@ import { BattleEntitySelectedService } from '../../services/battle-entity-select
         <drag-item></drag-item>
       </div>  
       <div class="basis-3/4 grow" (click)="entitySelected.entitySelected(entity)" >
-        <div *ngIf="!edit; else editable">
-          <h1>{{entity.name}}</h1>
-          <h1>{{entity.current_health}} / {{entity.total_health}}</h1>
-          <h1>{{entity.name}}</h1>
-        </div>
-        <ng-template #editable>
+        <div>
           <cInput
             class="grow"
             [(value)]="entity.name"
@@ -45,7 +40,7 @@ import { BattleEntitySelectedService } from '../../services/battle-entity-select
             title="Initiative"
             type="number"
             (blur)="saveBattleEntity(entity)"></cInput>
-        </ng-template>
+        </div>
       </div>
       <div class="basis-1/4 grow-0">
         <health-picker

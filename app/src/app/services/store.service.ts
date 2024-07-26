@@ -116,42 +116,46 @@ export class StoreService {
   /**
    * Battle methods
    */
-  deleteBattle(battle: Battle): void {
-    if (battle.id) {
-      this.delete<null>(`battles/${battle.id}`);
+  deleteBattle(battle: Battle): Observable<void> {
+    if (!battle.id) {
+      return of(); 
     }
+    return from(this.db.battleEntityTable.delete(battle.id));
   }
 
-  getBattle(id: number): Observable<Battle> {
-    return this.get<Battle>(`battles/${id}`);
+  getBattle(id: number): Observable<Battle | undefined> {
+    return from(liveQuery(() => this.db.battleTable.where({id: id}).first()));
   }
 
   getBattles(): Observable<Battle[]> {
-    return this.get<Battle[]>(`battles/`);
+    return from(liveQuery(() => this.db.battleTable.toArray()));
   }
 
   saveBattle(battle: Battle): Observable<Battle> {
-    if (battle.id) {
-      return this.patch<Battle>(`battles/${battle.id}`, battle);
-    }
-    return this.post<Battle>(`battles/`, battle);
+    return from(this.db.battleTable.put(battle, battle.id)).pipe(
+      map(id => {battle.id = id; return battle;})
+    );
   }
 
-  deleteBattleEntity(battleEntity: BattleEntity): void {
-    if (battleEntity.id) {
-      this.delete<null>(`battles/${battleEntity.battle_id}/entities/${battleEntity}`);
+  deleteBattleEntity(battleEntity: BattleEntity): Observable<void> {
+    if (!battleEntity.id) {
+      return of();
     }
+    return from(this.db.battleEntityTable.delete(battleEntity.id));
+  }
+
+  getBattleEntity(id: number): Observable<BattleEntity | undefined> {
+    return from(liveQuery(() => this.db.battleEntityTable.where({id: id}).first()));
   }
 
   getBattleEntities(battle: Battle): Observable<BattleEntity[]> {
-    return this.get<BattleEntity[]>(`battles/${battle.id}/entities`);
+    return from(liveQuery(() => this.db.battleEntityTable.where({battle_id: battle.id}).toArray()));
   }
 
   saveBattleEntity(entity: BattleEntity): Observable<BattleEntity> {
-    if (entity.battle_id && entity.id) {
-      return this.patch<BattleEntity>(`battles/${entity.battle_id}/entity/${entity.id}`, entity);
-    }
-    return this.post<BattleEntity>(`battles/${entity.battle_id}/entity`, entity);
+    return from(this.db.battleEntityTable.put(entity, entity.id)).pipe(
+      map(id => {entity.id = id; return entity})
+    );
   }
 
   /**
@@ -186,7 +190,7 @@ export class StoreService {
    */
   getCampaigns(): Observable<Campaign[]> {
     //return this.get<Campaign[]>('campaigns/');
-    return from(liveQuery(() => this.db.campaignTable.toArray()))
+    return from(liveQuery(() => this.db.campaignTable.toArray()));
   }
 
   /**

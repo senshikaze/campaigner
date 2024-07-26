@@ -8,10 +8,8 @@ describe('TextboxComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        TextboxComponent,
-      ],
       imports: [
+        TextboxComponent,
         MarkdownModule.forRoot()
       ]
     })

@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DiceRoll } from 'src/app/interfaces/dice-roll';
+import { DiceRoll, Roll } from 'src/app/interfaces/dice-roll';
 import { InputComponent } from '../input/input.component';
-import { BehaviorSubject, Observable, Subject, debounceTime, distinctUntilChanged, map, reduce, take, takeUntil } from 'rxjs';
-import { inDice } from 'src/app/enums/dice';
+import { BehaviorSubject, Observable, Subject, debounceTime, distinctUntilChanged, map, reduce, take, takeUntil, tap } from 'rxjs';
+import { Dice, inDice } from 'src/app/enums/dice';
 import { HttpClient } from '@angular/common/http';
 import { CloseButtonComponent } from '../close-button/close-button.component';
+import { DiceRollerService } from 'src/app/services/dice-roller.service';
 
 @Component({
   selector: 'dice-roller',
@@ -18,16 +19,16 @@ import { CloseButtonComponent } from '../close-button/close-button.component';
   template: `
   <div class="flex flex-col m-2">
     <div [class]="{'hidden': !show}" class="transition ease-in-out duration-700 shadow-md bg-light-bg dark:bg-dark-bg min-w-32 min-h-96 max-h-svh rounded-md flex flex-col">
-      <div class="grow flex flex-col min-w-full min-h-96 overflow-scroll">
-        <div class="border-b-2 last:border-b-0 border-slate-400 dark:border-slate-700 grow flex justify-start" *ngFor="let roll of (rolls$ | async); index as i">
+      <div class="grow flex flex-col-reverse justify-start min-w-full min-h-96 max-h-[32rem] overflow-auto custom-scrollbar">
+        <div class="border-b-2 first:border-b-0 border-slate-400 dark:border-slate-700 flex" *ngFor="let roll of (rolls$ | async)?.reverse() ?? []; index as i">
           <div class="p-2 grow">  
             <span class="text-sm block">{{roll.text}}</span>
-            <span class="text-5xl font-bold">{{roll.outcome ?? "None"}}</span>
+            <span class="text-5xl font-bold" [ngClass]="{'text-red-400': diceRoller.isFailure(roll), 'text-green-400': diceRoller.isCritical(roll)}">{{roll.total ?? "None"}}</span>
           </div>
           <div>
             <button
               class="m-2 p-2 bg-light-action dark:bg-dark-action hover:bg-light-action-hover dark:hover:bg-dark-action-hover rounded-md"
-              (click)="replay(i, roll)"
+              (click)="reroll(i, roll)"
               title="Re-Roll">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -41,7 +42,7 @@ import { CloseButtonComponent } from '../close-button/close-button.component';
         <button
           class="justify-end m-2 p-2 bg-light-action dark:bg-dark-action hover:bg-light-action-hover dark:hover:bg-dark-action-hover rounded-md disabled:bg-dark-bg-alt disabled:hover:bg-dark-bg-alt"
           (click)="roll(valueSubject.value)"
-          title="Re-Roll"
+          title="Roll"
           [disabled]="!valid">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -76,14 +77,15 @@ export class DiceRollerComponent implements OnInit, OnDestroy {
 
   destroy$ = new Subject<boolean>();
   constructor(
-    private http: HttpClient
+    public diceRoller: DiceRollerService,
   ) {}
 
   ngOnInit(): void {
     this.value$.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      map(v => this.roll(v)),
+      map(v => this.diceRoller.parseDice(v)),
+      tap(dr => this.valid = dr != undefined),
       takeUntil(this.destroy$)
     ).subscribe();
   }
@@ -93,77 +95,12 @@ export class DiceRollerComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  /**
-   * Parse the dice entered in the format of:
-   * 1d6+4
-   * (Roll 1 d6 with a +4 modifier after the roll(s))
-   * Supported dice: d2, d4, d6, d8, d10, d12, d20, d100
-   * @param value inputted dice value
-   * @returns DiceRoll or undefined if not valid
-   */
-  parseDice(value: string): DiceRoll | undefined {
-    // 0: 1d6+4
-    // (1)d(2)(3)(4)
-    let regDice = value.match(/(\d+)d(\d*)([+-]*)(\d*)/i);
-    if (!regDice) {
-      return undefined;
-    }
-
-    if (!regDice[1] || !regDice[2]) {
-      return undefined;
-    }
-
-    if (!inDice(Number.parseInt(regDice[2]))) {
-      return undefined;
-    }
-
-    // we have a valid dice roll
-    let diceRoll: DiceRoll = {
-      text: regDice[0],
-      num: Number.parseInt(regDice[1]),
-      dice: Number.parseInt(regDice[2]),
-    };
-
-    let modifier = Number.parseInt(regDice[4]);
-    if (modifier) {
-      diceRoll.modifier = (regDice[3] == '-') ? modifier * -1 : modifier;
-    }
-    return diceRoll;
-  }
-
   roll(dice: string): void {
-    let diceRoll = this.parseDice(dice);
-    if (!diceRoll) {
-      this.valid = false;
+    let diceRoll = this.diceRoller.parseDice(dice);
+    if (diceRoll == undefined) {
       return;
     }
-    this.rollDemBones(diceRoll).subscribe(dr => this.addToRolls(dr));
-  }
-
-  rollDemBones(diceRoll: DiceRoll): Observable<DiceRoll> {
-    Math.random();
-    return this.getRandomNumber(1, 1, diceRoll.dice).pipe(
-      take(diceRoll.num),
-      reduce((acc, val) => [...acc, ...val]),
-      map(nums => {diceRoll.outcome = nums.reduce((roll, sum) => sum + roll, 0); return diceRoll})
-    );
-      //error: e => {diceRoll.outcome = [Math.floor(Math.random() * diceRoll.dice) + 1].reduce((roll, sum) => sum + roll, 0); return diceRoll;}
-  }
-
-  getRandomNumber(count: number, min: number, max: number): Observable<number[]> {
-    return this.http.get(
-      `https://www.random.org/integers/?num=${count}&min=${min}&max=${max}&col=1&format=plain&base=10&rnd=new`,
-      {responseType: 'text'}
-    ).pipe(
-      map(r => {
-        let rolls : number [] = []
-        for (let line of r.trim().split("\n")) {
-          rolls.push(Number.parseInt(line));
-        }
-        return rolls;
-      }),
-      take(1)
-    );
+    this.diceRoller.roll(diceRoll).subscribe(dr => this.addToRolls(dr));
   }
 
   addToRolls(diceRoll: DiceRoll): void {
@@ -178,7 +115,7 @@ export class DiceRollerComponent implements OnInit, OnDestroy {
     this.rollsSubject.next(current);
   }
 
-  replay(index: number, diceRoll: DiceRoll): void {
-    this.rollDemBones(diceRoll).subscribe(dr => this.updateRoll(index, dr));
+  reroll(index: number, diceRoll: DiceRoll): void {
+    this.diceRoller.roll(diceRoll).subscribe(dr => this.updateRoll(index, dr));
   }
 }

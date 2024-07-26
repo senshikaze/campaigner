@@ -5,5 +5,14 @@ export interface DiceRoll {
     num: number;
     dice: Dice;
     modifier?: number;
+    total?: number;
+    rolls: Roll[];
+}
+
+export interface Roll {
     outcome?: number;
+    advantage?: number;
+    disadvantage?: number;
+    critical?: boolean;
+    failure?: boolean;
 }

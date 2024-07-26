@@ -8,6 +8,7 @@ import { BattleEntity } from 'src/app/interfaces/battle-entity';
 import { FormsModule } from '@angular/forms';
 import { CloseButtonComponent } from 'src/app/misc/close-button/close-button.component';
 import { DragItemComponent } from 'src/app/misc/drag-item/drag-item.component';
+import { InputComponent } from 'src/app/misc/input/input.component';
 
 describe('BattleEntityItemComponent', () => {
   let component: BattleEntityItemComponent;
@@ -28,7 +29,7 @@ describe('BattleEntityItemComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         BattleEntityItemComponent,
-        MockComponents(HealthPickerComponent, CloseButtonComponent, DragItemComponent)
+        MockComponents(HealthPickerComponent, CloseButtonComponent, DragItemComponent, InputComponent)
       ],
       providers: [
         {provide: StoreService, useValue: storeSpy}

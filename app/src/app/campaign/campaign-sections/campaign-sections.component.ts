@@ -7,7 +7,7 @@ import { StoreService } from 'src/app/services/store.service';
 @Component({
   selector: 'campaign-sections',
   template: `
-  <div class="overflow-y-scroll flex flex-row">
+  <div class="grow flex flex-row">
     <div class="grow-0 flex flex-col border-r-2 border-slate-400 dark:border-slate-700">
       <div class="flex border-b-2 border-slate-400 dark:border-slate-700">
           <div class="mb-2 flex flex-auto">

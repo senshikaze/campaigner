@@ -18,7 +18,7 @@ import { ModalService } from 'src/app/services/modal.service';
         <delete-button (click)="onDeleteClicked()" title="Delete Entry"></delete-button>
     </div>
     <div class="min-h-[15rem] m-2">
-        <textbox [(text)]="entry.text"></textbox>
+        <textbox styleClass="min-h-96" [(text)]="entry.text"></textbox>
     </div>
   </div>
 `,

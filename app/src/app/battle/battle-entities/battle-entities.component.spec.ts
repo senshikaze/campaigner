@@ -6,6 +6,8 @@ import { BattleEntityDescriptionComponent } from './battle-entity-description/ba
 import { StoreService } from 'src/app/services/store.service';
 import { Battle } from 'src/app/interfaces/battle';
 import { AddButtonComponent } from 'src/app/misc/add-button/add-button.component';
+import { InputComponent } from 'src/app/misc/input/input.component';
+import { of } from 'rxjs';
 
 describe('BattleEntitiesComponent', () => {
   let component: BattleEntitiesComponent;
@@ -18,13 +20,15 @@ describe('BattleEntitiesComponent', () => {
       id: 1,
       name: "TestBattle"
     };
-    storeSpy = jasmine.createSpyObj('StoreService', ['get']);
+    storeSpy = jasmine.createSpyObj('StoreService', ['getBattleEntities']);
+    storeSpy.getBattleEntities.and.returnValue(of([]));
     await TestBed.configureTestingModule({
       declarations: [
         BattleEntitiesComponent,
         MockComponents(
           BattleEntityDescriptionComponent,
           AddButtonComponent,
+          InputComponent
         )
       ],
       providers: [
