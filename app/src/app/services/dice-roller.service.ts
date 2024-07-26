@@ -2,15 +2,45 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DiceRoll, Roll } from '../interfaces/dice-roll';
 import { inDice } from '../enums/dice';
-import { map, Observable, reduce, take } from 'rxjs';
+import { BehaviorSubject, map, Observable, reduce, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DiceRollerService {
+  dice = new BehaviorSubject<DiceRoll[]>([]);
+
+  dice$ = this.dice.asObservable();
+
   constructor(
     private http: HttpClient,
   ) { }
+
+  addDice(dice: string | DiceRoll): Observable<DiceRoll[]> {
+    let dr: DiceRoll | undefined;
+    if (typeof dice === "string") {
+      dr = this.parseDice(dice);
+    } else {
+      dr = dice;
+    }
+    if (dr) {
+      this.roll(dr).pipe(
+        take(1),
+        map(dr => this.dice.next([...this.dice.value, ...[dr]]))
+      ).subscribe();
+    }
+    return this.dice$; 
+  }
+
+  getDice(): Observable<DiceRoll[]> {
+    return this.dice$;
+  }
+
+  removeDice(dice: DiceRoll): Observable<DiceRoll[]> {
+    let dr = this.dice.value;
+    this.dice.next(dr.filter(d => d != dice));
+    return this.dice$;
+  }
 
   /**
    * Parse the dice entered in the format of:

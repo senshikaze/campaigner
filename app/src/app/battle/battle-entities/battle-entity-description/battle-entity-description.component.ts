@@ -13,7 +13,7 @@ import { StoreService } from 'src/app/services/store.service';
     </div>
   </div>
   <ng-template #elseBlock>
-    <div class="grow flex items-center"><p class="text-slate-500 text-center grow">Select Combatant</p></div>
+    <div class="grow flex m-2 p-2 items-center bg-light-bg-selected dark:bg-dark-bg-selected text-center min-h-max rounded-md "><p class="text-slate-700 dark:text-slate-500 grow">Select Combatant</p></div>
   </ng-template>
   `,
   styles: []

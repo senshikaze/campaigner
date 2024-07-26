@@ -30,6 +30,7 @@ module.exports = {
         'dark-accent-wheat': "#eae2b7",
         'dark-bg': "#1f2937",
         'dark-bg-alt': "#101726",
+        'dark-bg-selected': "#202736",
         'dark-content-bg': "#111827",
         'dark-input-bg': "#40455a",
         'dark-input-bg-selected': "#70788e",

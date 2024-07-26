@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DiceRoll, Roll } from 'src/app/interfaces/dice-roll';
+import { DiceRoll } from 'src/app/interfaces/dice-roll';
 import { InputComponent } from '../input/input.component';
-import { BehaviorSubject, Observable, Subject, debounceTime, distinctUntilChanged, map, reduce, take, takeUntil, tap } from 'rxjs';
-import { Dice, inDice } from 'src/app/enums/dice';
-import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, Subject, debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs';
 import { CloseButtonComponent } from '../close-button/close-button.component';
 import { DiceRollerService } from 'src/app/services/dice-roller.service';
 
@@ -20,7 +18,7 @@ import { DiceRollerService } from 'src/app/services/dice-roller.service';
   <div class="flex flex-col m-2">
     <div [class]="{'hidden': !show}" class="transition ease-in-out duration-700 shadow-md bg-light-bg dark:bg-dark-bg min-w-32 min-h-96 max-h-svh rounded-md flex flex-col">
       <div class="grow flex flex-col-reverse justify-start min-w-full min-h-96 max-h-[32rem] overflow-auto custom-scrollbar">
-        <div class="border-b-2 first:border-b-0 border-slate-400 dark:border-slate-700 flex" *ngFor="let roll of (rolls$ | async)?.reverse() ?? []; index as i">
+        <div class="border-b-2 first:border-b-0 border-slate-400 dark:border-slate-700 flex" *ngFor="let roll of (rolls$ | async)?.reverse() ?? []">
           <div class="p-2 grow">  
             <span class="text-sm block">{{roll.text}}</span>
             <span class="text-5xl font-bold" [ngClass]="{'text-red-400': diceRoller.isFailure(roll), 'text-green-400': diceRoller.isCritical(roll)}">{{roll.total ?? "None"}}</span>
@@ -28,7 +26,7 @@ import { DiceRollerService } from 'src/app/services/dice-roller.service';
           <div>
             <button
               class="m-2 p-2 bg-light-action dark:bg-dark-action hover:bg-light-action-hover dark:hover:bg-dark-action-hover rounded-md"
-              (click)="reroll(i, roll)"
+              (click)="reroll(roll)"
               title="Re-Roll">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -48,12 +46,12 @@ import { DiceRollerService } from 'src/app/services/dice-roller.service';
             <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
           </svg>
         </button>
-        <close-button *ngIf="valueSubject.value.length > 0" (clicked)="rollsSubject.next([]); valueSubject.next('')" title="Clear Rolls"></close-button>
+        <close-button *ngIf="valueSubject.value.length > 0" (clicked)="close()" title="Clear Rolls"></close-button>
       </div>
     </div>
     <div class="flex justify-end">
       <button 
-        class="p-2 m-1 size-14 rounded-full justify-end text-right text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover" 
+        class="p-2 m-3 size-14 rounded-full justify-end text-right text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover" 
         (click)="show = !show"
         [title]="(show) ? 'Hide Dice Roller': 'Show Dice Roller'">
         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 32 32" class="size-10">
@@ -72,8 +70,7 @@ export class DiceRollerComponent implements OnInit, OnDestroy {
   valueSubject = new BehaviorSubject<string>("");
   value$ = this.valueSubject.asObservable();
 
-  rollsSubject = new BehaviorSubject<DiceRoll[]>([]);
-  rolls$ = this.rollsSubject.asObservable();
+  rolls$!: Observable<DiceRoll[]>;
 
   destroy$ = new Subject<boolean>();
   constructor(
@@ -88,6 +85,10 @@ export class DiceRollerComponent implements OnInit, OnDestroy {
       tap(dr => this.valid = dr != undefined),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    this.rolls$ = this.diceRoller.getDice().pipe(
+      tap(dr => this.show = (dr.length > 0))
+    );
   }
 
   ngOnDestroy(): void {
@@ -95,27 +96,16 @@ export class DiceRollerComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
+  close(): void {
+    this.valueSubject.next("");
+    this.show = false;
+  }
+
   roll(dice: string): void {
-    let diceRoll = this.diceRoller.parseDice(dice);
-    if (diceRoll == undefined) {
-      return;
-    }
-    this.diceRoller.roll(diceRoll).subscribe(dr => this.addToRolls(dr));
+    this.diceRoller.addDice(dice);
   }
 
-  addToRolls(diceRoll: DiceRoll): void {
-    let current = this.rollsSubject.value;
-    current = [...current, ...[diceRoll]];
-    this.rollsSubject.next(current);
-  }
-
-  updateRoll(index: number, diceRoll: DiceRoll): void {
-    let current = this.rollsSubject.value;
-    current[index] = diceRoll;
-    this.rollsSubject.next(current);
-  }
-
-  reroll(index: number, diceRoll: DiceRoll): void {
-    this.diceRoller.roll(diceRoll).subscribe(dr => this.updateRoll(index, dr));
+  reroll(diceRoll: DiceRoll): void {
+    this.diceRoller.roll(diceRoll).subscribe();
   }
 }

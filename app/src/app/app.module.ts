@@ -33,7 +33,8 @@ import { CloseButtonComponent } from './misc/close-button/close-button.component
         provide: MARKED_OPTIONS,
         useValue: {
           gfm: true,
-          breaks: true
+          breaks: true,
+          sanitize: false,
         }
       }
     }),

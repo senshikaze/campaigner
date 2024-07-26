@@ -4,13 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { StoreService } from '../services/store.service';
 import { Observable, Subject, of, take } from 'rxjs';
 import { ModalService } from '../services/modal.service';
-import { BattleEntitySelectedService } from './services/battle-entity-selected.service';
 
 @Component({
   selector: 'battle',
   template:`
   <div class="flex grow p-2 h-full max-h-full" *ngIf="battle$ | async as battle">
-    <div class="flex border-r-2 border-slate-400 dark:border-slate-700">
+    <div class="flex">
       <div class="flex flex-col min-w-96">
         <div class="mb-4 flex border-b-2 border-slate-400 dark:border-slate-700">
           <cInput
