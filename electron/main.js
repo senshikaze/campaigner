@@ -14,11 +14,12 @@ const createWindow = () => {
 	});
 	if (!DEBUG){
 		win.loadURL(url.format({
-			pathname: path.join(__dirname, "../app/dist/campaigner-app/index.html"),
+			pathname: path.join(__dirname, "app/index.html"),
 			protocol: "file:",
 			slashes: true
 		}));
 	} else {
+		console.log("debug");
 		win.loadURL(url.format({
 			pathname: "localhost:4200",
 			protocol: "http:",
