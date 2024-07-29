@@ -9,9 +9,9 @@ import { FormsModule } from '@angular/forms';
 import { NotfoundComponent } from './notfound.component';
 import { SharedModule } from './shared.module';
 import { ModalComponent } from './misc/modal/modal.component';
-import { LoginComponent } from './misc/login/login.component';
 import { MARKED_OPTIONS, MarkdownModule } from 'ngx-markdown';
 import { CloseButtonComponent } from './misc/close-button/close-button.component';
+import { DiceRollerComponent } from './misc/dice-roller/dice-roller.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,6 @@ import { CloseButtonComponent } from './misc/close-button/close-button.component
     SidebarComponent,
     NotfoundComponent,
     ModalComponent,
-    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,6 +27,7 @@ import { CloseButtonComponent } from './misc/close-button/close-button.component
     SharedModule,
     HttpClientModule,
     CloseButtonComponent,
+    DiceRollerComponent,
     MarkdownModule.forRoot({
       markedOptions: {
         provide: MARKED_OPTIONS,

@@ -1,5 +1,5 @@
 export interface Battle {
     id?: number;
     name: string;
-    current_battle_id?: number | null
+    current_entity_id?: number
 }

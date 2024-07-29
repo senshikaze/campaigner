@@ -16,28 +16,28 @@ import { DiceRollerService } from 'src/app/services/dice-roller.service';
   ],
   template:`
 <div 
-  class="grow h-full w-full relative p-2 bg-light-input-bg text-black dark:text-white dark:bg-dark-input-bg rounded-md"
+  class="grow min-h-full w-full relative p-2 bg-light-input-bg text-black dark:text-white dark:bg-dark-input-bg rounded-md overflow-auto"
   (dblclick)="changeEdit()"
   [class]="styleClass"
 >
+  @if (editing) {
+    <textarea
+      #editBox
+      class="h-full w-full p-2 bg-inherit border-2 border-slate-400 dark:border-slate-700"
+      (input)="inputChanged($event)"
+      [class]="styleClass"
+    >{{text}}</textarea>
+  } @else {
+    <markdown
+      class="h-full w-full p-2 prose prose-neutral dark:prose-invert"
+      [data]="text"
+      ngPreserveWhitespace
+      [disableSanitizer]="true"></markdown>
+  }
   <button
     class="p-2 rounded-md text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover absolute top-2 right-2"
     (click)="changeEdit()"
     i18n i18n-title [title]="(!editing) ? 'View' : 'Edit'" [innerHTML]="(editing)? 'View' : 'Edit'"></button>
-  <textarea
-    #editBox
-    class="h-full w-full p-2 bg-inherit border-2 border-slate-400 dark:border-slate-700"
-    *ngIf="editing; else viewBox"
-    (input)="inputChanged($event)"
-    [class]="styleClass"
-  >{{text}}</textarea>
-  <ng-template #viewBox>
-    <markdown
-      class="min-h-max min-w-max p-2 prose prose-neutral dark:prose-invert"
-      [data]="text"
-      ngPreserveWhitespace
-      [disableSanitizer]="true"></markdown>
-  </ng-template>
 </div>
 `,
 styles: [

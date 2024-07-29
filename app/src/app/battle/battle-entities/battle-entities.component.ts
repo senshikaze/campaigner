@@ -8,27 +8,27 @@ import { StoreService } from 'src/app/services/store.service';
 @Component({
   selector: 'battle-entities',
   template: `
-  <div class="h-full w-full grow flex flex-col">
-    <div class="grow flex flex-row">
-      <div
-        class="grow-0 flex-initial basis-1/5 flex flex-col max-h-full">
-        <div class="flex grow flex-col overflow-auto" cdkDropList (cdkDropListDropped)="drop($event)">
-          @for (entity of entities$ | async; track entity) {
-          <battle-entity-item
-            [entity]="entity" [attr.data-index]="entity.initiative ?? 0"
-            (deleted)="onDeleted($event)"
-            cdkDrag></battle-entity-item>
-          }
-        </div>
-        <div class="flex flex-col">
-          <add-button *ngIf="battle.id" (clicked)="onAddClicked(battle)" title="Add Combatant"></add-button>
-        </div>
+  <div
+    class="grow flex flex-col min-h-full overflow-hidden">
+    <div class="grow flex flex-col overflow-auto h-0" cdkDropList (cdkDropListDropped)="drop($event)">
+      @for (entity of entities$ | async; track entity) {
+        <battle-entity-item
+          class="min-h-30"
+          [entity]="entity" [attr.data-index]="entity.initiative ?? 0"
+          (deleted)="onDeleted($event)"
+          cdkDrag></battle-entity-item>
+      }
+    </div>
+    @if (battle.id) {
+      <div class="grow-0 flex flex-col border-t-2 border-slate-300 dark:border-slate-800">
+        <add-button (clicked)="onAddClicked(battle)" title="Add Combatant"></add-button>
       </div>
-    <div>
+    }
   </div>
   `,
   styles: [
-    `.cdk-drag-preview {background: theme('colors.slate.800')}`
+    `.cdk-drag-preview {background: theme('colors.slate.800')}`,
+    `.cdk-drag-placeholder {visibility: hidden}`
   ]
 })
 export class BattleEntitiesComponent implements OnInit, OnDestroy {

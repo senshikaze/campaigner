@@ -15,13 +15,15 @@ import { ModalService } from '../services/modal.service';
     </div>
     <div class="flex grow">
       <ul class="grow">
-        <li class="p-2 odd:bg-light-zebra-odd dark:odd:bg-dark-zebra-odd even:bg-light-zebra-even dark:even:bg-dark-zebra-even" *ngFor="let battle of battles$ | async">
-          <div class="flex">
-            <p class="grow block text-lg">{{battle.name}}</p>
-            <view-button [routerLink]="['/battles', battle.id]" [state]="battle" title="View Battle"></view-button>
-            <delete-button [value]="battle" (clicked)="onDeleteClicked($event)" title="Delete Battle"></delete-button>
-          </div>
-        </li>
+        @for (battle of battles$ | async; track battle) {
+          <li class="p-2 odd:bg-light-zebra-odd dark:odd:bg-dark-zebra-odd even:bg-light-zebra-even dark:even:bg-dark-zebra-even">
+            <div class="flex">
+              <p class="grow block text-lg">{{battle.name}}</p>
+              <view-button [routerLink]="['/battles', battle.id]" [state]="battle" title="View Battle"></view-button>
+              <delete-button [value]="battle" (clicked)="onDeleteClicked($event)" title="Delete Battle"></delete-button>
+            </div>
+          </li>
+        }
       </ul>
     </div>
   </div>

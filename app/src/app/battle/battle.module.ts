@@ -19,6 +19,7 @@ import { DragItemComponent } from '../misc/drag-item/drag-item.component';
 import { InputComponent } from '../misc/input/input.component';
 import { TextboxComponent } from '../misc/textbox/textbox.component';
 import { DiceRollerComponent } from '../misc/dice-roller/dice-roller.component';
+import { InitiativeButtonComponent } from './initiative-button/initiative-button.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { DiceRollerComponent } from '../misc/dice-roller/dice-roller.component';
       BattleEntitiesComponent,
       BattleEntityItemComponent,
       BattleEntityDescriptionComponent,
+      InitiativeButtonComponent,
     ],
     imports: [
       CommonModule,

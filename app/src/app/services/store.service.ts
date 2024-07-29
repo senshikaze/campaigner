@@ -143,7 +143,10 @@ export class StoreService {
     return from(this.db.battleEntityTable.delete(battleEntity.id));
   }
 
-  getBattleEntity(id: number): Observable<BattleEntity | undefined> {
+  getBattleEntity(id: number | undefined): Observable<BattleEntity | undefined> {
+    if (id === undefined) {
+      return of();
+    }
     return from(liveQuery(() => this.db.battleEntityTable.where({id: id}).first()));
   }
 

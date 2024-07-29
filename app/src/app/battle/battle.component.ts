@@ -2,26 +2,32 @@ import { Component, OnInit } from '@angular/core';
 import { Battle } from '../interfaces/battle';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StoreService } from '../services/store.service';
-import { Observable, Subject, of, take } from 'rxjs';
+import { Observable, Subject, of, take, tap } from 'rxjs';
 import { ModalService } from '../services/modal.service';
+import { InitiativeService } from './services/initiative.service';
 
 @Component({
   selector: 'battle',
   template:`
-  <div class="flex grow p-2 h-full max-h-full" *ngIf="battle$ | async as battle">
-    <div class="flex">
+  @if (battle$ | async; as battle) {
+  <div class="flex grow p-2 h-full max-h-screen">
+    <div class="flex max-h-full">
       <div class="flex flex-col min-w-96">
         <div class="mb-4 flex border-b-2 border-slate-400 dark:border-slate-700">
           <cInput
             class="grow mr-2"
             styleClass="w-full"
             [(value)]="battle.name"
+            (dirty)="dirty = $event"
             title="Battle Title"
             placeholder="Battle Title"></cInput>
-          <save-button
-            class="justify-end"
-            (click)="onSaveClicked(battle)"
-            title="Save Battle"></save-button>
+            @if (dirty) {
+            <save-button
+              class="justify-end"
+              (click)="onSaveClicked(battle)"
+              title="Save Battle"></save-button>
+            }
+          <initiative-button></initiative-button>
         </div>
         <div class="flex grow">
           <battle-entities
@@ -34,13 +40,14 @@ import { ModalService } from '../services/modal.service';
     <div class="grow flex">
       <battle-entity-description class="grow flex flex-col"></battle-entity-description>
     </div>
-    <dice-roller class="absolute bottom-1 right-1"></dice-roller>
-</div>
+  </div>
+  }
   `,
   styles: []
 })
 export class BattleComponent implements OnInit {
   battle$!: Observable<Battle | undefined>;
+  dirty = false;
 
   saveEvent = new Subject<Battle>();
 
@@ -49,12 +56,15 @@ export class BattleComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private modal: ModalService,
+    private initiative: InitiativeService,
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(p => {
       if (p.has('id') && p.get('id') != "new") {
-        this.battle$ = this.store.getBattle(Number.parseInt(p.get("id") ?? ''));
+        this.battle$ = this.store.getBattle(Number.parseInt(p.get("id") ?? '')).pipe(
+          tap(battle => (battle) ? this.initiative.setBattle(battle) : undefined)
+        )
       } else {
         this.battle$ = of({
           name: ''
@@ -66,6 +76,7 @@ export class BattleComponent implements OnInit {
   onSaveClicked(battle: Battle): void {
     if (battle.id != undefined) {
       this.battle$ = this.store.saveBattle(battle);
+      this.dirty = false;
     } else {
       this.store.saveBattle(battle).pipe(
         take(1)
