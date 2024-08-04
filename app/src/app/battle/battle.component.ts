@@ -31,7 +31,7 @@ import { InitiativeService } from './services/initiative.service';
         </div>
         <div class="flex grow">
           <battle-entities
-            class="border-b-2 last:border-b-0 border-b-slate-400 dark:border-b-slate-700"
+            class="border-b-2 last:border-b-0 border-b-slate-400 dark:border-b-slate-700 w-full"
             [battle]="battle"
             [saveEvent]="saveEvent.asObservable()"></battle-entities>
         </div>
@@ -67,7 +67,8 @@ export class BattleComponent implements OnInit {
         )
       } else {
         this.battle$ = of({
-          name: ''
+          name: '',
+          rounds: 0
         });
       }
     })

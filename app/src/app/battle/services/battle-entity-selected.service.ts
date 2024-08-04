@@ -1,18 +1,18 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
-import { BattleEntity } from "src/app/interfaces/battle-entity";
+import { Entity } from "src/app/interfaces/entity";
 
 @Injectable({
     providedIn: "root",
 })
 export class BattleEntitySelectedService {
-    entity$ = new Subject<BattleEntity>();
+    entity$ = new Subject<Entity>();
 
-    getEntity(): Observable<BattleEntity> {
+    getEntity(): Observable<Entity> {
         return this.entity$.asObservable();
     }
 
-    entitySelected(entity: BattleEntity): void {
+    entitySelected(entity: Entity): void {
         this.entity$.next(entity);
     }
 }

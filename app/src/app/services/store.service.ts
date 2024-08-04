@@ -10,7 +10,8 @@ import { CampaignEntry } from '../interfaces/campaign-entry';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Battle } from '../interfaces/battle';
-import { BattleEntity } from '../interfaces/battle-entity';
+import { EntityType } from '../enums/entity-type';
+import { Entity } from '../interfaces/entity';
 
 
 @Injectable({
@@ -113,13 +114,35 @@ export class StoreService {
   }
 
   /**
+   * Generic entity methods
+   */
+  deleteEntity(entity: Entity): Observable<void> {
+    if (!entity.id) {
+      return of();
+    }
+    return from(this.db.entitiesTable.delete(entity.id))
+  }
+
+  getEntity(id: number): Observable<Entity | undefined> {
+    return from(liveQuery(() => this.db.entitiesTable.where({id: id}).first()));
+  }
+
+  // TODO get entities with filtering
+
+  saveEntity(entity: Entity): Observable<Entity> {
+    return from(this.db.entitiesTable.put(entity, entity.id)).pipe(
+      map(id => {entity.id = id; return entity;})
+    );
+  }
+
+  /**
    * Battle methods
    */
   deleteBattle(battle: Battle): Observable<void> {
     if (!battle.id) {
       return of(); 
     }
-    return from(this.db.battleEntityTable.delete(battle.id));
+    return from(this.db.entitiesTable.delete(battle.id));
   }
 
   getBattle(id: number): Observable<Battle | undefined> {
@@ -136,31 +159,11 @@ export class StoreService {
     );
   }
 
-  deleteBattleEntity(battleEntity: BattleEntity): Observable<void> {
-    if (!battleEntity.id) {
-      return of();
-    }
-    return from(this.db.battleEntityTable.delete(battleEntity.id));
-  }
-
-  getBattleEntity(id: number | undefined): Observable<BattleEntity | undefined> {
-    if (id === undefined) {
-      return of();
-    }
-    return from(liveQuery(() => this.db.battleEntityTable.where({id: id}).first()));
-  }
-
-  getBattleEntities(battle: Battle): Observable<BattleEntity[]> {
+  getBattleEntities(battle: Battle): Observable<Entity[]> {
     return from(liveQuery(() => 
-      this.db.battleEntityTable.where({battle_id: battle.id}).toArray()
+      this.db.entitiesTable.where({battle_id: battle.id}).toArray()
     )).pipe(
       map(entities => entities.sort((a, b) => ((b.initiative ?? 0) > (a.initiative ?? 0)) ? 1:-1))
-    );
-  }
-
-  saveBattleEntity(entity: BattleEntity): Observable<BattleEntity> {
-    return from(this.db.battleEntityTable.put(entity, entity.id)).pipe(
-      map(id => {entity.id = id; return entity})
     );
   }
 

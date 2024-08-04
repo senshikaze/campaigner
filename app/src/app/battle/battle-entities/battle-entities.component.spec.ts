@@ -18,7 +18,8 @@ describe('BattleEntitiesComponent', () => {
   beforeEach(async () => {
     battle = {
       id: 1,
-      name: "TestBattle"
+      name: "TestBattle",
+      rounds: 0
     };
     storeSpy = jasmine.createSpyObj('StoreService', ['getBattleEntities']);
     storeSpy.getBattleEntities.and.returnValue(of([]));

@@ -36,7 +36,7 @@ import { DiceRollerService } from 'src/app/services/dice-roller.service';
         </div>
       </div>
       <div class="border-t-2 border-slate-400 dark:border-slate-700 flex">
-        <cInput class="grow mr-2" styleClass="w-full" (valueChange)="this.valueSubject.next($event)"></cInput>
+        <cInput class="grow m-2" styleClass="w-full" (valueChange)="this.valueSubject.next($event)"></cInput>
         <button
           class="justify-end m-2 p-2 bg-light-action dark:bg-dark-action hover:bg-light-action-hover dark:hover:bg-dark-action-hover rounded-md disabled:bg-dark-bg-alt disabled:hover:bg-dark-bg-alt"
           (click)="roll(valueSubject.value)"

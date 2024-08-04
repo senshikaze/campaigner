@@ -18,7 +18,6 @@ import { DiceRollerComponent } from './misc/dice-roller/dice-roller.component';
     AppComponent,
     SidebarComponent,
     NotfoundComponent,
-    ModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,6 +27,7 @@ import { DiceRollerComponent } from './misc/dice-roller/dice-roller.component';
     HttpClientModule,
     CloseButtonComponent,
     DiceRollerComponent,
+    ModalComponent,
     MarkdownModule.forRoot({
       markedOptions: {
         provide: MARKED_OPTIONS,

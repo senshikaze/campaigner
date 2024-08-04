@@ -3,6 +3,7 @@ import { CampaignEntry } from '../../interfaces/campaign-entry';
 import { StoreService } from 'src/app/services/store.service';
 import { take, takeUntil } from 'rxjs';
 import { ModalService } from 'src/app/services/modal.service';
+import { ConfirmDialogComponent, ConfirmDialogInterface } from 'src/app/misc/dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'campaign-entry',
@@ -34,15 +35,21 @@ export class EntryComponent {
 
   onDeleteClicked(): void {
     if (this.entry.id) {
-      this.modal.open({
-        header: "Are you sure?",
+      let data: ConfirmDialogInterface = {
         message: "Are you sure you want to delete this entry?",
         confirm: true,
         yes: () => this.store.deleteCampaignEntry(this.entry).pipe(
           take(1)
-        ).subscribe(_ =>
-          this.entryDelete.emit(this.entry)
-        )
+        ).subscribe(s => this.modal.close()),
+        no: () => this.modal.close(),
+        ok: () => this.modal.close(),
+        cancel: () => this.modal.close(),
+      };
+      this.modal.open({
+        header: "Are you sure?",
+        closable: true,
+        component: ConfirmDialogComponent,
+        data: data
       });
     }
   }

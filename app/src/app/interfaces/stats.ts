@@ -1,6 +1,4 @@
-export interface AlmanacStats {
-    totalHealth: number;
-    currentHeath: number;
+export interface Stats {
     defense: number;
     speed: number;
     strength: number;

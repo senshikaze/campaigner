@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Battle } from '../interfaces/battle';
-import { Observable, share } from 'rxjs';
+import { Observable, share, take } from 'rxjs';
 import { StoreService } from '../services/store.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalService } from '../services/modal.service';
+import { ConfirmDialogComponent, ConfirmDialogInterface } from '../misc/dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'battle-list',
@@ -50,15 +51,24 @@ export class BattleListComponent implements OnInit {
 
   onDeleteClicked(battle: Battle): void {
     if (battle.id) {
-      this.modal.open({
-        header: "Are you sure?",
+      let data: ConfirmDialogInterface = {
         message: "Are you sure you want to delete this battle?",
         confirm: true,
-        closable: true,
-        yes: () => {
-          this.store.deleteBattle(battle);
+        yes: () => this.store.deleteBattle(battle).pipe(
+          take(1)
+        ).subscribe(s => {
+          this.modal.close();
           this.battles$ = this.store.getBattles();
-        }
+        }),
+        no: () => this.modal.close(),
+        ok: () => this.modal.close(),
+        cancel: () => this.modal.close(),
+      };
+      this.modal.open({
+        header: "Are you sure?",
+        closable: true,
+        component: ConfirmDialogComponent,
+        data: data
       });
     }
   }

@@ -1,8 +1,11 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, ModelSignal, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+import { EntityType } from 'src/app/enums/entity-type';
 import { Battle } from 'src/app/interfaces/battle';
-import { BattleEntity } from 'src/app/interfaces/battle-entity';
+import { Entity } from 'src/app/interfaces/entity';
+import { BattleEntityDialogComponent, BattleEntityDialogInterface } from 'src/app/misc/dialogs/battle-entity-dialog/battle-entity-dialog.component';
+import { ModalService } from 'src/app/services/modal.service';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
@@ -21,7 +24,7 @@ import { StoreService } from 'src/app/services/store.service';
     </div>
     @if (battle.id) {
       <div class="grow-0 flex flex-col border-t-2 border-slate-300 dark:border-slate-800">
-        <add-button (clicked)="onAddClicked(battle)" title="Add Combatant"></add-button>
+        <add-button (clicked)="addEntity()" title="Add Combatant" text="Add"></add-button>
       </div>
     }
   </div>
@@ -35,12 +38,13 @@ export class BattleEntitiesComponent implements OnInit, OnDestroy {
   @Input() battle!: Battle;
   @Input() saveEvent!: Observable<Battle>;
 
-  entities$ = new BehaviorSubject<BattleEntity[]>([]);
+  entities$ = new BehaviorSubject<Entity[]>([]);
 
   destroy$ = new Subject<boolean>();
 
   constructor(
-    private store: StoreService
+    private store: StoreService,
+    private model: ModalService,
   ) {}
 
   ngOnInit(): void {
@@ -54,18 +58,48 @@ export class BattleEntitiesComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  onAddClicked(battle: Battle): void {
-    if (battle.id) {
+  addEntity(): void {
+    if (this.battle.id) {
       let entities = this.entities$.getValue();
-      let lastInit = (entities[entities.length - 1]) ? (entities[entities.length - 1].initiative ?? 21) - 1 : 20;
-      entities = [...entities, ...[{battle_id: battle.id, current_health: 0, total_health: 0, initiative: lastInit}]];
-      this.entities$.next(entities);
+      let data: BattleEntityDialogInterface = {
+        entity: {
+          type: EntityType.BATTLE,
+          name: "",
+          description: "",
+          notes: "",
+          battle_id: this.battle.id,
+          initiative: (entities[entities.length - 1]) ? (entities[entities.length - 1].initiative ?? 21) - 1 : 20,
+          total_health: 0,
+          current_health: 0,
+          allows_negative: false,
+          stats: {
+            defense: 0,
+            speed: 0,
+            strength: 0,
+            constitution: 0,
+            dexterity: 0,
+            intelligence: 0,
+            wisdom: 0,
+            charisma: 0
+          }
+        },
+        saved: (entity) => {
+          let entities = this.entities$.getValue();
+          this.entities$.next([...entities, ...[entity]])
+        }
+      };
+  
+      this.model.open({
+        header: "Create New Combatant",
+        component: BattleEntityDialogComponent,
+        data: data,
+      });
     }
   }
 
-  onDeleted(entity: BattleEntity): void {
+  onDeleted(entity: Entity): void {
     if (entity.id) {
-      this.store.deleteBattleEntity(entity);
+      this.store.deleteEntity(entity);
     }
     let entities = this.entities$.getValue();
     entities = entities.filter(e => e != entity);
@@ -76,7 +110,7 @@ export class BattleEntitiesComponent implements OnInit, OnDestroy {
 
   }
 
-  drop(event: CdkDragDrop<BattleEntity[]>) {
+  drop(event: CdkDragDrop<Entity[]>) {
     let entities = this.entities$.getValue();
     // find the next best initiative to set the current to +1/-1
     if (event.currentIndex !== event.previousIndex) {

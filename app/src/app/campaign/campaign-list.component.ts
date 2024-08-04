@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, share, Observable } from 'rxjs';
+import { of, share, Observable, take } from 'rxjs';
 import { Campaign } from '../interfaces/campaign';
 import { StoreService } from '../services/store.service';
 import { ModalService } from '../services/modal.service';
+import { ConfirmDialogComponent, ConfirmDialogInterface } from '../misc/dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'campaign-list',
@@ -15,20 +16,22 @@ import { ModalService } from '../services/modal.service';
   </div>
   <div class="flex grow">
     <ul class="grow">
-      <li class="p-2 odd:bg-light-zebra-odd dark:odd:bg-dark-zebra-odd even:bg-light-zebra-even dark:even:bg-dark-zebra-even" *ngFor="let campaign of campaigns | async">
+      @for (campaign of campaigns$ | async; track campaign.id) {
+      <li class="p-2 odd:bg-light-zebra-odd dark:odd:bg-dark-zebra-odd even:bg-light-zebra-even dark:even:bg-dark-zebra-even">
         <div class="flex">
           <p class="grow block text-lg">{{campaign.name}}</p>
           <view-button [routerLink]="['/campaign/', campaign.id]" [state]="campaign"></view-button>
           <delete-button (click)="onDeleteClicked(campaign)" title="Delete Campaign"></delete-button>
         </div>
       </li>
+      }
     </ul>
   </div>
 </div>
   `
 })
 export class CampaignListComponent implements OnInit {
-  campaigns: Observable<Campaign[]> = of([]);
+  campaigns$: Observable<Campaign[]> = of([]);
 
   constructor(
     private store: StoreService,
@@ -37,7 +40,7 @@ export class CampaignListComponent implements OnInit {
     private modal: ModalService) {}
 
   ngOnInit(): void {
-    this.campaigns = this.store.getCampaigns().pipe(share());
+    this.campaigns$ = this.store.getCampaigns().pipe(share());
   }
 
   onCreateClicked() {
@@ -46,16 +49,25 @@ export class CampaignListComponent implements OnInit {
 
   onDeleteClicked(campaign: Campaign) {
     if (campaign.id !== undefined) {
+      let data: ConfirmDialogInterface = {
+        message: "Are you sure you want to delete this campaign?\nThis will delete everything associated with it.",
+        confirm: true,
+        yes: () => this.store.deleteCampaign(campaign).pipe(
+          take(1)
+        ).subscribe(s => {
+          this.modal.close();
+          this.campaigns$ = this.store.getCampaigns();
+        }),
+        no: () => this.modal.close(),
+        ok: () => this.modal.close(),
+        cancel: () => this.modal.close(),
+      };
       this.modal.open({
         header: "Are you sure?",
-        message: "Are you sure you want to delete this campaign?",
-        confirm: true,
         closable: true,
-        yes: () => {
-          this.store.deleteCampaign(campaign);
-          this.campaigns = this.store.getCampaigns();
-        }
-      })
+        component: ConfirmDialogComponent,
+        data: data
+      });
     }
   }
 }

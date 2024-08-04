@@ -9,7 +9,7 @@ describe('TextboxComponent', () => {
   let diceRollerSpy: jasmine.SpyObj<DiceRollerService>;
 
   beforeEach(async () => {
-    let diceRollerSpy = jasmine.createSpyObj("DiceRollerService", ["roll"]);
+    diceRollerSpy = jasmine.createSpyObj("DiceRollerService", ["roll"]);
     await TestBed.configureTestingModule({
       imports: [
         TextboxComponent,

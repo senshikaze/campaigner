@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject, take } from 'rxjs';
 import { CampaignSection } from 'src/app/interfaces/campaign-section';
+import { ConfirmDialogComponent, ConfirmDialogInterface } from 'src/app/misc/dialogs/confirm-dialog/confirm-dialog.component';
 import { ModalService } from 'src/app/services/modal.service';
 import { StoreService } from 'src/app/services/store.service';
 
@@ -52,13 +53,20 @@ export class SectionComponent implements OnInit {
 
   onDeleteClicked() {
     if (this.section.id) {
-      this.modal.open({
-        header: "Are you sure?",
+      let data: ConfirmDialogInterface = {
         message: "Are you sure you want to delete this section?\nThis will delete all entries as well.",
         confirm: true,
         yes: () => this.store.deleteSection(this.section).pipe(
           take(1)
-        ).subscribe()
+        ).subscribe(s => this.modal.close()),
+        no: () => this.modal.close(),
+        ok: () => this.modal.close(),
+        cancel: () => this.modal.close(),
+      };
+      this.modal.open({
+        header: "Are you sure?",
+        component: ConfirmDialogComponent,
+        data: data
       });
     }
   }

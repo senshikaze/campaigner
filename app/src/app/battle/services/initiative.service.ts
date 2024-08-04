@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { catchError, filter, map, max, mergeMap, Observable, ReplaySubject, switchMap, take, tap } from 'rxjs';
+import { filter, map, Observable, ReplaySubject, switchMap, take, tap } from 'rxjs';
 import { Battle } from 'src/app/interfaces/battle';
-import { BattleEntity } from 'src/app/interfaces/battle-entity';
+import { Entity } from 'src/app/interfaces/entity';
 import { StoreService } from 'src/app/services/store.service';
 
 @Injectable({
@@ -29,10 +29,10 @@ export class InitiativeService {
     )
   }
 
-  currentEntity(): Observable<BattleEntity | undefined> {
+  currentEntity(): Observable<Entity | undefined> {
     return this.battle$.pipe(
       filter((b: Battle) => b.current_entity_id !== undefined),
-      switchMap(b => this.store.getBattleEntity(b.current_entity_id))
+      switchMap(b => this.store.getEntity(b.current_entity_id ?? -1))
     )
   }
 
@@ -44,7 +44,9 @@ export class InitiativeService {
           if (index >= entities.length) {
             index = 0;
           }
-          b.current_entity_id = entities.slice(index).filter(entity => entity.current_health >=0)[0].id;
+          b.current_entity_id = entities
+            .slice(index)
+            .filter(entity => entity.allows_negative && (entity.current_health ?? 0)  >= 0)[0].id;
           return b;
         }),
         tap(battle => this.store.saveBattle(battle).pipe(take(1)).subscribe())
@@ -57,7 +59,7 @@ export class InitiativeService {
     this.battle$.pipe(
       switchMap(b => this.store.getBattleEntities(b).pipe(
         map(entities => entities.reduce((highest, current) => (current.initiative ?? 0) > (highest.initiative ?? 0) ? current : highest)),
-        map((entity: BattleEntity) => {b.current_entity_id = entity.id; return b;}),
+        map((entity: Entity) => {b.current_entity_id = entity.id; return b;}),
         tap(battle => this.store.saveBattle(battle).pipe(take(1)).subscribe())
       )),
       take(1)

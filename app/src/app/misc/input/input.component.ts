@@ -14,7 +14,7 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
   ],
   template: `
     <input 
-      class="dark:text-white p-2 m-2 rounded-md placeholder:text-slate-600 dark:placeholder:text-slate-400 bg-light-input-bg dark:bg-dark-input-bg"
+      class="dark:text-white p-2 rounded-md placeholder:text-slate-600 dark:placeholder:text-slate-400 bg-light-input-bg dark:bg-dark-input-bg"
       [(ngModel)]="value"
       (input)="onInput(value)"
       [type]="inputType"
@@ -32,7 +32,7 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 })
 export class InputComponent implements ControlValueAccessor {
   @Input() value!: any;
-  @Input() inputType: 'text' | 'number' | 'email' = "text";
+  @Input() inputType: 'text' | 'number' | 'email' | 'checkbox' = "text";
   @Input() placeholder = "";
   @Input() display = true;
   @Input() disabled = false;
@@ -54,6 +54,9 @@ export class InputComponent implements ControlValueAccessor {
   onInput(value: any): void {
     if (this.inputType == 'number') {
       value = Number.parseInt(value);
+    }
+    if (this.inputType == 'checkbox') {
+      value = value;
     }
     if (!this.disabled) {
       this.onTouch();

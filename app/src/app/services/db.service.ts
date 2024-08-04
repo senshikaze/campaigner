@@ -5,7 +5,7 @@ import { CampaignSection } from '../interfaces/campaign-section';
 import { CampaignEntry } from '../interfaces/campaign-entry';
 import { AlmanacEntry } from '../interfaces/almanac-entry';
 import { Battle } from '../interfaces/battle';
-import { BattleEntity } from '../interfaces/battle-entity';
+import { Entity } from '../interfaces/entity';
 
 @Injectable({
   providedIn: 'root'
@@ -15,21 +15,22 @@ export class DBService extends Dexie {
   almanacEntryTable!: Table<AlmanacEntry, number>;
   // Battle
   battleTable!: Table<Battle, number>;
-  battleEntityTable!: Table<BattleEntity, number>;
   // Campaign
   campaignTable!: Table<Campaign, number>;
   campaignSectionTable!: Table<CampaignSection, number>;
   campaignEntryTable!: Table<CampaignEntry, number>;
+  // Entities
+  entitiesTable!: Table<Entity, number>;
 
   constructor() {
     super('ngdexieliveQuery');
     this.version(3).stores({
       almanacEntryTable: "++id, campaign_id",
       battleTable: "++id",
-      battleEntityTable: "++id, battle_id",
       campaignTable: "++id",
       campaignSectionTable: "++id, campaign_id",
-      campaignEntryTable: "++id, section_id"
+      campaignEntryTable: "++id, section_id",
+      entitiesTable: "++id, campaign_id, battle_id",
     });
   }
 }

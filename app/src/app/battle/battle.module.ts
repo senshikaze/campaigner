@@ -20,6 +20,7 @@ import { InputComponent } from '../misc/input/input.component';
 import { TextboxComponent } from '../misc/textbox/textbox.component';
 import { DiceRollerComponent } from '../misc/dice-roller/dice-roller.component';
 import { InitiativeButtonComponent } from './initiative-button/initiative-button.component';
+import { BattleEntityComponent } from '../misc/entries/battle-entity/battle-entity.component';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import { InitiativeButtonComponent } from './initiative-button/initiative-button
       CdkDrag,
       CdkDropList,
       CdkDragHandle,
+      BattleEntityComponent,
     ],
     providers: [],
     bootstrap: [BattleComponent]

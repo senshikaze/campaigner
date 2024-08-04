@@ -1,4 +1,4 @@
-export enum AlmanacStatType {
+export enum StatType {
     STR="strength",
     CHA="charisma",
     DEX="dexterity",
