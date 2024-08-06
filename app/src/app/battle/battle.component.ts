@@ -15,7 +15,7 @@ import { InitiativeService } from './services/initiative.service';
       <div class="flex flex-col min-w-96">
         <div class="mb-4 flex border-b-2 border-slate-400 dark:border-slate-700">
           <cInput
-            class="grow mr-2"
+            class="grow m-2"
             styleClass="w-full"
             [(value)]="battle.name"
             (dirty)="dirty = $event"

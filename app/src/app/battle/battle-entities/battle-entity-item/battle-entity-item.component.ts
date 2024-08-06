@@ -11,10 +11,10 @@ import { Entity } from 'src/app/interfaces/entity';
     <div 
       class="flex"
       [ngClass]="{
-        'bg-gradient-to-b': entity.current_health ?? 0 <= (entity.total_health ??0) / 2,
-        'from-red-400/50': entity.current_health ?? 0 > 0,
-        'from-red-600/50': entity.current_health ?? 0 <= 0 && entity.allows_negative,
-        'from-red-600/50 to-red-500/10': (entity.current_health ?? 0 <= 0 && !entity.allows_negative) || (entity.current_health ?? 0 <= -(entity.total_health ?? 0) && entity.allows_negative),
+        'bg-gradient-to-b': (entity.current_health ?? 0) <= (entity.total_health ?? 0) / 2,
+        'from-red-400/50': (entity.current_health ?? 0) > 0,
+        'from-red-600/50': (entity.current_health ?? 0) <= 0 && entity.allows_negative,
+        'from-red-600/50 to-red-500/10': ((entity.current_health ?? 0) <= 0 && !entity.allows_negative) || ((entity.current_health ?? 0) <= -(entity.total_health ?? 0) && entity.allows_negative),
         'bg-light-bg-selected dark:bg-dark-bg-selected': currentInit | async
       }"
     >
@@ -89,12 +89,12 @@ export class BattleEntityItemComponent implements OnInit {
   }
 
   changeCurrentHealth(entity: Entity, change: number): void {
-    if (entity.current_health ?? 0 + change > (entity.total_health ?? 0)) {
+    if ((entity.current_health ?? 0) + change > (entity.total_health ?? 0)) {
       entity.current_health = entity.total_health;
     } else {
       entity.current_health = (this.entity.allows_negative)
-        ? entity.current_health ?? 0 + change
-        : entity.current_health = Math.max(entity.current_health ?? 0 + change, 0);
+        ? (entity.current_health ?? 0) + change
+        : entity.current_health = Math.max((entity.current_health ?? 0) + change, 0);
     }
     this.saveBattleEntity(entity);
   }

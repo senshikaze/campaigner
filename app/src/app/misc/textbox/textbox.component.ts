@@ -5,10 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { MarkdownModule, MarkdownService } from 'ngx-markdown';
 import { ViewInt } from '../view-int';
 import { DiceRollerService } from 'src/app/services/dice-roller.service';
-import { StoreService } from 'src/app/services/store.service';
 import { EntityType } from 'src/app/enums/entity-type';
-import { renderStatsBlock } from './renderers';
+import { renderDiceRoll, renderRollStatModifier, renderStatsBlock } from './renderers';
 import { Entity } from 'src/app/interfaces/entity';
+import { keyToStat, scoreToModifier, statToString, StatType } from 'src/app/enums/stats';
 
 @Component({
   selector: 'textbox',
@@ -66,21 +66,23 @@ export class TextboxComponent extends ViewInt implements OnInit {
   ngOnInit(): void {
     this.markdown.renderer.text = (text: string) => {
       let rendered = text;
-      text.match(/\d+d\d*[+-]\d*/i)
-        ?.map(d => rendered = rendered.replace(
-          d,
-          `<a class="dice cursor-pointer bg-slate-400 hover:bg-slate-500 p-1 px-2 rounded-lg no-underline" dice="${d}">${d}</a>`
-        ));
+      text.match(/\d+d\d*[+-]\d*/i)?.map(d => rendered = rendered.replace(d, renderDiceRoll(d)));
       if (this.entity) {
+        // stat block
         text.match(/\$stats/i)
-          ?.map(d => {
-            if (this.entity && this.entity.type === EntityType.BATTLE) {
-              rendered = rendered.replace(
-                d,
-                renderStatsBlock(this.entity)
-              )
+          ?.map(text => {
+            if (this.entity.type === EntityType.BATTLE) {
+              rendered = rendered.replace(text, renderStatsBlock(this.entity))
               }
           });
+        let statRoll = text.match(/\$atk(\w*)/);
+        if (statRoll) {
+          let stat = keyToStat(statRoll[1]);
+          if (this.entity.type === EntityType.BATTLE && stat !== undefined) {
+            let modifier = scoreToModifier(this.entity.stats?.[stat as keyof typeof this.entity.stats] ?? 0);
+            rendered = rendered.replace(statRoll[0], renderRollStatModifier(this.entity, "1d20", modifier, "Attack"));
+          }
+        };
       }
       return rendered;
     };

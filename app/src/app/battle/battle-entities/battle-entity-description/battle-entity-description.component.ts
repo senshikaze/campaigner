@@ -12,7 +12,7 @@ import { Entity } from 'src/app/interfaces/entity';
     <div class="grow flex overflow-hidden">
       <textbox
         class="m-2 grow flex min-h-30 overflow-auto"
-        styleClass="grow"
+        styleClass="grow p-2"
         [text]="entity.description"
         (textChange)="onDescriptionChanged(entity, $event)"
         [entity]="entity"
