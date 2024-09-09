@@ -95,15 +95,14 @@ export class DiceRollerService {
       take(diceRoll.num),
       reduce((acc, val) => [...acc, ...val]),
       map(nums => {
-        let rolls: Roll[] = [];
+        diceRoll.rolls = [];
         for (let num of nums) {
-          rolls.push({
+          diceRoll.rolls = [...diceRoll.rolls, ...[({
             outcome: num,
             critical: num == diceRoll.dice,
             failure: num == 1
-          });
+          })]];
         }
-        diceRoll.rolls = rolls;
         diceRoll.total = diceRoll.rolls.reduce((sum, roll) => sum + (roll.outcome ?? 0), 0) + (diceRoll.modifier ?? 0);
         return diceRoll
       })
@@ -124,11 +123,10 @@ export class DiceRollerService {
       map(r => {
         let rolls : number [] = []
         for (let line of r.trim().split("\n")) {
-          rolls.push(Number.parseInt(line));
+          rolls = [...rolls, ...[(Number.parseInt(line))]];
         }
         return rolls;
-      }),
-      take(1)
+      })
     );
   }
 

@@ -106,7 +106,7 @@ export class BattleEntityComponent implements OnInit {
         campaign_id: this.campaign?.id,
         battle_id: this.battle?.id,
         stats: {
-          defense: 0,
+          ac: 0,
           speed: 0,
           strength: 0,
           dexterity: 0,

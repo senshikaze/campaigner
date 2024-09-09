@@ -73,7 +73,7 @@ export class BattleEntitiesComponent implements OnInit, OnDestroy {
           current_health: 0,
           allows_negative: false,
           stats: {
-            defense: 0,
+            ac: 0,
             speed: 0,
             strength: 0,
             constitution: 0,

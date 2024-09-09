@@ -6,7 +6,7 @@ import { MarkdownModule, MarkdownService } from 'ngx-markdown';
 import { ViewInt } from '../view-int';
 import { DiceRollerService } from 'src/app/services/dice-roller.service';
 import { EntityType } from 'src/app/enums/entity-type';
-import { renderDiceRoll, renderRollStatModifier, renderStatsBlock } from './renderers';
+import { renderDiceRoll, renderRollStatModifier, renderStat, renderStatsBlock } from './renderers';
 import { Entity } from 'src/app/interfaces/entity';
 import { keyToStat, scoreToModifier, statToString, StatType } from 'src/app/enums/stats';
 
@@ -28,6 +28,7 @@ import { keyToStat, scoreToModifier, statToString, StatType } from 'src/app/enum
       #editBox
       class="h-full w-full bg-inherit"
       (input)="inputChanged($event)"
+      (keyup)="onKeyup($event)"
       (dblclick)="changeEdit()"
     >{{text}}</textarea>
   } @else {
@@ -75,6 +76,15 @@ export class TextboxComponent extends ViewInt implements OnInit {
               rendered = rendered.replace(text, renderStatsBlock(this.entity))
               }
           });
+        // indvidual stats
+        let statMatch = text.match(/\$(str|dex|con|int|wis|cha|ac|speed)/i);
+        if (statMatch) {
+          let stat = statMatch[1];
+          if (this.entity.type === EntityType.BATTLE && stat !== undefined) {
+            rendered = rendered.replace(text, renderStat(this.entity, stat));
+          }
+        }
+        // stat roll
         let statRoll = text.match(/\$atk(\w*)/);
         if (statRoll) {
           let stat = keyToStat(statRoll[1]);
@@ -95,5 +105,31 @@ export class TextboxComponent extends ViewInt implements OnInit {
   inputChanged(event: Event) {
     this.text = (event.target as HTMLTextAreaElement).value ?? "";
     this.textChange.emit(this.text);
+  }
+
+  onKeyup(event: KeyboardEvent) {
+    if (event.key == "Enter") {
+      // check the first character of the current line
+      // for a character that starts a list (`*`) If it does,
+      // inject a new one after the newline iff there are any
+      // other characters on the line, otherwise inject nothing
+      const selection = (event.target as HTMLTextAreaElement).selectionStart;
+      const lines = this.text.slice(0, selection).split("\n");
+      if (lines.length > 0) {
+        let count = 0;
+        let lineNum = -1;
+        for (let [key, line] of lines.entries()) {
+          if (count <= selection - 1 && (count = count + (line.length + 1)) >= selection) {
+            lineNum = key;
+            break;
+          }
+        }
+        if (lineNum >= 0 && lines[lineNum].trim()[0] == "*" && lines[lineNum].trim().length > 1) {
+          this.text = this.text.slice(0, selection) + `* ` + this.text.slice(selection + 1) ?? "";
+          return;
+        } 
+      }
+      
+    }
   }
 }

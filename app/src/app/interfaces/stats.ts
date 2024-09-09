@@ -1,5 +1,5 @@
 export interface Stats {
-    defense: number;
+    ac: number;
     speed: number;
     strength: number;
     dexterity: number;

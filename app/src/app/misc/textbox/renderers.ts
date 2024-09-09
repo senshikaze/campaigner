@@ -33,3 +33,7 @@ export function renderRollStatModifier(entity: Entity, dice: string, modifier: n
     return `<a class="dice cursor-pointer bg-slate-400 hover:bg-slate-500 p-1 px-2 rounded-lg no-underline" dice="${dice}+${modifier.toString()}">${action} (${dice}${modifier > 0? '+'+modifier:'-'+modifier })</a>`;
 }
 
+export function renderStat(entity: Entity, stat: string): string {
+    return `<span class="text-xl">${stat.toUpperCase()} - ${entity.stats?.[(stat as keyof typeof entity.stats)]}</span>`;
+}
+

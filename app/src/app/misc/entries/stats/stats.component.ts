@@ -10,9 +10,9 @@ import { InputComponent } from "../../input/input.component";
   @if (stats) {
     <div class="flex flex-row flex-wrap">
       <div>
-        <label for="defense">Defense:</label>
+        <label for="ac">AC:</label>
         <div>
-          <cInput [(value)]="stats.defense" inputType="number" styleClass="m-2 w-40"></cInput>
+          <cInput [(value)]="stats.ac" inputType="number" styleClass="m-2 w-40"></cInput>
         </div>
       </div>
       <div>

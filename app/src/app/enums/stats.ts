@@ -8,8 +8,7 @@ export enum StatType {
     CON="constitution",
     THP="totalHealth",
     CHP="currentHealth",
-    DEF="defense",
-    AC="defense",
+    AC="ac",
     SPD="speed",
 }
 
@@ -84,7 +83,7 @@ export function statToString(stat: StatType): string {
     if (stat == "charisma") {
         return "CHA";
     }
-    if (stat == "defense") {
+    if (stat == "ac") {
         return "AC";
     }
     if (stat == "speed") {
