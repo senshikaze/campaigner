@@ -30,7 +30,8 @@ import { keyToStat, scoreToModifier, statToString, StatType } from 'src/app/enum
       (input)="inputChanged($event)"
       (keyup)="onKeyup($event)"
       (dblclick)="changeEdit()"
-    >{{text}}</textarea>
+      [value]="text"
+    ></textarea>
   } @else {
     <markdown
       class="h-full w-full prose prose-neutral dark:prose-invert"
@@ -109,27 +110,38 @@ export class TextboxComponent extends ViewInt implements OnInit {
 
   onKeyup(event: KeyboardEvent) {
     if (event.key == "Enter") {
-      // check the first character of the current line
+      // check the first character of the previous line
       // for a character that starts a list (`*`) If it does,
-      // inject a new one after the newline iff there are any
+      // inject a new asterick after the newline iff there are any
       // other characters on the line, otherwise inject nothing
       const selection = (event.target as HTMLTextAreaElement).selectionStart;
       const lines = this.text.slice(0, selection).split("\n");
-      if (lines.length > 0) {
-        let count = 0;
-        let lineNum = -1;
-        for (let [key, line] of lines.entries()) {
-          if (count <= selection - 1 && (count = count + (line.length + 1)) >= selection) {
-            lineNum = key;
-            break;
-          }
-        }
-        if (lineNum >= 0 && lines[lineNum].trim()[0] == "*" && lines[lineNum].trim().length > 1) {
-          this.text = this.text.slice(0, selection) + `* ` + this.text.slice(selection + 1) ?? "";
-          return;
-        } 
+      if (lines.length <= 0) {
+        return;
       }
-      
+      let count = 0;
+      let lineNum = -1;
+      for (let [key, line] of lines.entries()) {
+        if (count <= selection - 1 && (count = count + (line.length + 1)) >= selection) {
+          lineNum = key;
+          break;
+        }
+      }
+      if (lineNum <= 0) {
+        return;
+      }
+      if (lines[lineNum].trim()[0] != "*") {
+        return;
+      }
+      if (lines[lineNum].trim().length > 1) {
+        this.text = this.text.slice(0, selection) + `* `;
+        return;
+      }
+      if (lines[lineNum].trim().length == 1) {
+          // remove the current line before new line is inserted
+          this.text = this.text.slice(0, selection - 3) + '\n';
+          return;
+      }
     }
   }
 }
