@@ -10,7 +10,7 @@ export function renderStatsBlock(entity: Entity): string {
     <table class="w-96 border-collapse border border-slate-700 dark:border-slate-500">
     `;
     for (let stat of Object.keys(entity?.stats ?? {}) as Array<keyof typeof entity.stats>) {
-        if (stat != "defense" && stat != "speed") {
+        if (stat != "defense" && stat != "speed" && stat != "ac") {
             block = block + `
             <tr class="border border-slate-700 dark:border-slate-500">
                 <th class="p-2 text-bold text-justify text-white bg-slate-800 dark:bg-slate-600 border border-slate-700 dark:border-slate-500">${statToString(stat)}</th>

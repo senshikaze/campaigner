@@ -18,22 +18,43 @@ import { DiceRollerService } from 'src/app/services/dice-roller.service';
   <div class="flex flex-col m-2">
     <div [class]="{'hidden': !show}" class="transition ease-in-out duration-700 shadow-md bg-light-bg dark:bg-dark-bg min-w-32 min-h-96 max-h-svh rounded-md flex flex-col">
       <div class="grow flex flex-col-reverse justify-start min-w-full min-h-96 max-h-[32rem] overflow-auto custom-scrollbar">
-        <div class="border-b-2 first:border-b-0 border-slate-400 dark:border-slate-700 flex" *ngFor="let roll of (rolls$ | async)?.reverse() ?? []">
-          <div class="p-2 grow">  
-            <span class="text-sm block">{{roll.text}}</span>
-            <span class="text-5xl font-bold" [ngClass]="{'text-red-400': diceRoller.isFailure(roll), 'text-green-400': diceRoller.isCritical(roll)}">{{roll.total ?? "None"}}</span>
+        @for (roll of (rolls$ | async)?.reverse() ?? []; track $index) {
+          <div class="border-b-2 first:border-b-0 border-slate-400 dark:border-slate-700 flex">
+            <div class="p-2 grow">
+              <span class="text-sm block">{{roll.text}}</span>
+              @if(roll?.advantage || roll?.disavantage) {
+                <span
+                  class="text-5xl font-bold"
+                  [ngClass]="{'text-red-400': diceRoller.isFailure(roll), 'text-green-400': diceRoller.isCritical(roll)}"
+                  >
+                  {{showVantage(roll, true)}}
+                </span>
+                <span
+                  class="text-xl font-normal text-gray-600"
+                  >
+                  {{showVantage(roll, false)}}
+                </span>
+              } @else {
+                <span
+                  class="text-5xl font-bold"
+                  [ngClass]="{'text-red-400': diceRoller.isFailure(roll), 'text-green-400': diceRoller.isCritical(roll)}"
+                >
+                  {{roll.total ?? "None"}}
+                </span>
+              }
+            </div>
+            <div>
+              <button
+                class="m-2 p-2 bg-light-action dark:bg-dark-action hover:bg-light-action-hover dark:hover:bg-dark-action-hover rounded-md"
+                (click)="reroll(roll)"
+                title="Re-Roll">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+              </button>
+            </div>
           </div>
-          <div>
-            <button
-              class="m-2 p-2 bg-light-action dark:bg-dark-action hover:bg-light-action-hover dark:hover:bg-dark-action-hover rounded-md"
-              (click)="reroll(roll)"
-              title="Re-Roll">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-              </svg>
-            </button>
-          </div>
-        </div>
+        }
       </div>
       <div class="border-t-2 border-slate-400 dark:border-slate-700 flex">
         <cInput class="grow m-2" styleClass="w-full" (valueChange)="this.valueSubject.next($event)"></cInput>
@@ -107,5 +128,16 @@ export class DiceRollerComponent implements OnInit, OnDestroy {
 
   reroll(diceRoll: DiceRoll): void {
     this.diceRoller.roll(diceRoll).subscribe();
+  }
+
+  showVantage(roll: DiceRoll, showHigher: boolean): string {
+    let firstRoll = roll.rolls[0].outcome;
+    let secondRoll = roll.rolls[1].outcome;
+    let higher = (firstRoll ?? 0 > (secondRoll ?? 0)) ? firstRoll : secondRoll;
+    let lower = (firstRoll ?? 0 < (secondRoll ?? 0)) ? firstRoll : secondRoll;
+    return ((showHigher)
+      ? ((higher ?? 0) + (roll.modifier ?? 0))
+      : ((lower ?? 0) + (roll.modifier ?? 0))
+    ).toString()
   }
 }

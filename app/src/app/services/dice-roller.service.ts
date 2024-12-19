@@ -4,6 +4,11 @@ import { DiceRoll, Roll } from '../interfaces/dice-roll';
 import { inDice } from '../enums/dice';
 import { BehaviorSubject, catchError, map, Observable, of, reduce, take } from 'rxjs';
 
+export interface AddDiceOptions {
+  advantage?: boolean,
+  disadvantage?: boolean,
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,17 +21,23 @@ export class DiceRollerService {
     private http: HttpClient,
   ) { }
 
-  addDice(dice: string | DiceRoll): Observable<DiceRoll[]> {
+  addDice(dice: string | DiceRoll, options?: AddDiceOptions): Observable<DiceRoll[]> {
     let dr: DiceRoll | undefined;
+    let num: number = 1;
     if (typeof dice === "string") {
       dr = this.parseDice(dice);
     } else {
       dr = dice;
     }
     if (dr) {
+      if (options?.advantage || options?.disadvantage) {
+        num = 2;
+        dr.advantage = options?.advantage ?? false;
+        dr.disavantage = options?.disadvantage ?? false;
+      }
       this.roll(dr).pipe(
-        take(1),
-        map(dr => this.dice.next([...this.dice.value, ...[dr]]))
+        take(num),
+        map(dr => this.dice.next([...this.dice.value, ...[dr]])),
       ).subscribe();
     }
     return this.dice$; 

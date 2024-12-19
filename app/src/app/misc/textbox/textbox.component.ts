@@ -41,9 +41,12 @@ import { keyToStat, scoreToModifier, statToString, StatType } from 'src/app/enum
       (dblclick)="changeEdit()"></markdown>
   }
   <button
+    *ngIf="showView"
     class="p-2 rounded-md text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover absolute top-2 right-2"
     (click)="changeEdit()"
-    i18n i18n-title [title]="(!editing) ? 'View' : 'Edit'" [innerHTML]="(editing)? 'View' : 'Edit'"></button>
+    i18n i18n-title
+    [title]="(!editing) ? 'View' : 'Edit'"
+    [innerHTML]="(editing)? 'View' : 'Edit'"></button>
 </div>
 `,
 styles: [
@@ -55,6 +58,7 @@ export class TextboxComponent extends ViewInt implements OnInit {
   @Input() styleClass = "";
   @Input() editing = false;
   @Input() entity!: Entity;
+  @Input() showView = true;
   @Output() textChange = new EventEmitter<string>();
 
 
@@ -68,7 +72,7 @@ export class TextboxComponent extends ViewInt implements OnInit {
   ngOnInit(): void {
     this.markdown.renderer.text = (text: string) => {
       let rendered = text;
-      text.match(/\d+d\d*[+-]\d*/i)?.map(d => rendered = rendered.replace(d, renderDiceRoll(d)));
+      text.match(/\d+d\d+[+-]\d*/gi)?.map(d => rendered = rendered.replace(d, renderDiceRoll(d)));
       if (this.entity) {
         // stat block
         text.match(/\$stats/i)
@@ -100,7 +104,9 @@ export class TextboxComponent extends ViewInt implements OnInit {
   }
 
   changeEdit() {
-    this.editing = !this.editing;
+    if (this.showView) {
+      this.editing = !this.editing;
+    }
   }
 
   inputChanged(event: Event) {

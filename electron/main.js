@@ -6,34 +6,40 @@ const url = require("url");
 const createWindow = () => {
 	const DEBUG = process.argv.includes("--debug");
 	const win = new BrowserWindow({
-		width: 800,
-		height: 600,
+		width: 1024,
+		height: 768,
 		webPreferences: {
-			nodeIntegration: true
-		}
+			nodeIntegration: true,
+			preload: path.join(__dirname, 'preload.js')
+		},
 	});
-	if (!DEBUG){
-		win.loadURL(url.format({
-			pathname: path.join(__dirname, "app/index.html"),
-			protocol: "file:",
-			slashes: true
-		}));
-	} else {
-		console.log("debug");
-		win.loadURL(url.format({
-			pathname: "localhost:4200",
-			protocol: "http:",
-			slashes: true
-		}));
-	}
+	win.loadURL(url.format({
+		pathname: app.isPackaged ? path.join(__dirname, "app", "index.html") : `http://localhost:4200`,
+		protocol: "file:",
+		slashes: true
+	}));
 
-	win.webContents.openDevTools();
+	if (DEBUG) {
+		win.webContents.openDevTools();
+	}
 };
+
+app.on("ready", () => {
+	createWindow();
+});
+
+app.on("window-all-closed", () => {
+	if (process.platform !== "darwin") {
+		app.quit();
+	}
+});
+
+app.on("activate", () => {
+	if(BrowserWindow.getAllWindows().length === 0) {
+		createWindow();
+	}
+});
 
 process.on('uncaughtException', function(err) {
 	fs.writeFileSync('crash.log', `${err}\n${err.stack}`);
-});
-
-app.whenReady().then(() => {
-	createWindow();
 });

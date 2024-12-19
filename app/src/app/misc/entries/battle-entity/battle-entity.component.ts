@@ -61,13 +61,23 @@ import { EntityType } from 'src/app/enums/entity-type';
       <div>
         <label for="description">Description</label>
         <div>
-          <textbox [(text)]="entity.description" id="description" [editing]="true" styleClass="m-2 h-60 w-2/3"></textbox>
+          <textbox
+            [(text)]="entity.description"
+            id="description"
+            [editing]="true"
+            styleClass="m-2 h-60 w-2/3"
+            [showView]="false"></textbox>
         </div>
       </div>
       <div>
         <label for="notes">Notes <info-icon title="Private notes only shown in Almanac"></info-icon></label>
         <div>
-          <textbox [(text)]="entity.notes" id="notes" [editing]="true" styleClass="m-2 h-60 w-2/3"></textbox>
+          <textbox
+            [(text)]="entity.notes"
+            id="notes"
+            [editing]="true"
+            styleClass="m-2 h-60 w-2/3"
+            [showView]="false"></textbox>
         </div>
       </div>
       <div class="w-2/3">

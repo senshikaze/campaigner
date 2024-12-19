@@ -6,13 +6,13 @@ export interface DiceRoll {
     dice: Dice;
     modifier?: number;
     total?: number;
+    advantage?: boolean;
+    disavantage?: boolean;
     rolls: Roll[];
 }
 
 export interface Roll {
     outcome?: number;
-    advantage?: number;
-    disadvantage?: number;
     critical?: boolean;
     failure?: boolean;
 }
