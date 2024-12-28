@@ -15,6 +15,7 @@ import { of } from 'rxjs';
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" />
         </svg>
       </button>
+      <close-button (clicked)="stop()" title="Stop Encounter"></close-button>
     } @else {
       <button
         class="p-2 m-2 rounded-md text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover"
@@ -46,5 +47,9 @@ export class InitiativeButtonComponent implements OnInit {
 
   start(): void {
     this.initiative.start();
+  }
+
+  stop(): void {
+    this.initiative.stop();
   }
 }

@@ -23,6 +23,7 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
       [ngClass]="{'border-2 border-light-accent-red dark:border-dark-accent-red': invalid}"
       [class]="styleClass"
       [min]="min"
+      [max]="max"
       (blur)="(value) ? blur.emit(true): undefined">
     <span *ngIf="showClear"></span>
   `,
@@ -40,6 +41,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() showClear = false;
   @Input() styleClass = "";
   @Input() min?: number = undefined;
+  @Input() max?: number = undefined;
   @Output() valueChange = new EventEmitter<any>();
   @Output() dirty = new EventEmitter<boolean>(false);
   @Output() blur = new EventEmitter<boolean>(false);

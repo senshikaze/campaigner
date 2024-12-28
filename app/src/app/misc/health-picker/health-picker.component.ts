@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
     CommonModule
   ],
   template:`
-  <div class="flex flex-col m-2 relative">
+  <div class="flex flex-col m-2 relative z-50">
     <button (click)="healthChange.emit(+amount);" title="Increase Health by 1" class="p-2 rounded-t-md bg-light-health-up-bg dark:bg-dark-health-up-bg dark:text-slate-300">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 block m-auto">
         <path fill-rule="evenodd" d="M11.47 7.72a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 1 1-1.06 1.06L12 9.31l-6.97 6.97a.75.75 0 0 1-1.06-1.06l7.5-7.5Z" clip-rule="evenodd" />
@@ -42,7 +42,7 @@ import { FormsModule } from '@angular/forms';
   styles: []
 })
 export class HealthPickerComponent {
-  @Input() amount = 0;
+  @Input() amount = 1;
   @Output() healthChange = new EventEmitter<number>();
 
   quickBar = false;

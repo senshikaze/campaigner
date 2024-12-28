@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { DBService } from '../services/db.service';
+import { liveQuery } from 'dexie';
+import { catchError, from, map, take } from 'rxjs';
 
 @Component({
   selector: 'sidebar',
@@ -6,10 +9,10 @@ import { Component } from '@angular/core';
 <div class="flex flex-col h-full w-11" [ngClass]="{'sm:w-fit': expanded}">
   <nav class="w-48 grow flex flex-col">
     <ul class="grow">
-        <li class="text-slate-200 dark:text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover">
+        <li class="text-slate-200 dark:text-white bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover">
           <a
             routerLink="campaign"
-            routerLinkActive="dark:bg-dark-action-active"
+            routerLinkActive="bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover"
             class="flex p-2"
             i18n i18n-title title="Campaigns">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -18,10 +21,10 @@ import { Component } from '@angular/core';
             <span class="hidden" [ngClass]="{'sm:inline':expanded}">Campaign</span>
           </a>
         </li>
-        <li class="text-slate-200 dark:text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover">
+        <li class="text-slate-200 dark:text-white bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover">
           <a
             routerLink="battles"
-            routerLinkActive="bg-light-action-active dark:bg-dark-action-active"
+            routerLinkActive="bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover"
             class="p-2 flex"
             i18n i18n-title title="Battles">
             <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="size-6">
@@ -33,10 +36,10 @@ import { Component } from '@angular/core';
             <span class="hidden" [ngClass]="{'sm:inline':expanded}">Battles</span>
           </a>
         </li>
-        <li class="text-slate-200 dark:text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover">
+        <li class="text-slate-200 dark:text-white bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover">
           <a
             routerLink="almanac"
-            routerLinkActive="bg-light-action-active dark:bg-dark-action-active"
+            routerLinkActive="bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover"
             class="flex p-2"
             i18n i18n-title title="Almanac">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -47,10 +50,10 @@ import { Component } from '@angular/core';
         </li>
     </ul>
     <div class="hidden sm:flex sm:flex-row">
-      <svg *ngIf="expanded" class="cursor-pointer" title="Close" (click)="expanded = false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+      <svg *ngIf="expanded" class="cursor-pointer" title="Close" (click)="onExpand(false)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
         <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
       </svg>
-      <svg *ngIf="!expanded" class="cursor-pointer" title="Expand" (click)="expanded = true" vxmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+      <svg *ngIf="!expanded" class="cursor-pointer" title="Expand" (click)="onExpand(true)" vxmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
         <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
       </svg>
     </div>
@@ -58,10 +61,27 @@ import { Component } from '@angular/core';
   <footer class="text-xs whitespace-nowrap" title="&copy; 2024 Kaze Industries">&copy; 2024 Kaze Industries</footer>
 </div>`
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   expanded = true;
 
-  onExpand(): void {
-    this.expanded = !this.expanded;
+  constructor(private db: DBService) {}
+
+  ngOnInit(): void {
+    from(liveQuery(
+      () => this.db.stateTable.where({variable: 'sidebarExpanded'}).first()
+    )).pipe(
+      map(s => s?.id ? this.expanded = !!s.value : this.expanded = true),
+      take(1)
+    ).subscribe();
+  }
+
+  onExpand(expand: boolean): void {
+    this.expanded = expand;
+    from(liveQuery(
+      () => this.db.stateTable.where({variable: "sidebarExpanded"}).first()
+    )).pipe(
+      map(s => this.db.stateTable.put({id: s?.id, variable: "sidebarExpanded", value: this.expanded}, s?.id)),
+      take(1)
+    ).subscribe();
   }
 }

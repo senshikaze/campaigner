@@ -7,12 +7,13 @@ import { StoreService } from 'src/app/services/store.service';
 @Component({
   selector: 'campaign-sections',
   template: `
-  <div class="grow flex flex-row">
-    <div class="grow-0 flex flex-col border-r-2 border-slate-400 dark:border-slate-700">
-      <div class="flex border-b-2 border-slate-400 dark:border-slate-700">
+  <div class="grow flex flex-row h-screen">
+    <div class="grow-0 flex flex-col h-full">
+      <div class="flex">
           <div class="mb-2 flex flex-auto">
             <cInput
-              class="grow"
+              class="grow m-2"
+              styleClass="w-full"
               [(value)]="campaign.name"
               title="Campaign Title"
               placeholder="Campaign Title"></cInput>
@@ -21,7 +22,7 @@ import { StoreService } from 'src/app/services/store.service';
             <save-button (click)="onSaveClicked(campaign)" title="Save Campaign"></save-button>
           </div>
       </div>
-      <campaign-section-list class="grow" [campaign]="campaign" (section)="sectionSelected($event)"></campaign-section-list>
+      <campaign-section-list class="grow flex overflow-hidden" [campaign]="campaign" (section)="sectionSelected($event)"></campaign-section-list>
     </div>
     <campaign-entries class="grow flex flex-row" *ngIf="selectedSection" [section]="selectedSection"></campaign-entries>
   </div>

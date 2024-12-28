@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subject, take } from 'rxjs';
+import { Subject, take, tap } from 'rxjs';
 import { CampaignSection } from 'src/app/interfaces/campaign-section';
 import { ConfirmDialogComponent, ConfirmDialogInterface } from 'src/app/misc/dialogs/confirm-dialog/confirm-dialog.component';
 import { ModalService } from 'src/app/services/modal.service';
@@ -8,15 +8,18 @@ import { StoreService } from 'src/app/services/store.service';
 @Component({
   selector: 'campaign-section',
   template: `
-  <div class="flex flex-row" (click)="clicked()">
-    <cInput *ngIf="editing; else display" [(value)]="section.name" placeholder="Section Title"></cInput>
+  <div class="flex flex-row w-full" (click)="clicked()">
+    <cInput
+      class="grow m-2"
+      *ngIf="editing; else display"
+      [(value)]="section.name"
+      placeholder="Section Title"></cInput>
     <ng-template #display>
       <div class="grow dark:text-white p-2 m-2 cursor-pointer"
         (dblclick)="editing = !editing">
         {{section.name}}
       </div>
     </ng-template>
-    <save-button (click)="onSaveClicked()" title="Save"></save-button>
     <delete-button (click)="onDeleteClicked()" title="Delete Section"></delete-button>
   </div>
   `,
@@ -24,8 +27,10 @@ import { StoreService } from 'src/app/services/store.service';
 })
 export class SectionComponent implements OnInit {
   @Input() section!: CampaignSection;
+  @Input() index!: number;
   @Output() sectionChange = new EventEmitter<CampaignSection>();
   @Output() selected = new EventEmitter<CampaignSection>();
+  @Output() deleteClicked = new EventEmitter<number>();
 
   editing = false;
   dirty = false;
@@ -43,6 +48,7 @@ export class SectionComponent implements OnInit {
 
   onSaveClicked(): void {
     this.store.saveSection(this.section).pipe(
+      tap(s => s?.id ? this.store.saveCampaignEntry({section_id: s.id, title: '', text: ''}) : undefined),
       take(1)
     ).subscribe(s => {this.section = s; this.selected.emit(this.section);});
   }
@@ -69,5 +75,6 @@ export class SectionComponent implements OnInit {
         data: data
       });
     }
+    this.deleteClicked.emit(this.index);
   }
 }

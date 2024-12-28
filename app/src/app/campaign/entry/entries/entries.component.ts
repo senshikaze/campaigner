@@ -8,10 +8,6 @@ import { StoreService } from 'src/app/services/store.service';
   selector: 'campaign-entries',
   template: `
   <div class="grow">
-    <div class="flex flex-row">
-      <span class="grow"></span>
-      <campaign-entry-create-button [section]="section" (entryCreated)="entryCreated($event)"></campaign-entry-create-button>
-    </div>
     <campaign-entry
       *ngFor="let entry of entries$ | async" 
       [entry]="entry" 

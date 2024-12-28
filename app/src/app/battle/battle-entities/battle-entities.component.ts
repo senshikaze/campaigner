@@ -1,6 +1,6 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Component, Input, ModelSignal, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+import { Component, Input, ModelSignal, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { BehaviorSubject, catchError, map, Observable, reduce, Subject, take, takeUntil } from 'rxjs';
 import { EntityType } from 'src/app/enums/entity-type';
 import { Battle } from 'src/app/interfaces/battle';
 import { Entity } from 'src/app/interfaces/entity';
@@ -18,12 +18,13 @@ import { StoreService } from 'src/app/services/store.service';
         <battle-entity-item
           class="min-h-30"
           [entity]="entity" [attr.data-index]="entity.initiative ?? 0"
+          (initChanged)="sortEntities()"
           (deleted)="onDeleted($event)"
           cdkDrag></battle-entity-item>
       }
     </div>
     @if (battle.id) {
-      <div class="grow-0 flex flex-col border-t-2 border-slate-300 dark:border-slate-800">
+      <div class="grow-0 flex flex-col">
         <add-button (clicked)="addEntity()" title="Add Combatant" text="Add"></add-button>
       </div>
     }
@@ -34,13 +35,11 @@ import { StoreService } from 'src/app/services/store.service';
     `.cdk-drag-placeholder {visibility: hidden}`
   ]
 })
-export class BattleEntitiesComponent implements OnInit, OnDestroy {
+export class BattleEntitiesComponent implements OnInit, OnChanges {
   @Input() battle!: Battle;
   @Input() saveEvent!: Observable<Battle>;
 
   entities$ = new BehaviorSubject<Entity[]>([]);
-
-  destroy$ = new Subject<boolean>();
 
   constructor(
     private store: StoreService,
@@ -49,13 +48,17 @@ export class BattleEntitiesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.getBattleEntities(this.battle).pipe(
-      takeUntil(this.destroy$)
+      take(1)
     ).subscribe(entities => this.entities$.next(entities));
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.unsubscribe();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['battle']) {
+      this.store.getBattleEntities(this.battle).pipe(
+        map(entities => entities.sort((higher, lower) => (lower.initiative ?? 0) > (higher.initiative ?? 0) ? 1 : -1)),
+        take(1)
+      ).subscribe(entities => this.entities$.next(entities));
+    }
   }
 
   addEntity(): void {
@@ -107,7 +110,10 @@ export class BattleEntitiesComponent implements OnInit, OnDestroy {
   }
 
   sortEntities(): void {
-
+    this.store.getBattleEntities(this.battle).pipe(
+      map(entities => entities.sort((higher, lower) => (lower.initiative ?? 0) > (higher.initiative ?? 0) ? 1 : -1)),
+      take(1)
+    ).subscribe(entities => this.entities$.next(entities));
   }
 
   drop(event: CdkDragDrop<Entity[]>) {

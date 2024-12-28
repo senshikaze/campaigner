@@ -12,12 +12,12 @@ import { Entity } from 'src/app/interfaces/entity';
       class="flex"
       [ngClass]="{
         'bg-gradient-to-b': (entity.current_health ?? 0) <= (entity.total_health ?? 0) / 2,
-        'from-red-400/50': (entity.current_health ?? 0) > 0,
-        'from-red-600/50': (entity.current_health ?? 0) <= 0 && entity.allows_negative,
-        'from-red-600/50 to-red-500/10': ((entity.current_health ?? 0) <= 0 && !entity.allows_negative) || ((entity.current_health ?? 0) <= -(entity.total_health ?? 0) && entity.allows_negative),
-        'bg-light-bg-selected dark:bg-dark-bg-selected': currentInit | async
+        'from-red-200/50': (entity.current_health ?? 0) > 0,
+        'from-red-300/50': (entity.current_health ?? 0) <= 0 && entity.allows_negative,
+        'from-red-400/50 to-red-500/10': ((entity.current_health ?? 0) <= 0 && !entity.allows_negative) || ((entity.current_health ?? 0) <= -(entity.total_health ?? 0) && entity.allows_negative),
       }"
     >
+      <div class="w-2" [ngClass]="{'bg-light-accent dark:bg-dark-accent': currentInit$ | async}"></div>
       <div class="flex flex-col grow-0">
         <close-button (click)="deleted.emit(entity)" title="Delete Entity"></close-button>
         <drag-item cdkDragHandle></drag-item>
@@ -36,6 +36,7 @@ import { Entity } from 'src/app/interfaces/entity';
               styleClass="inline w-16 m-2"
               [(value)]="entity.current_health"
               title="Current Health"
+              [max]="entity.total_health"
               inputType="number"
               (blur)="saveBattleEntity(entity)"></cInput>
             <p class="dark:text-white p-2 m-2">/</p>
@@ -49,10 +50,11 @@ import { Entity } from 'src/app/interfaces/entity';
               (blur)="saveBattleEntity(entity)"></cInput>
           </div>
           <cInput
-            [(value)]="entity.initiative"
+            [value]="entity.initiative"
             title="Initiative"
             inputType="number"
             styleClass="m-2"
+            (valueChange)="changeInitiative(entity, $event)"
             (blur)="saveBattleEntity(entity)"></cInput>
         </div>
       </div>
@@ -67,9 +69,10 @@ import { Entity } from 'src/app/interfaces/entity';
 })
 export class BattleEntityItemComponent implements OnInit {
   @Input() entity!: Entity;
+  @Output() initChanged = new EventEmitter<Entity>();
   @Output() deleted = new EventEmitter<Entity>();
 
-  currentInit: Observable<boolean> = of(false);
+  currentInit$: Observable<boolean> = of(false);
 
   edit = false;
 
@@ -83,8 +86,8 @@ export class BattleEntityItemComponent implements OnInit {
     if (!this.entity.id) {
       this.edit = true;
     }
-    this.currentInit = this.initiative.currentEntity().pipe(
-      map(entity => (entity !== undefined && this.entity.id) ? entity.id == this.entity.id : false)
+    this.currentInit$ = this.initiative.currentEntity().pipe(
+      map(entity => (entity && this.entity.id) ? entity.id == this.entity.id : false)
     );
   }
 
@@ -97,6 +100,12 @@ export class BattleEntityItemComponent implements OnInit {
         : entity.current_health = Math.max((entity.current_health ?? 0) + change, 0);
     }
     this.saveBattleEntity(entity);
+  }
+
+  changeInitiative(entity: Entity, initiative: number): void {
+    entity.initiative = initiative;
+    this.saveBattleEntity(entity);
+    this.initChanged.emit(entity);
   }
 
   saveBattleEntity(entity: Entity): void {

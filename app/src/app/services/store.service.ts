@@ -142,7 +142,7 @@ export class StoreService {
     if (!battle.id) {
       return of(); 
     }
-    return from(this.db.entitiesTable.delete(battle.id));
+    return from(this.db.battleTable.delete(battle.id));
   }
 
   getBattle(id: number): Observable<Battle | undefined> {
@@ -160,11 +160,12 @@ export class StoreService {
   }
 
   getBattleEntities(battle: Battle): Observable<Entity[]> {
+    if (battle.id === undefined) {
+      return of([]);
+    }
     return from(liveQuery(() => 
       this.db.entitiesTable.where({battle_id: battle.id}).toArray()
-    )).pipe(
-      map(entities => entities.sort((a, b) => ((b.initiative ?? 0) > (a.initiative ?? 0)) ? 1:-1))
-    );
+    ));
   }
 
   /**

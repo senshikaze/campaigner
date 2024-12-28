@@ -7,10 +7,10 @@ import { StoreService } from 'src/app/services/store.service';
 @Component({
   selector: 'campaign-section-list',
   template: `
-  <div class="flex flex-col h-full">
-    <div class="grow">
+  <div class="grow flex flex-col w-full max-h-full">
+    <div class="grow w-full overflow-auto min-h-0">
       <campaign-section
-        class="border-b-slate-900 dark:border-b-slate-700 border-b-2 last:border-b-0"
+        class="w-full"
         *ngFor="let section of sections$| async"
         [section]="section"
         (selected)="sectionSelected($event)"

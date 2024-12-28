@@ -31,7 +31,6 @@ export class InitiativeService {
 
   currentEntity(): Observable<Entity | undefined> {
     return this.battle$.pipe(
-      filter((b: Battle) => b.current_entity_id !== undefined),
       switchMap(b => this.store.getEntity(b.current_entity_id ?? -1))
     )
   }
@@ -46,7 +45,7 @@ export class InitiativeService {
           }
           b.current_entity_id = entities
             .slice(index)
-            .filter(entity => entity.allows_negative && (entity.current_health ?? 0)  >= 0)[0].id;
+            .filter(entity => entity.allows_negative || (entity.current_health ?? 0)  >= 0)[0].id;
           return b;
         }),
         tap(battle => this.store.saveBattle(battle).pipe(take(1)).subscribe())
@@ -62,6 +61,14 @@ export class InitiativeService {
         map((entity: Entity) => {b.current_entity_id = entity.id; return b;}),
         tap(battle => this.store.saveBattle(battle).pipe(take(1)).subscribe())
       )),
+      take(1)
+    ).subscribe(battle => this.battle$.next(battle));
+  }
+
+  stop(): void {
+    this.battle$.pipe(
+      map(battle => {battle.current_entity_id = undefined; return battle}),
+      tap(battle => this.store.saveBattle(battle).pipe(take(1)).subscribe()),
       take(1)
     ).subscribe(battle => this.battle$.next(battle));
   }

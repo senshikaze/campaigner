@@ -7,6 +7,7 @@
   "license": "Apache",
   "scripts": {
     "start": "electron-forge start",
+    "build-angular": "rm -r ./app/; mkdir ./app; cd ../app; ng build; cd ../electron; cp -r ../app/dist/campaigner-web/* ./app/",
     "package": "electron-forge package",
     "make": "electron-forge make"
   },

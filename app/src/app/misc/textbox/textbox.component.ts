@@ -8,7 +8,7 @@ import { DiceRollerService } from 'src/app/services/dice-roller.service';
 import { EntityType } from 'src/app/enums/entity-type';
 import { renderDiceRoll, renderRollStatModifier, renderStat, renderStatsBlock } from './renderers';
 import { Entity } from 'src/app/interfaces/entity';
-import { keyToStat, scoreToModifier, statToString, StatType } from 'src/app/enums/stats';
+import { keyToStat, scoreToModifier } from 'src/app/enums/stats';
 
 @Component({
   selector: 'textbox',
@@ -20,13 +20,13 @@ import { keyToStat, scoreToModifier, statToString, StatType } from 'src/app/enum
   ],
   template:`
 <div 
-  class="relative p-2 bg-light-input-bg text-black dark:text-white dark:bg-dark-input-bg rounded-md overflow-auto"
+  class="relative bg-light-input-bg text-black dark:text-white dark:bg-dark-input-bg rounded-md overflow-auto"
   [class]="styleClass"
 >
   @if (editing) {
     <textarea
       #editBox
-      class="h-full w-full bg-inherit"
+      class="h-full p-2 w-full bg-inherit block bg-light-input-bg-edit dark:bg-dark-input-bg-edit"
       (input)="inputChanged($event)"
       (keyup)="onKeyup($event)"
       (dblclick)="changeEdit()"

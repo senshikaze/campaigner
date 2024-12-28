@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require("electron");
+const { nativeTheme } = require("electron/main");
 const fs = require("fs");
 const path = require("path");
 const url = require("url");
@@ -13,11 +14,9 @@ const createWindow = () => {
 			preload: path.join(__dirname, 'preload.js')
 		},
 	});
-	win.loadURL(url.format({
-		pathname: app.isPackaged ? path.join(__dirname, "app", "index.html") : `http://localhost:4200`,
-		protocol: "file:",
-		slashes: true
-	}));
+	win.loadURL(
+		app.isPackaged ? `file://${path.join(__dirname, "app", "index.html")}` : `http://localhost:4200`,
+	);
 
 	if (DEBUG) {
 		win.webContents.openDevTools();
@@ -26,6 +25,7 @@ const createWindow = () => {
 
 app.on("ready", () => {
 	createWindow();
+	nativeTheme.themeSource = "dark";
 });
 
 app.on("window-all-closed", () => {

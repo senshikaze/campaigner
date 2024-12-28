@@ -6,6 +6,7 @@ import { CampaignEntry } from '../interfaces/campaign-entry';
 import { AlmanacEntry } from '../interfaces/almanac-entry';
 import { Battle } from '../interfaces/battle';
 import { Entity } from '../interfaces/entity';
+import { State } from '../interfaces/state';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,8 @@ export class DBService extends Dexie {
   campaignEntryTable!: Table<CampaignEntry, number>;
   // Entities
   entitiesTable!: Table<Entity, number>;
+  // State
+  stateTable!: Table<State>
 
   constructor() {
     super('ngdexieliveQuery');
@@ -31,6 +34,7 @@ export class DBService extends Dexie {
       campaignSectionTable: "++id, campaign_id",
       campaignEntryTable: "++id, section_id",
       entitiesTable: "++id, campaign_id, battle_id",
+      stateTable: "++id, variable",
     });
   }
 }

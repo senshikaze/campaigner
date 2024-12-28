@@ -9,7 +9,7 @@ import { CampaignSection } from '../interfaces/campaign-section';
 @Component({
   selector: 'campaign',
   template: `
-  <div class="flex flex-col grow p-2 h-full">
+  <div class="flex flex-col grow h-screen max-h-screen">
     <campaign-sections class="grow flex" *ngIf="campaign$ | async as campaign" [campaign]="campaign"></campaign-sections>
   </div>
   `,
