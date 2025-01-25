@@ -9,23 +9,38 @@ import { catchError, from, map, take } from 'rxjs';
 <div class="flex flex-col h-full w-11" [ngClass]="{'sm:w-fit': expanded}">
   <nav class="w-48 grow flex flex-col">
     <ul class="grow">
-        <li class="text-slate-200 dark:text-white bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover">
+        <li>
           <a
+          class="flex -p-2 text-slate-200 dark:text-white bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover"
             routerLink="campaign"
-            routerLinkActive="bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover"
+            routerLinkActive="bg-light-menu-active hover:bg-light-menu-hover dark:bg-dark-menu-active dark:hover:bg-dark-menu-hover"
             class="flex p-2"
             i18n i18n-title title="Campaigns">
+            <svg fill="#000000" viewBox="0 0 24 24" id="pennant-15" data-name="Flat Color" class="size-6">
+              <path id="secondary" d="M17,8a1,1,0,0,1-.62-.22L12,4.28,7.62,7.78A1,1,0,1,1,6.38,6.22l5-4a1,1,0,0,1,1.24,0l5,4a1,1,0,0,1,.16,1.4A1,1,0,0,1,17,8Z" style="fill: rgba(255, 255, 255);"></path>
+              <path id="primary" d="M18,6H6A1,1,0,0,0,5,7V17.5a2,2,0,0,0,1.11,1.79l5,2.5a2,2,0,0,0,1.78,0l5-2.5A2,2,0,0,0,19,17.5V7A1,1,0,0,0,18,6Z" style="fill: rgb(255, 255, 255);"></path>
+              <path id="secondary-2" data-name="secondary" d="M19,8H5A1,1,0,0,1,5,6H19a1,1,0,0,1,0,2Zm-3,7a1,1,0,0,0-1-1H9a1,1,0,0,0,0,2h6A1,1,0,0,0,16,15Zm0-4a1,1,0,0,0-1-1H9a1,1,0,0,0,0,2h6A1,1,0,0,0,16,11Z" style="fill: rgba(255, 255, 255,0);"></path>
+            </svg>
+            <span class="hidden" [ngClass]="{'sm:inline':expanded}">Campaigns</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="flex p-2 text-slate-200 dark:text-white bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover"
+            routerLink="party"
+            routerLinkActive="bg-light-menu-active hover:bg-light-menu-hover dark:bg-dark-menu-active dark:hover:bg-dark-menu-hover"
+            i18n i18n-title title="Party">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
               <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
             </svg>
-            <span class="hidden" [ngClass]="{'sm:inline':expanded}">Campaign</span>
+            <span class="hidden" [ngClass]="{'sm:inline':expanded}">Parties</span>
           </a>
         </li>
-        <li class="text-slate-200 dark:text-white bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover">
+        <li>
           <a
+            class="flex p-2 text-slate-200 dark:text-white bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover"
             routerLink="battles"
-            routerLinkActive="bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover"
-            class="p-2 flex"
+            routerLinkActive="bg-light-menu-active hover:bg-light-menu-hover dark:bg-dark-menu-active dark:hover:bg-dark-menu-hover"
             i18n i18n-title title="Battles">
             <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="size-6">
               <g>
@@ -36,11 +51,11 @@ import { catchError, from, map, take } from 'rxjs';
             <span class="hidden" [ngClass]="{'sm:inline':expanded}">Battles</span>
           </a>
         </li>
-        <li class="text-slate-200 dark:text-white bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover">
+        <li>
           <a
+            class="flex p-2 text-slate-200 dark:text-white bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover"
             routerLink="almanac"
-            routerLinkActive="bg-light-menu hover:bg-light-menu-hover dark:bg-dark-menu dark:hover:bg-dark-menu-hover"
-            class="flex p-2"
+            routerLinkActive="bg-light-menu-active hover:bg-light-menu-hover dark:bg-dark-menu-active dark:hover:bg-dark-menu-hover"
             i18n i18n-title title="Almanac">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
               <path d="M11.25 4.533A9.707 9.707 0 0 0 6 3a9.735 9.735 0 0 0-3.25.555.75.75 0 0 0-.5.707v14.25a.75.75 0 0 0 1 .707A8.237 8.237 0 0 1 6 18.75c1.995 0 3.823.707 5.25 1.886V4.533ZM12.75 20.636A8.214 8.214 0 0 1 18 18.75c.966 0 1.89.166 2.75.47a.75.75 0 0 0 1-.708V4.262a.75.75 0 0 0-.5-.707A9.735 9.735 0 0 0 18 3a9.707 9.707 0 0 0-5.25 1.533v16.103Z" />

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { forkJoin, from, map, Observable, of } from 'rxjs';
-import { liveQuery } from 'dexie';
+import { Collection, liveQuery } from 'dexie';
 import { DBService } from './db.service';
 
 import { Campaign } from '../interfaces/campaign';
@@ -235,6 +235,13 @@ export class StoreService {
       map(id => Object.assign(entry, {id: id}))
     );
     //return this.post<CampaignEntry>(`entries`, entry);
+  }
+
+  /** 
+   * Campaign Sections as Collection
+  */
+  getCampaignSectionsCollection(campaign: Campaign): Collection {
+    return this.db.campaignSectionTable.where({campaign_id: campaign.id});
   }
 
   /**

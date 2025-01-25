@@ -84,7 +84,7 @@ import { EntityType } from 'src/app/enums/entity-type';
         <h2 class="text-xl">Stats</h2>
         <stats-entry [(stats)]="entity.stats"></stats-entry>
       <div>
-        <save-button (clicked)="save(entity)" value="Save" [showText]="true"></save-button>
+        <save-button (clicked)="save(entity)" text="Save"></save-button>
       </div>
     </div>
 

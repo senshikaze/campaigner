@@ -24,7 +24,8 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
       [class]="styleClass"
       [min]="min"
       [max]="max"
-      (blur)="(value) ? blur.emit(true): undefined">
+      (blur)="(value) ? blur.emit(true): undefined"
+      (click)="click.emit()">
     <span *ngIf="showClear"></span>
   `,
   styles: [
@@ -45,6 +46,7 @@ export class InputComponent implements ControlValueAccessor {
   @Output() valueChange = new EventEmitter<any>();
   @Output() dirty = new EventEmitter<boolean>(false);
   @Output() blur = new EventEmitter<boolean>(false);
+  @Output() click = new EventEmitter<void>(false);
 
   onChange = (value: any) => {};
   onTouch = () => {};

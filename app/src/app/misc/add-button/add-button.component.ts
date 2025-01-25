@@ -15,6 +15,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       @if (text) {
         {{text}}
       }
+      <span class="sr-only">{{title}}</span>
     </button>
   `,
   styles: ``

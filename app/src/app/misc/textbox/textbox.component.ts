@@ -20,7 +20,7 @@ import { keyToStat, scoreToModifier } from 'src/app/enums/stats';
   ],
   template:`
 <div 
-  class="relative bg-light-input-bg text-black dark:text-white dark:bg-dark-input-bg rounded-md overflow-auto"
+  class="relative bg-light-input-bg text-black dark:text-white dark:bg-dark-input-bg rounded-md overflow-auto cursor-text"
   [class]="styleClass"
 >
   @if (editing) {
@@ -34,7 +34,7 @@ import { keyToStat, scoreToModifier } from 'src/app/enums/stats';
     ></textarea>
   } @else {
     <markdown
-      class="h-full w-full prose prose-neutral dark:prose-invert"
+      class="h-full min-h-full min-w-full w-full prose prose-neutral dark:prose-invert"
       [data]="text"
       ngPreserveWhitespace
       [disableSanitizer]="true"

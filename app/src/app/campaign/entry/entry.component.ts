@@ -1,23 +1,15 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CampaignEntry } from '../../interfaces/campaign-entry';
 import { StoreService } from 'src/app/services/store.service';
-import { debounceTime, map, Subject, take, takeUntil, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, Subject, take, takeUntil, tap } from 'rxjs';
 import { ModalService } from 'src/app/services/modal.service';
 import { ConfirmDialogComponent, ConfirmDialogInterface } from 'src/app/misc/dialogs/confirm-dialog/confirm-dialog.component';
+import { CampaignSection } from 'src/app/interfaces/campaign-section';
 
 @Component({
   selector: 'campaign-entry',
   template:`
   <div class="grow flex flex-col h-screen overflow-hidden bg-light-input-bg text-black dark:text-white dark:bg-dark-input-bg rounded-md">
-    <div class="flex">
-      <cInput
-        class="grow m-2"
-        styleClass="w-1/3 border-b-2"
-        [value]="entry.title"
-        (valueChange)="title$.next($event)"
-        title="Entry Title"
-        placeholder="Entry Title"></cInput>
-    </div>
     <textbox
       class="grow m-2 flex min-h-30 overflow-auto"
       styleClass="grow min-h-full"
@@ -28,13 +20,14 @@ import { ConfirmDialogComponent, ConfirmDialogInterface } from 'src/app/misc/dia
 `,
   styles: []
 })
-export class EntryComponent implements OnInit, OnDestroy {
-  @Input() entry!: CampaignEntry;
+export class EntryComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() section!: CampaignSection;
   @Output() entryDelete = new EventEmitter<CampaignEntry>();
+
+  entry: CampaignEntry = {text: ""} as CampaignEntry;
 
   editing: boolean = false;
 
-  title$ = new Subject<string>();
   text$ = new Subject<string>();
 
   destroy$ = new Subject<void>();
@@ -45,18 +38,23 @@ export class EntryComponent implements OnInit, OnDestroy {
   ) {}
   
   ngOnInit(): void {
-    this.title$.next(this.entry.title);
-    this.text$.next(this.entry.text);
-
-    this.title$.pipe(
-      debounceTime(450),
-      map(title => this.entry.title = title),
-      tap(_ => this.store.saveCampaignEntry(this.entry)),
-      takeUntil(this.destroy$)
-    ).subscribe();
+    if (this.section && this.section.id) {
+      this.store.getSectionEntries(this.section).pipe(
+        map(e => e[0]),
+        take(1)
+      ).subscribe(e => {
+        if (e) {
+          this.entry = e;
+          this.text$.next(e.text);
+        } else {
+          this.entry.section_id = this.section.id!;
+        }
+      });
+    }
 
     this.text$.pipe(
       debounceTime(450),
+      distinctUntilChanged(),
       map(text => this.entry.text = text),
       tap(_ => this.store.saveCampaignEntry(this.entry)),
       takeUntil(this.destroy$)
@@ -66,6 +64,26 @@ export class EntryComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["section"]) {
+      this.section = changes["section"].currentValue;
+      this.entry = {text: ""} as CampaignEntry;
+      if (this.section && this.section.id) {
+        this.store.getSectionEntries(this.section).pipe(
+          map(e => e[0]),
+          take(1)
+        ).subscribe(e => {
+          if (e) {
+            this.entry = e;
+            this.text$.next(e.text);
+          } else {
+            this.entry.section_id = this.section.id!;
+          }
+        });
+      }
+    }
   }
 
   onDeleteClicked(): void {
@@ -91,12 +109,5 @@ export class EntryComponent implements OnInit, OnDestroy {
 
   onEditClicked(): void {
     this.editing = true;
-  }
-
-  onSaveClicked(): void {
-    this.editing = false;
-    this.store.saveCampaignEntry(this.entry).pipe(
-      take(1)
-    ).subscribe(e => this.entry = e);
   }
 }

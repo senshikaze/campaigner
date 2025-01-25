@@ -15,17 +15,36 @@ import { ConfirmDialogComponent, ConfirmDialogInterface } from '../misc/dialogs/
       <add-button (click)="onCreateClicked()" title="Add Battle"></add-button>
     </div>
     <div class="flex grow">
-      <ul class="grow">
+      <table class="grow border-collapse table-auto">
+        <tr class="bg-light-zebra-odd dark:bg-dark-zebra-odd">
+          <th class="p-2 text-xl text-left w-2/3">Name</th>
+          <th class="p-2 text-xl text-left">In Combat</th>
+          <th class="p-2 text-xl text-left"></th>
+        </tr>
         @for (battle of battles$ | async; track battle) {
-          <li class="p-2 odd:bg-light-zebra-odd dark:odd:bg-dark-zebra-odd even:bg-light-zebra-even dark:even:bg-dark-zebra-even">
-            <div class="flex">
-              <p class="grow block text-lg">{{battle.name}}</p>
-              <view-button [routerLink]="['/battles', battle.id]" [state]="battle" title="View Battle"></view-button>
-              <delete-button [value]="battle" (clicked)="onDeleteClicked($event)" title="Delete Battle"></delete-button>
-            </div>
-          </li>
+          <tr class="odd:bg-light-zebra-odd dark:odd:bg-dark-zebra-odd even:bg-light-zebra-even dark:even:bg-dark-zebra-even">
+            <td class="text-lg">
+              <a
+                class="p-2 block"
+                [routerLink]="['/battles', battle.id]"
+                [state]="battle"
+                [title]="battle.name">
+                {{battle.name}}
+              </a>
+            </td>
+            <td class="p-2 text-lg">
+              {{battle.current_entity_id ? "Yes" : "No"}}
+            </td>
+            <td class="p-2">
+              <delete-button
+                [value]="battle"
+                (clicked)="onDeleteClicked($event)"
+                title="Delete Battle">
+              </delete-button>
+            </td>
+          </tr>
         }
-      </ul>
+      </table>
     </div>
   </div>
   `,
@@ -42,7 +61,7 @@ export class BattleListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.battles$ = this.store.getBattles().pipe(share())
+    this.battles$ = this.store.getBattles().pipe(share());
   }
 
   onCreateClicked(): void {

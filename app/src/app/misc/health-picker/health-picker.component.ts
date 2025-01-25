@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, ViewChild, viewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 block m-auto">
         <path fill-rule="evenodd" d="M11.47 7.72a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 1 1-1.06 1.06L12 9.31l-6.97 6.97a.75.75 0 0 1-1.06-1.06l7.5-7.5Z" clip-rule="evenodd" />
       </svg>
+      <span class="sr-only">Increase Health by {{amount}}</span>
     </button>
     <input
       [(ngModel)]="amount"
@@ -29,13 +30,32 @@ import { FormsModule } from '@angular/forms';
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 block m-auto">
         <path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z" clip-rule="evenodd" />
       </svg>
+      <span class="sr-only">Decrease Health by {{amount}}</span>
     </button>
   </div>
   @if (quickBar) {
         <div class="fixed bg-slate-500 min-w-fit p-2" [style.top]="quickTop+'px'" [style.left]="quickLeft+'px'">
-          <button (click)="amount = 1; quickBar = false" class="min-w-6 p-2 mx-2 text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover rounded-lg">1</button>
-          <button (click)="amount = 5; quickBar = false" class="min-w-6 p-2 mx-2 text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover rounded-lg">5</button>
-          <button (click)="amount = 10; quickBar = false" class="min-w-6 p-2 mx-2 text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover rounded-lg">10</button>
+          <button
+            (click)="amount = 1; quickBar = false"
+            class="min-w-6 p-2 mx-2 text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover rounded-lg"
+          >
+            1
+            <span class="sr-only">Quick Set 1</span>
+          </button>
+          <button
+            (click)="amount = 5; quickBar = false"
+            class="min-w-6 p-2 mx-2 text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover rounded-lg"
+          >
+            5
+            <span class="sr-only">Quick Set 5</span>
+          </button>
+          <button
+            (click)="amount = 10; quickBar = false"
+            class="min-w-6 p-2 mx-2 text-white bg-light-action hover:bg-light-action-hover dark:bg-dark-action dark:hover:bg-dark-action-hover rounded-lg"
+          >
+            10
+            <span class="sr-only">Quick Set 10</span>
+          </button>
         </div>
       }
   `,

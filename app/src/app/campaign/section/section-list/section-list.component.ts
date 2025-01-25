@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Observable, Subject, of, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map, of, take, takeUntil } from 'rxjs';
 import { Campaign } from 'src/app/interfaces/campaign';
 import { CampaignSection } from 'src/app/interfaces/campaign-section';
 import { StoreService } from 'src/app/services/store.service';
@@ -15,10 +15,15 @@ import { StoreService } from 'src/app/services/store.service';
         [section]="section"
         (selected)="sectionSelected($event)"
         [ngClass]="{'bg-light-bg-selected dark:bg-dark-input-bg-selected': selected?.id == section.id}"
-        if></campaign-section>
+        (deleteClicked)="sectionDeleted()"
+      ></campaign-section>
     </div>
     <div class="grow-0 flex flex-row">
-      <campaign-section-create-button [campaign]="campaign" (newSectionEvent)="addNewSection()"></campaign-section-create-button>
+      <campaign-section-create-button
+        *ngIf="campaign.id"
+        [campaign]="campaign"
+        (newSectionEvent)="addNewSection()"
+      ></campaign-section-create-button>
     </div>
   </div>
   `,
@@ -27,7 +32,7 @@ import { StoreService } from 'src/app/services/store.service';
 export class SectionListComponent implements OnInit, OnDestroy {
   @Input() campaign!: Campaign;
   @Output() section = new EventEmitter<CampaignSection>();
-  sections$!: Observable<CampaignSection[]>;
+  sections$ = new BehaviorSubject<CampaignSection[]>([]);
 
   selected: CampaignSection | undefined;
 
@@ -36,7 +41,17 @@ export class SectionListComponent implements OnInit, OnDestroy {
   constructor(private store: StoreService) {}
 
   ngOnInit(): void {
-    this.sections$ = this.store.getSections(this.campaign);
+    this.store.getSections(this.campaign).pipe(
+      map(sections => this.sections$.next(sections)),
+      take(1)
+    ).subscribe();
+  }
+
+  sectionDeleted() {
+    this.store.getSections(this.campaign).pipe(
+      map(sections => this.sections$.next(sections)),
+      take(1)
+    ).subscribe();
   }
   
   ngOnDestroy(): void {
@@ -45,9 +60,9 @@ export class SectionListComponent implements OnInit, OnDestroy {
   }
 
   addNewSection() {
-    this.sections$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(s => this.sections$ = of([...s, ...[{name:'', campaign_id: this.campaign.id} as CampaignSection]]))
+    let sections = this.sections$.value;
+    sections = [...sections, ...[{campaign_id: this.campaign.id, name: ""} as CampaignSection]];
+    this.sections$.next(sections);
   }
 
   sectionSelected(section: CampaignSection): void {

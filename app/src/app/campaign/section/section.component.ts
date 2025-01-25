@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subject, take, tap } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinct, distinctUntilChanged, filter, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { CampaignSection } from 'src/app/interfaces/campaign-section';
 import { ConfirmDialogComponent, ConfirmDialogInterface } from 'src/app/misc/dialogs/confirm-dialog/confirm-dialog.component';
 import { ModalService } from 'src/app/services/modal.service';
@@ -11,29 +11,25 @@ import { StoreService } from 'src/app/services/store.service';
   <div class="flex flex-row w-full" (click)="clicked()">
     <cInput
       class="grow m-2"
-      *ngIf="editing; else display"
-      [(value)]="section.name"
-      placeholder="Section Title"></cInput>
-    <ng-template #display>
-      <div class="grow dark:text-white p-2 m-2 cursor-pointer"
-        (dblclick)="editing = !editing">
-        {{section.name}}
-      </div>
-    </ng-template>
-    <delete-button (click)="onDeleteClicked()" title="Delete Section"></delete-button>
+      [value]="section.name"
+      (valueChange)="title$.next($event)"
+      placeholder="Section Title"
+      title="Section Title"></cInput>
+    <delete-button *ngIf="section.id" (click)="onDeleteClicked()" title="Delete Section"></delete-button>
   </div>
   `,
   styles: []
 })
-export class SectionComponent implements OnInit {
+export class SectionComponent implements OnInit, OnDestroy {
   @Input() section!: CampaignSection;
   @Input() index!: number;
   @Output() sectionChange = new EventEmitter<CampaignSection>();
   @Output() selected = new EventEmitter<CampaignSection>();
   @Output() deleteClicked = new EventEmitter<number>();
 
-  editing = false;
-  dirty = false;
+  title$ = new BehaviorSubject<string>('');
+
+  destroy$ = new Subject<void>();
 
   constructor(
     private store: StoreService,
@@ -41,16 +37,24 @@ export class SectionComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
-    if (this.section && this.section.name == "") {
-      this.editing = true;
+    if (this.section.id) {
+      this.title$.next(this.section.name);
     }
+    this.title$.pipe(
+      debounceTime(450),
+      distinctUntilChanged(),
+      filter(title => title != ""),
+      switchMap(title => {
+        this.section.name = title;
+        return this.store.saveSection(this.section);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(s => this.section = s);
   }
 
-  onSaveClicked(): void {
-    this.store.saveSection(this.section).pipe(
-      tap(s => s?.id ? this.store.saveCampaignEntry({section_id: s.id, title: '', text: ''}) : undefined),
-      take(1)
-    ).subscribe(s => {this.section = s; this.selected.emit(this.section);});
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   clicked(): void {
@@ -63,6 +67,7 @@ export class SectionComponent implements OnInit {
         message: "Are you sure you want to delete this section?\nThis will delete all entries as well.",
         confirm: true,
         yes: () => this.store.deleteSection(this.section).pipe(
+          tap(_ => this.deleteClicked.emit(this.index)),
           take(1)
         ).subscribe(s => this.modal.close()),
         no: () => this.modal.close(),
@@ -75,6 +80,5 @@ export class SectionComponent implements OnInit {
         data: data
       });
     }
-    this.deleteClicked.emit(this.index);
   }
 }

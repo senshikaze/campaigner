@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { Campaign } from 'src/app/interfaces/campaign';
 import { CampaignSection } from 'src/app/interfaces/campaign-section';
 import { StoreService } from 'src/app/services/store.service';
@@ -14,37 +15,63 @@ import { StoreService } from 'src/app/services/store.service';
             <cInput
               class="grow m-2"
               styleClass="w-full"
-              [(value)]="campaign.name"
+              [value]="campaign.name"
+              (valueChange)="title$.next($event)"
               title="Campaign Title"
               placeholder="Campaign Title"></cInput>
           </div>
-          <div class="mb-2 flex">
-            <save-button (click)="onSaveClicked(campaign)" title="Save Campaign"></save-button>
-          </div>
       </div>
-      <campaign-section-list class="grow flex overflow-hidden" [campaign]="campaign" (section)="sectionSelected($event)"></campaign-section-list>
+      <campaign-section-list
+        class="grow flex overflow-hidden"
+        [campaign]="campaign"
+        (section)="sectionSelected($event)"
+      ></campaign-section-list>
     </div>
-    <campaign-entries class="grow flex flex-row" *ngIf="selectedSection" [section]="selectedSection"></campaign-entries>
+    @if (selectedSection) {
+    <campaign-entry
+      class="grow flex flex-row"
+      [section]="selectedSection"
+    ></campaign-entry>
+    }
   </div>
   `,
   styles: []
 })
-export class CampaignSectionsComponent {
+export class CampaignSectionsComponent implements OnInit, OnDestroy {
   @Input() campaign!: Campaign;
   selectedSection!: CampaignSection;
 
-  constructor(private store: StoreService, private router: Router) {}
+  title$ = new BehaviorSubject<string>('');
+
+  destroy$ = new Subject<void>();
+
+  constructor(
+    private store: StoreService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    if (this.campaign.id) {
+      this.title$.next(this.campaign.name);
+    }
+    this.title$.pipe(
+      debounceTime(450),
+      distinctUntilChanged(),
+      filter(title => title != ""),
+      switchMap(title => {
+        this.campaign.name = title;
+        return this.store.saveCampaign(this.campaign);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(c => this.campaign = c);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   sectionSelected(section: CampaignSection): void {
     this.selectedSection = section;
-  }
-
-  onSaveClicked(campaign: Campaign): void {
-    this.store.saveCampaign(campaign).subscribe(c =>{
-      if (campaign.id != c.id) {
-        this.router.navigate(["/campaigns", c.id]);
-      }
-      this.campaign = c
-    });
   }
 }
