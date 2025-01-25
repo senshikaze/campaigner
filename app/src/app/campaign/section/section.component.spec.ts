@@ -7,6 +7,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MockComponents } from 'ng-mocks';
 import { SaveButtonComponent } from 'src/app/misc/save-button/save-button.component';
 import { DeleteButtonComponent } from 'src/app/misc/delete-button/delete-button.component';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 
 describe('SectionComponent', () => {
   let component: SectionComponent;
@@ -17,11 +19,16 @@ describe('SectionComponent', () => {
     storeSpy = jasmine.createSpyObj('StoreService', ['getSection']);
     await TestBed.configureTestingModule({
       imports: [
-        FormsModule, ReactiveFormsModule
+        FormsModule,
+        ReactiveFormsModule,
       ],
       declarations: [
         SectionComponent,
-        MockComponents(SaveButtonComponent, DeleteButtonComponent)
+        MockComponents(
+          SaveButtonComponent,
+          DeleteButtonComponent,
+          SectionComponent
+        )
       ],
       providers: [
         { provide: StoreService, useValue: storeSpy}

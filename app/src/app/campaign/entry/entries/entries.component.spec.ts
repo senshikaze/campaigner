@@ -5,6 +5,7 @@ import { StoreService } from 'src/app/services/store.service';
 import { CreateEntryButtonComponent } from '../create-button/create-entry-button.component';
 import { MockComponents } from 'ng-mocks';
 import { DeleteButtonComponent } from 'src/app/misc/delete-button/delete-button.component';
+import { EntryComponent } from '../entry.component';
 
 describe('EntriesComponent', () => {
   let component: EntriesComponent;
@@ -16,7 +17,7 @@ describe('EntriesComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         EntriesComponent,
-        MockComponents(CreateEntryButtonComponent),
+        MockComponents(CreateEntryButtonComponent, EntryComponent),
       ],
       providers: [
         { provide: StoreService, useValue: storeSpy },

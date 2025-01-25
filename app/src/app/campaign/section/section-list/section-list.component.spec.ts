@@ -4,6 +4,8 @@ import { SectionListComponent } from './section-list.component';
 import { CreateSectionButtonComponent } from '../create-section-button/create-section-button.component';
 import { StoreService } from 'src/app/services/store.service';
 import { MockComponents } from 'ng-mocks';
+import { of } from 'rxjs';
+import { Campaign } from 'src/app/interfaces/campaign';
 
 describe('SectionListComponent', () => {
   let component: SectionListComponent;
@@ -12,6 +14,7 @@ describe('SectionListComponent', () => {
 
   beforeEach(async () => {
     storeSpy = jasmine.createSpyObj('StoreService', ['getSections']);
+    storeSpy.getSections.and.returnValue(of());
     await TestBed.configureTestingModule({
       declarations: [
         SectionListComponent,
@@ -25,6 +28,9 @@ describe('SectionListComponent', () => {
 
     fixture = TestBed.createComponent(SectionListComponent);
     component = fixture.componentInstance;
+    component.campaign = {
+      name: "test"
+    } as Campaign;
     fixture.detectChanges();
   });
 

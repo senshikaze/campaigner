@@ -15,7 +15,9 @@ import { StoreService } from 'src/app/services/store.service';
       (valueChange)="title$.next($event)"
       placeholder="Section Title"
       title="Section Title"></cInput>
-    <delete-button *ngIf="section.id" (click)="onDeleteClicked()" title="Delete Section"></delete-button>
+    @if(section.id) {
+    <delete-button (click)="onDeleteClicked()" title="Delete Section"></delete-button>
+    }
   </div>
   `,
   styles: []
