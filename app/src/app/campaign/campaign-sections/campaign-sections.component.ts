@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, filter, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { Campaign } from 'src/app/interfaces/campaign';
 import { CampaignSection } from 'src/app/interfaces/campaign-section';
 import { StoreService } from 'src/app/services/store.service';
@@ -7,48 +8,70 @@ import { StoreService } from 'src/app/services/store.service';
 @Component({
   selector: 'campaign-sections',
   template: `
-  <div class="overflow-y-scroll grid grid-flow-col grid-cols-12 grow">
-    <div class="grow col-span-2 flex flex-col border-r-2 border-slate-700">
-      <div class="flex border-b-2 border-slate-700">
+  <div class="grow flex flex-row h-screen">
+    <div class="grow-0 flex flex-col h-full">
+      <div class="flex">
           <div class="mb-2 flex flex-auto">
-              <input
-                  class="grow text-white p-2 m-2 rounded-md placeholder:text-slate-400 bg-dark-input-bg"
-                  [(ngModel)]="campaign.name"
-                  i18n-title title="Campaign Title" 
-                  i18n-placeholder placeholder="Campaign Title"/>
-          </div>
-          <div class="mb-2 flex">
-              <button
-                  class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
-                  (click)="onSaveClicked(campaign)"
-                  i18n i18n-title title="Save Campaign">
-                  <img class="w-[28px] h-[28px]" src="assets/save-white.png" i18n-title title="Save Campaign" alt="Save Campaign"/>
-              </button>
+            <cInput
+              class="grow m-2"
+              styleClass="w-full"
+              [value]="campaign.name"
+              (valueChange)="title$.next($event)"
+              title="Campaign Title"
+              placeholder="Campaign Title"></cInput>
           </div>
       </div>
-      <campaign-section-list class="grow" [campaign]="campaign" (section)="sectionSelected($event)"></campaign-section-list>
+      <campaign-section-list
+        class="grow flex overflow-hidden"
+        [campaign]="campaign"
+        (section)="sectionSelected($event)"
+      ></campaign-section-list>
     </div>
-    <campaign-entries class="col-span-10 col-start-3 flex flex-row" *ngIf="selectedSection" [section]="selectedSection"></campaign-entries>
+    @if (selectedSection) {
+    <campaign-entry
+      class="grow flex flex-row"
+      [section]="selectedSection"
+    ></campaign-entry>
+    }
   </div>
   `,
   styles: []
 })
-export class CampaignSectionsComponent {
+export class CampaignSectionsComponent implements OnInit, OnDestroy {
   @Input() campaign!: Campaign;
   selectedSection!: CampaignSection;
 
-  constructor(private store: StoreService, private router: Router) {}
+  title$ = new BehaviorSubject<string>('');
+
+  destroy$ = new Subject<void>();
+
+  constructor(
+    private store: StoreService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    if (this.campaign.id) {
+      this.title$.next(this.campaign.name);
+    }
+    this.title$.pipe(
+      debounceTime(450),
+      distinctUntilChanged(),
+      filter(title => title != ""),
+      switchMap(title => {
+        this.campaign.name = title;
+        return this.store.saveCampaign(this.campaign);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(c => this.campaign = c);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   sectionSelected(section: CampaignSection): void {
     this.selectedSection = section;
-  }
-
-  onSaveClicked(campaign: Campaign): void {
-    this.store.saveCampaign(campaign).subscribe(c =>{
-      if (campaign.id != c.id) {
-        this.router.navigate(["/campaigns", c.id]);
-      }
-      this.campaign = c
-    });
   }
 }

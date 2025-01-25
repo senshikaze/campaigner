@@ -1,44 +1,35 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Modal, ModalService } from 'src/app/services/modal.service';
+import { CloseButtonComponent } from '../close-button/close-button.component';
+import { DynamicDirective } from '../directives/dynamic.directive';
+import { Dialog } from 'src/app/interfaces/dialog';
 
 @Component({
-  selector: 'app-modal',
+  selector: 'modal',
+  standalone: true,
+  imports: [
+    CloseButtonComponent,
+    DynamicDirective,
+  ],
   template: `
-    <div *ngIf="modal" class="wrapper bg-slate-700/75 h-screen w-screen z-50 absolute top-0 left-0 flex items-center justify-center" [class.hidden]="!open" (click)="modalClose()">
-      <div class="modal border-2 bg-dark-bg border-dark-bg w-1/2 h-1/3 flex flex-col min-h-[13rem]" (click)="$event.stopPropagation()">
-        <div class="header border-b-2 border-slate-700 flex p-2 items-center">
-          <h2 class="grow text-2xl font-bold px-4" *ngIf="modal.header">{{modal.header}}</h2>
-          <button
-            *ngIf="modal.closable"
-            class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
-            (click)="modalClose()"
-            i18n i18n-title title="Close">
-            <img class="w-[28px] h-[28px]" src="assets/close-white.png" i18n-title title="Close" alt="Close"/>
-          </button>
+    <div
+      class="wrapper bg-slate-500/85 dark:bg-slate-700/85 h-screen w-screen z-50 absolute top-0 left-0 flex items-center justify-center py-2"
+      [class.hidden]="!open"
+      (click)="modalClose()">
+      <div
+        class="modal border-2 w-3/4 min-h-40 max-h-full rounded-md flex flex-col bg-light-bg dark:bg-dark-bg border-light-bg dark:border-dark-bg"
+        (click)="$event.stopPropagation()">
+        <div class="header border-b-2 border-slate-400 dark:border-slate-700 flex p-2 items-center">
+          @if (modal && modal.header) {
+          <h2 class="grow text-2xl font-bold px-4">{{modal.header}}</h2>
+          }
+          @if (modal && modal.closable) {
+          <close-button  (click)="modalClose()" title="Close"></close-button>
+          }
         </div>
-        <div class="body grow p-2 flex-shrink-0">
-          <p class="px-4 py-2">{{modal.message}}</p>
-        </div>
-        <div class="actions flex p-2">
-          <span *ngIf="modal.confirm; else ok" class="confirm grow flex justify-end">
-            <button
-              class="p-2 m-2 w-12 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
-              (click)="onYesClicked()"
-              i18n i18n-title title="Yes">Yes</button>
-            <button
-              class="p-2 m-2 w-12 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
-              (click)="modalClose()"
-              i18n i18n-title title="No">No</button>
-          </span>
-          <ng-template #ok>
-            <span class="ok grow flex justify-end">
-              <button
-                class="p-2 m-2 rounded-md text-white bg-dark-action hover:bg-dark-action-hover"
-                (click)="modalClose()"
-                i18n i18n-title title="Ok">Ok</button>
-            </span>
-          </ng-template>
+        <div class="max-h-full min-h-0 overflow-auto">
+          <ng-template dynamicDirective></ng-template>
         </div>
       </div>
     </div>
@@ -46,17 +37,22 @@ import { Modal, ModalService } from 'src/app/services/modal.service';
   styles: []
 })
 export class ModalComponent implements OnInit, OnDestroy {
+  @ViewChild(DynamicDirective, {static: true}) private dynamicHost!: DynamicDirective;
   modal!: Modal;
   open = false;
 
   serviceRef$!: Subscription;
 
-  constructor(private modalService: ModalService) {}
+  constructor(
+    private modalService: ModalService,
+  ) {}
 
   ngOnInit(): void {
     this.serviceRef$ = this.modalService.openModal.subscribe(m => {
       this.modal = m;
       this.open = true;
+      this.modalService.closeModal.subscribe(c => this.modalClose());
+      this.loadComponent();
     })
   }
 
@@ -73,10 +69,14 @@ export class ModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  onYesClicked() {
-    this.open = false;
-    if (this.modal.yes) {
-      this.modal.yes();
+  loadComponent(): void {
+    if (this.modal) {
+      const viewRef = this.dynamicHost.viewContainerRef;
+      viewRef.clear();
+
+      const componentRef = viewRef.createComponent<Dialog>(this.modal.component);
+      componentRef.instance.data = this.modal.data;
     }
   }
+
 }

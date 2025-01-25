@@ -5,34 +5,33 @@ import { AlmanacEntry } from 'src/app/interfaces/almanac-entry';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
-  selector: 'app-almanac-form',
+  selector: 'almanac-form',
   template: `
   <form [formGroup]="almanacForm" (ngSubmit)="onSave()">
     <div class="flex flex-col m-2">
-      <input
-        type="text"
-        class="grow text-stone-900 m-2 p-2 rounded-md placeholder:text-slate-400 bg-dark-input-bg"
+      <cInput
+        class="grow"
         formControlName="name"
         placeholder="Entry Name"
-        i18n i18n-title title="Almanac Entry Name"
-        [ngClass]="{'border-2 border-dark-accent-red': this.almanacForm.dirty && this.almanacForm.get('name')?.invalid}">
+        title="Almanac Entry Name"
+        [invalid]="this.almanacForm.dirty && (this.almanacForm.get('name')?.invalid ?? false)"></cInput>
       <select
-        class="grow text-stone-900 m-2 p-2 rounded-md placeholder:text-slate-400 bg-dark-input-bg"
+        class="grow dark:text-stone-900 m-2 p-2 rounded-md dark:placeholder:text-slate-400 dark:bg-dark-input-bg"
         formControlName="type"
         i18n i18n-title title="Almanac Entry Type"
-        [ngClass]="{'border-2 border-dark-accent-red': this.almanacForm.dirty && this.almanacForm.get('type')?.invalid}">
+        [ngClass]="{'border-2 border-light-accent-red dark:border-dark-accent-red': this.almanacForm.dirty && this.almanacForm.get('type')?.invalid}">
         <option *ngFor="let aType of almanacTypes">{{aType}}</option>
       </select>
       <textarea
-        class="grow text-stone-900 m-2 p-2 rounded-md placeholder:text-slate-400 bg-dark-input-bg"
+        class="grow dark:text-stone-900 m-2 p-2 rounded-md dark:placeholder:text-slate-400 dark:bg-dark-input-bg bg-light-input-bg"
         placeholder="Entry Description"
         formControlName="description"
         i18n i18n-title title="Almanac Entry Description"
-        [ngClass]="{'border-2 border-dark-accent-red': this.almanacForm.dirty && this.almanacForm.get('description')?.invalid}"></textarea>
+        [ngClass]="{'border-2 border-light-accent-red dark:border-dark-accent-red': this.almanacForm.dirty && this.almanacForm.get('description')?.invalid}"></textarea>
       <p *ngIf="!this.almanacForm.valid">{{this.almanacForm.errors}}</p>
       <button
         type="submit"
-        class="p-2 m-2 rounded-md bg-dark-action hover:bg-dark-action-hover inline-block cursor-pointer"
+        class="p-2 m-2 rounded-md bg-light-action dark:bg-dark-action hover:bg-light-action-hover dark:hover:bg-dark-action-hover inline-block cursor-pointer"
         i18n i18n-title title="Save Entry">
           Save
       </button>

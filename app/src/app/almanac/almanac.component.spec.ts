@@ -4,6 +4,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AlmanacComponent } from './almanac.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StoreService } from '../services/store.service';
+import { MockComponents } from 'ng-mocks';
+import { AddButtonComponent } from '../misc/add-button/add-button.component';
+import { InputComponent } from '../misc/input/input.component';
 
 describe('AlmanacComponent', () => {
   let component: AlmanacComponent;
@@ -15,6 +18,7 @@ describe('AlmanacComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ 
         AlmanacComponent,
+        MockComponents(AddButtonComponent, InputComponent),
       ],
       imports: [
         FormsModule,

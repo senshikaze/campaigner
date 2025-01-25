@@ -9,9 +9,9 @@ import { Campaign } from 'src/app/interfaces/campaign';
 import { StoreService } from 'src/app/services/store.service';
 
 @Component({
-  selector: 'app-almanac-entry',
+  selector: 'almanac-entry',
   template: `
-    <app-almanac-form *ngIf="entry$ | async as entry" [entry]="entry" (saveEvent)="onSave(entry)"></app-almanac-form>
+    <almanac-form *ngIf="entry$ | async as entry" [entry]="entry" (saveEvent)="onSave(entry)"></almanac-form>
   `,
   styles: []
 })

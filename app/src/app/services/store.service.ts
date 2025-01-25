@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { filter, forkJoin, from, map, Observable, of, switchMap } from 'rxjs';
-import { v4 as uuid} from 'uuid';
+import { forkJoin, from, map, Observable, of } from 'rxjs';
+import { Collection, liveQuery } from 'dexie';
+import { DBService } from './db.service';
 
 import { Campaign } from '../interfaces/campaign';
 import { AlmanacEntry } from '../interfaces/almanac-entry';
@@ -8,8 +9,10 @@ import { CampaignSection } from '../interfaces/campaign-section';
 import { CampaignEntry } from '../interfaces/campaign-entry';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { liveQuery } from 'dexie';
-import { DBService } from './db.service';
+import { Battle } from '../interfaces/battle';
+import { EntityType } from '../enums/entity-type';
+import { Entity } from '../interfaces/entity';
+
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +25,7 @@ export class StoreService {
   ) { }
 
   /** 
-   * HTTP Methods
+   * CRUD Methods
    */
   delete<T>(url: string): Observable<T> {
     // TODO error handling, login for auth0
@@ -111,6 +114,61 @@ export class StoreService {
   }
 
   /**
+   * Generic entity methods
+   */
+  deleteEntity(entity: Entity): Observable<void> {
+    if (!entity.id) {
+      return of();
+    }
+    return from(this.db.entitiesTable.delete(entity.id))
+  }
+
+  getEntity(id: number): Observable<Entity | undefined> {
+    return from(liveQuery(() => this.db.entitiesTable.where({id: id}).first()));
+  }
+
+  // TODO get entities with filtering
+
+  saveEntity(entity: Entity): Observable<Entity> {
+    return from(this.db.entitiesTable.put(entity, entity.id)).pipe(
+      map(id => {entity.id = id; return entity;})
+    );
+  }
+
+  /**
+   * Battle methods
+   */
+  deleteBattle(battle: Battle): Observable<void> {
+    if (!battle.id) {
+      return of(); 
+    }
+    return from(this.db.battleTable.delete(battle.id));
+  }
+
+  getBattle(id: number): Observable<Battle | undefined> {
+    return from(liveQuery(() => this.db.battleTable.where({id: id}).first()));
+  }
+
+  getBattles(): Observable<Battle[]> {
+    return from(liveQuery(() => this.db.battleTable.toArray()));
+  }
+
+  saveBattle(battle: Battle): Observable<Battle> {
+    return from(this.db.battleTable.put(battle, battle.id)).pipe(
+      map(id => {battle.id = id; return battle;})
+    );
+  }
+
+  getBattleEntities(battle: Battle): Observable<Entity[]> {
+    if (battle.id === undefined) {
+      return of([]);
+    }
+    return from(liveQuery(() => 
+      this.db.entitiesTable.where({battle_id: battle.id}).toArray()
+    ));
+  }
+
+  /**
    * Campaign methods
    */
   /**
@@ -142,7 +200,7 @@ export class StoreService {
    */
   getCampaigns(): Observable<Campaign[]> {
     //return this.get<Campaign[]>('campaigns/');
-    return from(liveQuery(() => this.db.campaignTable.toArray()))
+    return from(liveQuery(() => this.db.campaignTable.toArray()));
   }
 
   /**
@@ -177,6 +235,13 @@ export class StoreService {
       map(id => Object.assign(entry, {id: id}))
     );
     //return this.post<CampaignEntry>(`entries`, entry);
+  }
+
+  /** 
+   * Campaign Sections as Collection
+  */
+  getCampaignSectionsCollection(campaign: Campaign): Collection {
+    return this.db.campaignSectionTable.where({campaign_id: campaign.id});
   }
 
   /**

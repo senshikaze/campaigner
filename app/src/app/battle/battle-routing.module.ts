@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { BattleComponent } from './battle.component';
+import { BattleListComponent } from './battle-list.component';
 
 
 const routes: Routes = [
-    {path: "", component: BattleComponent}
+    {path: "", component: BattleListComponent},
+    {path: ":id", component: BattleComponent}
 ];
 
 @NgModule({

@@ -1,18 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject, Subscription, map, of, takeUntil, timer } from 'rxjs';
-import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, Subject, of } from 'rxjs';
 
 import { Campaign } from '../interfaces/campaign';
-import { CampaignEntry } from '../interfaces/campaign-entry';
 import { StoreService } from '../services/store.service';
 import { CampaignSection } from '../interfaces/campaign-section';
 
 @Component({
   selector: 'campaign',
   template: `
-  <div class="flex flex-col grow p-2 h-full">
-    <campaign-sections class="overflow-y-scroll grid grow" *ngIf="campaign$ | async as campaign" [campaign]="campaign"></campaign-sections>
+  <div class="flex flex-col grow h-screen max-h-screen">
+    <campaign-sections class="grow flex" *ngIf="campaign$ | async as campaign" [campaign]="campaign"></campaign-sections>
   </div>
   `,
   styles: []
