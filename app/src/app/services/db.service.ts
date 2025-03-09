@@ -7,6 +7,8 @@ import { AlmanacEntry } from '../interfaces/almanac-entry';
 import { Battle } from '../interfaces/battle';
 import { Entity } from '../interfaces/entity';
 import { State } from '../interfaces/state';
+import { Player } from '../interfaces/player';
+import { Party } from '../interfaces/party';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +24,10 @@ export class DBService extends Dexie {
   campaignEntryTable!: Table<CampaignEntry, number>;
   // Entities
   entitiesTable!: Table<Entity, number>;
+  // Parties
+  partiesTable!: Table<Party, number>;
+  // Player
+  playersTable!: Table<Player, number>;
   // State
   stateTable!: Table<State>
 
@@ -33,7 +39,9 @@ export class DBService extends Dexie {
       campaignTable: "++id",
       campaignSectionTable: "++id, campaign_id",
       campaignEntryTable: "++id, section_id",
-      entitiesTable: "++id, campaign_id, battle_id",
+      entitiesTable: "++id, campaign_id, battle_id, type",
+      partiesTable: "++id, campaign_id",
+      playersTable: "++id, campaign_id, battle_id, party_id, type",
       stateTable: "++id, variable",
     });
   }

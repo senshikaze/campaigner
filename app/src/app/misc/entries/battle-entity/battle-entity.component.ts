@@ -107,7 +107,7 @@ export class BattleEntityComponent implements OnInit {
     if (!this.entity && this.battle) {
       this.entity = {
         name: "",
-        type: EntityType.BATTLE,
+        type: EntityType.NPC,
         description: "",
         notes: "",
         total_health: 0,

@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MarkdownModule, MarkdownService } from 'ngx-markdown';
 import { ViewInt } from '../view-int';
 import { DiceRollerService } from 'src/app/services/dice-roller.service';
-import { EntityType } from 'src/app/enums/entity-type';
+import { EntityType, hasStats } from 'src/app/enums/entity-type';
 import { renderDiceRoll, renderRollStatModifier, renderStat, renderStatsBlock } from './renderers';
 import { Entity } from 'src/app/interfaces/entity';
 import { keyToStat, scoreToModifier } from 'src/app/enums/stats';
@@ -77,7 +77,7 @@ export class TextboxComponent extends ViewInt implements OnInit {
         // stat block
         text.match(/\$stats/i)
           ?.map(text => {
-            if (this.entity.type === EntityType.BATTLE) {
+            if (hasStats(this.entity.type)) {
               rendered = rendered.replace(text, renderStatsBlock(this.entity))
               }
           });
@@ -85,7 +85,7 @@ export class TextboxComponent extends ViewInt implements OnInit {
         let statMatch = text.match(/\$(str|dex|con|int|wis|cha|ac|speed)/i);
         if (statMatch) {
           let stat = statMatch[1];
-          if (this.entity.type === EntityType.BATTLE && stat !== undefined) {
+          if (hasStats(this.entity.type) && stat !== undefined) {
             rendered = rendered.replace(text, renderStat(this.entity, stat));
           }
         }
@@ -93,7 +93,7 @@ export class TextboxComponent extends ViewInt implements OnInit {
         let statRoll = text.match(/\$atk(\w*)/);
         if (statRoll) {
           let stat = keyToStat(statRoll[1]);
-          if (this.entity.type === EntityType.BATTLE && stat !== undefined) {
+          if (hasStats(this.entity.type) && stat !== undefined) {
             let modifier = scoreToModifier(this.entity.stats?.[stat as keyof typeof this.entity.stats] ?? 0);
             rendered = rendered.replace(statRoll[0], renderRollStatModifier(this.entity, "1d20", modifier, "Attack"));
           }

@@ -66,7 +66,7 @@ export class BattleEntitiesComponent implements OnInit, OnChanges {
       let entities = this.entities$.getValue();
       let data: BattleEntityDialogInterface = {
         entity: {
-          type: EntityType.BATTLE,
+          type: EntityType.NPC,
           name: "",
           description: "",
           notes: "",
