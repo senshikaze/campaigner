@@ -14,6 +14,7 @@ import { Component } from '@angular/core';
         <dice-roller class="absolute bottom-1 right-1"></dice-roller>
       </main>
       <modal></modal>
+      <toast></toast>
     </div>
   </div>
   `

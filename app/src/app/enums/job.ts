@@ -1,0 +1,15 @@
+export enum Job {
+    BARBARIAN,
+    BARD,
+    CLERIC,
+    CUSTOM,
+    DRUID,
+    FIGHTER,
+    MONK,
+    PALADIN,
+    RANGER,
+    ROGUE,
+    SORCERER,
+    WARLOCK,
+    WIZARD,
+}

@@ -12,6 +12,10 @@ import { environment } from 'src/environments/environment';
 import { Battle } from '../interfaces/battle';
 import { EntityType } from '../enums/entity-type';
 import { Entity } from '../interfaces/entity';
+import { RaceInfo } from '../interfaces/race-info';
+import { JobInfo } from '../interfaces/job-info';
+import { Race } from '../enums/race';
+import { Job } from '../enums/job';
 
 
 @Injectable({
@@ -275,7 +279,7 @@ export class StoreService {
       return of([]);
     }
     return from(liveQuery(() => this.db.campaignEntryTable.where({section_id: section.id}).toArray()));
-    //return this.get<CampaignEntry[]>(`sections/${section.id}/entries`);
+
   }
 
   /**
@@ -288,7 +292,6 @@ export class StoreService {
       return of([]);
     }
     return from(liveQuery(() => this.db.campaignSectionTable.toArray()));
-    //return this.get<CampaignSection[]>(`campaigns/${campaign.id}/sections`);
   }
 
   /**
@@ -299,6 +302,74 @@ export class StoreService {
     return from(this.db.campaignSectionTable.put(section, section.id)).pipe(
       map(id => {section.id = id; return section})
     );
-    //return this.post<CampaignSection>(`sections`, section);
+  }
+
+  /**
+   * Internal and SRD objects
+   */
+  /**
+   * Character Races
+   */
+
+  /**
+   * Get all Races
+   * @returns 
+   */
+  getRaces(): Observable<RaceInfo[]> {
+    return from(liveQuery(() => this.db.racesTable.toArray()));
+  }
+
+  /**
+   * Find Races of a certian type
+   * 
+   * @param race 
+   * @returns 
+   */
+  filterRaces(race: Race): Observable<RaceInfo[]> {
+    return from(liveQuery(() => this.db.racesTable.where({race: race}).toArray()));
+  }
+  
+  /**
+   * Save (or create) Race to store
+   * @param race 
+   * @returns 
+   */
+  saveRace(race: RaceInfo): Observable<RaceInfo> {
+    return from(this.db.racesTable.put(race, race.id)).pipe(
+      map(id => {race.id = id; return race;})
+    );
+  }
+
+  /**
+   * Character Classes
+   *  (known as Jobs to avoid name conflict)
+   */
+
+  /**
+   * Get all jobs
+   * @returns 
+   */
+  getJobs(): Observable<JobInfo[]> {
+    return from(this.db.jobsTable.toArray());
+  }
+
+  /**
+   * Find Jobs of a certain type
+   * @param job
+   * @returns
+   */
+  filterJobs(job: Job): Observable<JobInfo[]> {
+    return from(liveQuery(() => this.db.jobsTable.where({job: job}).toArray()));
+  }
+
+  /**
+   * Save (or create) Job to store
+   * @param job 
+   * @returns 
+   */
+  saveJob(job: JobInfo): Observable<JobInfo> {
+    return from(this.db.jobsTable.put(job, job.id)).pipe(
+      map(id => {job.id = id; return job})
+    );
   }
 }

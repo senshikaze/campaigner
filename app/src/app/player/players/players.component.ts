@@ -3,8 +3,7 @@ import { AddButtonComponent } from 'src/app/misc/add-button/add-button.component
 import { PartiesComponent } from "../parties/parties.component";
 import { Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { DeleteButtonComponent } from 'src/app/misc/delete-button/delete-button.component';
+import { Router, RouterLink } from '@angular/router';
 import { StoreService } from 'src/app/services/store.service';
 import { Player } from 'src/app/interfaces/player';
 
@@ -13,9 +12,7 @@ import { Player } from 'src/app/interfaces/player';
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     AddButtonComponent,
-    DeleteButtonComponent,
     PartiesComponent,
 ],
   template: `
@@ -34,24 +31,11 @@ import { Player } from 'src/app/interfaces/player';
         <table class="grow border-collapse table-auto">
           <tr class="bg-light-zebra-odd dark:bg-dark-zebra-odd">
             <th class="p-2 text-left text-xl">Name</th>
-            <th class="p-2 text-left text-xl">Sections</th>
+            <th class="p-2 text-left text-xl">Campaign</th>
             <th class="p-2 text-left"></th>
           </tr>
           @for (player of players$ | async; track player.id) {
-          <tr class="odd:bg-light-zebra-odd dark:odd:bg-dark-zebra-odd even:bg-light-zebra-even dark:even:bg-dark-zebra-even">
-            <td class="w-2/3">
-              <a
-                class="p-2 block text-lg hover:font-bold"
-                [routerLink]="['/players/', player.id]"
-                [state]="player"
-                [title]="player.name"
-              >{{player.name}}</a>
-            </td>
-            <td class="p-2"></td>
-            <td class="p-2">
-              <delete-button (click)="onPlayerDeleteClicked(player)" title="Delete Player"></delete-button>
-            </td>
-          </tr>
+          <tr player-list-row></tr>
           }
         </table>
       </div>
@@ -65,6 +49,7 @@ export class PlayersComponent implements OnInit {
 
   constructor(
     private store: StoreService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -72,10 +57,6 @@ export class PlayersComponent implements OnInit {
   }
 
   onPlayerCreateClicked(): void {
-
-  }
-
-  onPlayerDeleteClicked(player: Player): void {
-
+    this.router.navigate(["players", "add"]);
   }
 }

@@ -6,6 +6,7 @@ import { PartiesComponent } from './player/parties/parties.component';
 import { PartyComponent } from './player/parties/party/party.component';
 import { PlayersComponent } from './player/players/players.component';
 import { PlayerComponent } from './player/players/player/player.component';
+import { AddPlayerComponent } from './player/players/player/add-player/add-player.component';
 
 
 const routes: Routes = [
@@ -14,7 +15,6 @@ const routes: Routes = [
   { path: "campaign", loadChildren: () => import("./campaign/campaign.module").then(m => m.CampaignModule)},
   {
     path: "players",
-    component: PlayersComponent,
     children: [
       {
         path: "parties",
@@ -23,8 +23,10 @@ const routes: Routes = [
           { path: ':id', component: PartyComponent }
         ]
       },
-      { path: ':id', component: PlayerComponent }
-    ]
+      { path: 'add', component: AddPlayerComponent},
+      { path: ':id', component: PlayerComponent },
+      { path: '', component: PlayersComponent },
+    ],
   },
   { path: "", redirectTo: "/campaign", pathMatch: "full"},
   { path: "**", component: NotfoundComponent}

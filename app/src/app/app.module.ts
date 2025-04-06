@@ -12,6 +12,7 @@ import { ModalComponent } from './misc/modal/modal.component';
 import { MARKED_OPTIONS, MarkdownModule } from 'ngx-markdown';
 import { CloseButtonComponent } from './misc/close-button/close-button.component';
 import { DiceRollerComponent } from './misc/dice-roller/dice-roller.component';
+import { ToastComponent } from "./misc/toast/toast.component";
 
 @NgModule({
   declarations: [
@@ -29,16 +30,17 @@ import { DiceRollerComponent } from './misc/dice-roller/dice-roller.component';
     DiceRollerComponent,
     ModalComponent,
     MarkdownModule.forRoot({
-      markedOptions: {
-        provide: MARKED_OPTIONS,
-        useValue: {
-          gfm: true,
-          breaks: true,
-          sanitize: false,
+        markedOptions: {
+            provide: MARKED_OPTIONS,
+            useValue: {
+                gfm: true,
+                breaks: true,
+                sanitize: false,
+            }
         }
-      }
     }),
-  ],
+    ToastComponent
+],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

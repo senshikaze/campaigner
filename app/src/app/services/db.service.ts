@@ -9,6 +9,9 @@ import { Entity } from '../interfaces/entity';
 import { State } from '../interfaces/state';
 import { Player } from '../interfaces/player';
 import { Party } from '../interfaces/party';
+import { RaceInfo } from '../interfaces/race-info';
+import { JobInfo } from '../interfaces/job-info';
+import { SkillInfo } from '../interfaces/skill-info';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +33,10 @@ export class DBService extends Dexie {
   playersTable!: Table<Player, number>;
   // State
   stateTable!: Table<State>
+  // SRD tables
+  racesTable!: Table<RaceInfo, number>;
+  jobsTable!: Table<JobInfo, number>;
+  skillsTable!: Table<SkillInfo, number>;
 
   constructor() {
     super('ngdexieliveQuery');
@@ -43,6 +50,9 @@ export class DBService extends Dexie {
       partiesTable: "++id, campaign_id",
       playersTable: "++id, campaign_id, battle_id, party_id, type",
       stateTable: "++id, variable",
+      racesTable: "++id, race",
+      jobsTable: "++id, job",
+      skillsTable: "++id, name"
     });
   }
 }
