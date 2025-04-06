@@ -35,7 +35,7 @@ import { Player } from 'src/app/interfaces/player';
             <th class="p-2 text-left"></th>
           </tr>
           @for (player of players$ | async; track player.id) {
-          <tr player-list-row></tr>
+          <tr player-list-row class="odd:bg-light-zebra-odd dark:odd:bg-dark-zebra-odd even:bg-light-zebra-even dark:even:bg-dark-zebra-even"></tr>
           }
         </table>
       </div>

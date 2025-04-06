@@ -16,7 +16,7 @@ describe('BattleEntityComponent', () => {
     storeSpy = jasmine.createSpyObj('StoreSpy', ["saveEntity"]);
     let entity: Entity = {
       id: 1,
-      type: EntityType.BATTLE,
+      type: EntityType.PLAYER,
       name: "string",
       description: "string",
       notes: "string",

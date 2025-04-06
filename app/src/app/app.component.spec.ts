@@ -7,6 +7,7 @@ import { MockComponents } from 'ng-mocks';
 import { ModalComponent } from './misc/modal/modal.component';
 import { AuthService } from '@auth0/auth0-angular';
 import { DiceRollerComponent } from './misc/dice-roller/dice-roller.component';
+import { ToastComponent } from './misc/toast/toast.component';
 
 describe('AppComponent', () => {
   let apiSpy: jasmine.SpyObj<StoreService>;
@@ -21,7 +22,10 @@ describe('AppComponent', () => {
         AppComponent,
         SidebarComponent,
         ModalComponent,
-        MockComponents(DiceRollerComponent)
+        MockComponents(
+          DiceRollerComponent,
+          ToastComponent
+        )
       ],
       providers: [
         {provide: StoreService, useValue: apiSpy },

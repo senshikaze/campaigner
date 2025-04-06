@@ -1,14 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { delay, map, Subject, takeUntil, tap } from 'rxjs';
-import { StoreService } from 'src/app/services/store.service';
 import { ToastMessage, ToastService, ToastType } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'toast',
   standalone: true,
   imports: [
-    BrowserModule
+    CommonModule
   ],
   template: `
     <div

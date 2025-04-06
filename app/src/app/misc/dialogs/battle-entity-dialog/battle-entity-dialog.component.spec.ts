@@ -18,7 +18,7 @@ describe('BattleEntityDialogComponent', () => {
     let data: BattleEntityDialogInterface = {
       entity: {
         id: 1,
-        type: EntityType.BATTLE,
+        type: EntityType.PLAYER,
         name: "string",
         description: "string",
         notes: "string"

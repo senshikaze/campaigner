@@ -1,7 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
-import { map, Observable, take } from 'rxjs';
+import { Observable} from 'rxjs';
 import { Campaign } from 'src/app/interfaces/campaign';
 import { Player } from 'src/app/interfaces/player';
 import { DeleteButtonComponent } from 'src/app/misc/delete-button/delete-button.component';
@@ -11,12 +11,11 @@ import { StoreService } from 'src/app/services/store.service';
   selector: 'tr[player-list-row]',
   standalone: true,
   imports: [
-    BrowserModule,
+    CommonModule,
     RouterLink,
     DeleteButtonComponent
   ],
   template: `
-  <ng-content class="odd:bg-light-zebra-odd dark:odd:bg-dark-zebra-odd even:bg-light-zebra-even dark:even:bg-dark-zebra-even">
     <td class="w-2/3">
       <a
         class="p-2 block text-lg hover:font-bold"
@@ -33,7 +32,6 @@ import { StoreService } from 'src/app/services/store.service';
     <td class="p-2">
       <delete-button (click)="onPlayerDeleteClicked()" title="Delete Player"></delete-button>
     </td>
-  </ng-content>
   `,
   styles: ``
 })
